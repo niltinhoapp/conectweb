@@ -33,6 +33,14 @@
   --ring: 0 0 0 4px rgba(34,211,238,.22);
 }
 
+/* Inter auto-hospedada (subset latino) — sem dependência de terceiros.
+   Mais rápido (mesma origem) e elimina o reflow do CSS externo do Google. */
+@font-face{ font-family:"Inter"; font-style:normal; font-weight:400; font-display:swap; src:url("/fonts/inter-400.woff2") format("woff2"); }
+@font-face{ font-family:"Inter"; font-style:normal; font-weight:600; font-display:swap; src:url("/fonts/inter-600.woff2") format("woff2"); }
+@font-face{ font-family:"Inter"; font-style:normal; font-weight:700; font-display:swap; src:url("/fonts/inter-700.woff2") format("woff2"); }
+@font-face{ font-family:"Inter"; font-style:normal; font-weight:800; font-display:swap; src:url("/fonts/inter-800.woff2") format("woff2"); }
+@font-face{ font-family:"Inter"; font-style:normal; font-weight:900; font-display:swap; src:url("/fonts/inter-900.woff2") format("woff2"); }
+
 /* Fallback com métricas ajustadas ao Inter — elimina o salto (CLS)
    quando a web font termina de carregar. */
 @font-face{
