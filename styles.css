@@ -611,8 +611,10 @@ section[id], main[id]{ scroll-margin-top: 84px; }
 /* =============================
    Animação de entrada
    ============================= */
-.reveal{ opacity:0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
-.reveal.in{ opacity:1; transform:none; }
+/* Conteúdo visível por padrão; a animação só entra quando há JS.
+   Garante que o site NUNCA fique "faltando" se o script não rodar. */
+.js .reveal{ opacity:0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+.js .reveal.in{ opacity:1; transform:none; }
 
 /* =============================
    Responsivo
