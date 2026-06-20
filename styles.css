@@ -611,10 +611,10 @@ section[id], main[id]{ scroll-margin-top: 84px; }
 /* =============================
    Animação de entrada
    ============================= */
-/* Conteúdo visível por padrão; a animação só entra quando há JS.
-   Garante que o site NUNCA fique "faltando" se o script não rodar. */
-.js .reveal{ opacity:0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
-.js .reveal.in{ opacity:1; transform:none; }
+/* Animação de entrada 100% CSS: roda no load e SEMPRE termina visível.
+   Não depende de JavaScript — o conteúdo nunca fica escondido. */
+@keyframes revealUp{ from{ opacity:0; transform: translateY(16px); } to{ opacity:1; transform:none; } }
+.reveal{ animation: revealUp .5s ease both; }
 
 /* =============================
    Responsivo
