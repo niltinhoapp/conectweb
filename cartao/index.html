@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#060912" />
+
+  <title>Conect Web | Cartão Digital</title>
+  <meta name="description" content="Conect Web — Desenvolvimento de sistemas, integrações e automação. Fale no WhatsApp, conheça os projetos e salve o contato." />
+  <link rel="canonical" href="https://conectweb.online/cartao/" />
+  <meta name="robots" content="noindex" />
+
+  <meta property="og:title" content="Conect Web | Cartão Digital" />
+  <meta property="og:description" content="Desenvolvimento de sistemas, integrações e automação. Toque para falar no WhatsApp e salvar o contato." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://conectweb.online/cartao/" />
+  <meta property="og:image" content="https://conectweb.online/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css" />
+
+  <style>
+    .vcard-wrap{ min-height:100vh; display:grid; place-items:center; padding:28px 18px; }
+    .vcard{
+      width:100%; max-width:420px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid var(--line2); border-radius:26px; padding:30px 26px 26px;
+      box-shadow: var(--shadow); text-align:center; position:relative; overflow:hidden;
+    }
+    .vcard::before{
+      content:""; position:absolute; inset:0 0 auto 0; height:120px;
+      background: var(--grad); opacity:.18; pointer-events:none;
+    }
+    .vcard__logo{
+      position:relative; width:84px; height:84px; border-radius:24px; margin:6px auto 14px;
+      background: var(--grad); display:grid; place-items:center; color:#04111a;
+      font-weight:900; font-size:34px; box-shadow: var(--shadow-sm);
+    }
+    .vcard__name{ font-size:24px; font-weight:900; letter-spacing:-.02em; margin:0; }
+    .vcard__role{ color: var(--muted); font-size:14.5px; margin:4px 0 0; font-weight:600; }
+    .vcard__tags{ display:flex; gap:7px; justify-content:center; flex-wrap:wrap; margin:16px 0 22px; }
+    .vcard__tag{ font-size:12px; font-weight:800; padding:6px 12px; border-radius:999px; background: var(--surface); border:1px solid var(--line2); color: var(--text); }
+    .vcard__btns{ display:flex; flex-direction:column; gap:11px; }
+    .vcard__btns .btn{ width:100%; }
+    .vcard__qr{ margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
+    .vcard__qr img{ width:140px; height:140px; border-radius:14px; background:#fff; padding:8px; margin:10px auto 0; }
+    .vcard__qr p{ font-size:12.5px; color: var(--muted2); margin:0; }
+    .vcard__foot{ margin-top:18px; font-size:12px; color: var(--muted2); }
+    .vcard__foot a{ color: var(--brand); font-weight:700; }
+  </style>
+</head>
+
+<body>
+  <div class="vcard-wrap">
+    <main class="vcard">
+      <div class="vcard__logo">CW</div>
+      <h1 class="vcard__name">Conect Web</h1>
+      <p class="vcard__role">Desenvolvimento de Sistemas, Integrações e Automação</p>
+
+      <div class="vcard__tags">
+        <span class="vcard__tag">Integração de Sistemas</span>
+        <span class="vcard__tag">Sistemas Web</span>
+        <span class="vcard__tag">Apps Mobile</span>
+      </div>
+
+      <div class="vcard__btns">
+        <a class="btn btn--wa btn--lg" id="wa" href="#" target="_blank" rel="noopener">
+          💬 Falar no WhatsApp
+        </a>
+        <a class="btn btn--primary btn--lg" href="https://conectweb.online" target="_blank" rel="noopener">
+          🌐 Conhecer o site
+        </a>
+        <a class="btn btn--ghost btn--lg" href="https://conectweb.online/#projetos" target="_blank" rel="noopener">
+          🚀 Ver projetos
+        </a>
+        <button class="btn btn--ghost btn--lg" id="save" type="button">
+          📇 Salvar contato
+        </button>
+        <button class="btn btn--ghost btn--lg" id="share" type="button" hidden>
+          🔗 Compartilhar cartão
+        </button>
+      </div>
+
+      <div class="vcard__qr">
+        <p>Aponte a câmera para abrir este cartão</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=https%3A%2F%2Fconectweb.online%2Fcartao%2F"
+             alt="QR Code do cartão Conect Web" loading="lazy" />
+      </div>
+
+      <p class="vcard__foot">
+        <a href="https://conectweb.online">conectweb.online</a>
+      </p>
+    </main>
+  </div>
+
+  <script>
+    var NUM = "5514996807881";
+    var msg = encodeURIComponent("Olá! Vim pelo cartão da Conect Web e quero falar sobre um projeto.");
+    document.getElementById("wa").href = "https://wa.me/" + NUM + "?text=" + msg;
+
+    // Salvar contato (vCard) — adiciona na agenda do celular
+    document.getElementById("save").addEventListener("click", function () {
+      var vcf = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        "FN:Conect Web",
+        "ORG:Conect Web — Sistemas e Integrações",
+        "TITLE:Desenvolvimento de Software",
+        "TEL;TYPE=CELL:+" + NUM,
+        "URL:https://conectweb.online",
+        "NOTE:Sistemas web, integrações, automação e apps mobile.",
+        "END:VCARD"
+      ].join("\n");
+      var blob = new Blob([vcf], { type: "text/vcard" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "ConectWeb.vcf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Compartilhar (Web Share API — abre o menu nativo: WhatsApp, etc.)
+    var shareBtn = document.getElementById("share");
+    if (navigator.share) {
+      shareBtn.hidden = false;
+      shareBtn.addEventListener("click", function () {
+        navigator.share({
+          title: "Conect Web",
+          text: "Desenvolvimento de sistemas, integrações e automação:",
+          url: "https://conectweb.online/cartao/"
+        }).catch(function(){});
+      });
+    }
+  </script>
+</body>
+</html>

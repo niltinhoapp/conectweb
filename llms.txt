@@ -1,0 +1,21 @@
+# Conect Web
+
+> Desenvolvimento de sistemas web e mobile sob medida, integração de sistemas via API, automação de processos e captura de dados. Parceiro Certificado Nuvemshop. Projetos reais em produção. Atendimento remoto para todo o Brasil, contato pelo WhatsApp.
+
+## Páginas
+
+- [Início](https://conectweb.online/): Visão geral dos serviços, projetos no ar e formulário de orçamento.
+- [Integração de Sistemas](https://conectweb.online/integracao-de-sistemas/): Integração via API, webhooks, captura de dados e sincronização entre ERP, CRM e sistemas proprietários.
+
+## Serviços
+
+- Integração de sistemas e APIs (REST, webhooks)
+- Integração de lojas Nuvemshop (parceiro certificado Partners Core)
+- Automação de processos empresariais
+- Sistemas web sob medida e aplicativos mobile (Android/PWA)
+- Análise de sistemas e otimização de performance
+
+## Contato
+
+- WhatsApp: orçamento sem compromisso via formulário no site
+- Site: https://conectweb.online

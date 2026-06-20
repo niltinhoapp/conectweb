@@ -1,0 +1,53 @@
+# Conect Web - Allow query strings (UTM) and keep site stable
+Options -Indexes
+
+RewriteEngine On
+
+# Se o arquivo ou pasta existir, entrega normal (robots.txt, sitemap.xml, css, imagens, pdf...)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Fallback (evita 404 em qualquer rota)
+RewriteRule ^ index.html [L]
+
+# =====================================================
+# Compressão (reduz transferência de HTML/CSS/JS/SVG)
+# =====================================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+# =====================================================
+# Cache eficiente para estáticos (PageSpeed)
+# HTML curto para refletir atualizações rápido
+# =====================================================
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                        "access plus 7 days"
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/png               "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType image/x-icon            "access plus 1 year"
+  ExpiresByType application/pdf         "access plus 30 days"
+  ExpiresByType text/html               "access plus 1 hour"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Assets versionáveis: cache longo e imutável
+  <FilesMatch "\.(css|js|png|jpe?g|gif|svg|ico|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # HTML sempre revalidado
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+  # Segurança
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>

@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#060912" />
+
+  <title>Conect Web | Desenvolvimento de Sistemas Web, Mobile e Integrações</title>
+  <meta name="description" content="Conect Web: desenvolvimento de sistemas web e mobile sob medida, integrações entre plataformas (APIs, captura e processamento de dados), automação de processos e análise de sistemas. Projetos reais no ar. Orçamento no WhatsApp." />
+  <link rel="canonical" href="https://conectweb.online/" />
+
+  <meta property="og:title" content="Conect Web | Sistemas Web, Mobile e Integrações" />
+  <meta property="og:description" content="Desenvolvimento sob medida: sistemas, apps, integrações (APIs) e automação. Código próprio, escalável e documentado. Projetos reais no ar." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://conectweb.online/" />
+  <meta property="og:image" content="https://conectweb.online/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"></noscript>
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#top" aria-label="Conect Web">
+        <span class="brand__logo">CW</span>
+        <span class="brand__text">
+          <strong>Conect Web</strong>
+          <small>Sistemas • Integrações • Mobile</small>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#integracao">Integrações</a>
+        <a href="#nuvemshop">Nuvemshop</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#processo">Metodologia</a>
+        <a class="btn btn--sm btn--primary" href="#contato" data-event="click_cta_top">Pedir orçamento</a>
+      </nav>
+
+      <button class="menu" type="button" aria-label="Abrir menu" aria-expanded="false" data-menu-btn>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile" data-mobile-menu hidden>
+      <div class="container mobile__inner">
+        <a href="#integracao">Integrações</a>
+        <a href="#nuvemshop">Nuvemshop</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#processo">Metodologia</a>
+        <a class="btn btn--primary" href="#contato" data-event="click_cta_top_mobile">Pedir orçamento</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="top" class="hero">
+    <div class="container hero__grid">
+      <section class="hero__left">
+        <div class="badge-row">
+          <span class="live-badge"><span class="dot"></span> Projetos reais no ar</span>
+          <span class="partner-badge">Parceiro Certificado Nuvemshop</span>
+        </div>
+
+        <div class="chips">
+          <span class="chip">Integração de Sistemas</span>
+          <span class="chip">APIs & Webhooks</span>
+          <span class="chip">Automação de Processos</span>
+          <span class="chip">Sistemas sob medida</span>
+          <span class="chip">Apps Mobile</span>
+        </div>
+
+        <h1>Sua empresa já possui um sistema.<br><span class="u">Nós conectamos o restante.</span></h1>
+        <p class="lead">
+          Especialistas em <b>integração de sistemas, automação de processos e captura de dados</b>.
+          Conectamos ERPs, CRMs, APIs e softwares proprietários — sem trocar o que já funciona no seu negócio.
+        </p>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="#contato" data-event="click_cta_hero">Solicitar orçamento</a>
+          <a class="btn btn--ghost btn--lg" href="#integracao" data-event="click_scroll_integ">Ver integrações</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>Código próprio</strong>
+            <span>O cliente é dono da solução</span>
+          </div>
+          <div class="stat">
+            <strong>Feito para escalar</strong>
+            <span>Arquitetura sólida</span>
+          </div>
+          <div class="stat">
+            <strong>Atendimento técnico</strong>
+            <span>Direto com quem desenvolve</span>
+          </div>
+        </div>
+
+        <div class="trustline">
+          <span>Análise antes de desenvolver</span>
+          <span>Entrega documentada</span>
+          <span>Suporte e evolução contínua</span>
+        </div>
+      </section>
+
+      <aside class="hero__right">
+        <div class="panel">
+          <div class="panel__head">
+            <strong>Processo de trabalho</strong>
+            <span>Da ideia ao sistema no ar</span>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step__dot"></div>
+              <div><strong>Análise</strong><p>Levantamento do problema, do fluxo e das regras do negócio.</p></div>
+            </div>
+            <div class="step">
+              <div class="step__dot"></div>
+              <div><strong>Arquitetura</strong><p>Definição de estrutura, banco de dados e integrações.</p></div>
+            </div>
+            <div class="step">
+              <div class="step__dot"></div>
+              <div><strong>Desenvolvimento</strong><p>Construção em ciclos, com validações a cada entrega.</p></div>
+            </div>
+            <div class="step">
+              <div class="step__dot"></div>
+              <div><strong>Deploy & Suporte</strong><p>Publicação, documentação e manutenção contínua.</p></div>
+            </div>
+          </div>
+
+          <a class="btn btn--primary btn--block" href="#contato" data-event="click_cta_panel">Iniciar um projeto</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Prova social -->
+  <div class="container proof">
+    <div class="proof__inner">
+      <span class="proof__label">Projetos no ar</span>
+      <span class="proof__item"><span class="pdot"></span> Financer Auto</span>
+      <span class="proof__sep"></span>
+      <span class="proof__item"><span class="pdot"></span> Desafio Lógico</span>
+      <span class="proof__sep"></span>
+      <span class="proof__item"><span class="pdot"></span> Conect Web</span>
+      <span class="proof__sep"></span>
+      <span class="proof__item"><span class="pdot"></span> Parceiro Nuvemshop</span>
+    </div>
+  </div>
+
+  <!-- Integração de Sistemas (destaque) -->
+  <section id="integracao" class="section">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Especialidade</span>
+        <h2>Integração de Sistemas</h2>
+        <p>Sua empresa já possui um sistema? Desenvolvemos a ponte entre ele e outras plataformas — sem retrabalho, sem trocar o que já funciona.</p>
+      </header>
+
+      <div class="integ">
+        <div class="integ__main reveal">
+          <h3>Conectamos o que hoje não conversa</h3>
+          <p class="integ__lead">
+            Capturamos, processamos e sincronizamos informações entre <b>ERPs, CRMs, APIs e sistemas
+            proprietários</b>. O dado flui automaticamente entre as plataformas — e sua equipe para de fazer trabalho manual.
+          </p>
+          <ul class="integ__list">
+            <li>Integração via API e Webhooks</li>
+            <li>Captura de dados externos</li>
+            <li>Processamento automático</li>
+            <li>Sincronização entre sistemas</li>
+            <li>Importação e exportação de dados</li>
+            <li>Automação de processos empresariais</li>
+          </ul>
+          <div class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="#contato" data-event="click_integ_cta">Quero integrar meus sistemas</a>
+            <a class="btn btn--ghost btn--lg" href="/integracao-de-sistemas/" data-event="click_integ_page">Saiba mais</a>
+          </div>
+        </div>
+
+        <aside class="integ__case reveal">
+          <span class="pill">Exemplo de projeto</span>
+          <h4>Como funciona na prática</h4>
+          <div class="integ__flow">
+            <div class="flowbox flowbox--problem">
+              <strong>O cenário</strong>
+              <ul>
+                <li>Empresa com sistema próprio</li>
+                <li>Dados presos numa plataforma externa</li>
+                <li>Equipe digitando tudo manualmente</li>
+              </ul>
+            </div>
+            <div class="flowarrow">↓</div>
+            <div class="flowbox flowbox--solution">
+              <strong>A solução</strong>
+              <ul>
+                <li>Captura automática dos dados</li>
+                <li>Tratamento e padronização</li>
+                <li>Atualização em tempo real entre os sistemas</li>
+              </ul>
+            </div>
+            <div class="flowarrow">↓</div>
+            <div class="flowbox flowbox--result">
+              <strong>O resultado</strong>
+              <ul>
+                <li>Mais velocidade no processo</li>
+                <li>Menos erros e retrabalho</li>
+                <li>Economia operacional</li>
+              </ul>
+            </div>
+          </div>
+          <p class="integ__note">*Cenário ilustrativo de um projeto típico de integração.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nuvemshop (parceiro certificado) -->
+  <section id="nuvemshop" class="section section--alt">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">E-commerce</span>
+        <h2>Parceiro Certificado Nuvemshop</h2>
+        <p>Sua loja na Nuvemshop integrada ao restante do seu negócio — pedidos, estoque e clientes sincronizados, sem digitação manual.</p>
+      </header>
+
+      <div class="nuvem">
+        <div class="nuvem__main reveal">
+          <span class="pill pill--nuvem">Certificação Nuvemshop Partners Core</span>
+          <h3>Quem desenvolve para sua loja é certificado pela própria Nuvemshop</h3>
+          <p class="nuvem__lead">
+            A Conect Web possui a <b>Certificação Nuvemshop Partners</b>.
+            Isso significa que conhecemos a plataforma por dentro — APIs, webhooks e regras de loja — e
+            entregamos integrações estáveis, dentro das boas práticas oficiais.
+          </p>
+          <ul class="checklist">
+            <li><b>Sincronização de pedidos</b> entre a Nuvemshop e seu ERP ou planilha de gestão</li>
+            <li><b>Atualização automática de estoque</b> e preços em tempo real</li>
+            <li><b>Captura de clientes e pedidos</b> para CRM, cobrança e atendimento</li>
+            <li><b>Automação de pós-venda</b>: mensagens, etiquetas e rotinas operacionais</li>
+            <li><b>Conexão com sistemas próprios</b> via API e webhooks da Nuvemshop</li>
+          </ul>
+          <div class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="#contato" data-event="click_nuvem_cta">Integrar minha loja Nuvemshop</a>
+            <a class="btn btn--ghost btn--lg" href="/certificado-nuvemshop.pdf" target="_blank" rel="noopener" data-event="click_nuvem_cert">Ver certificado</a>
+          </div>
+        </div>
+
+        <aside class="nuvem__cert reveal">
+          <span class="nuvem__seal">Nuvemshop Partners Core</span>
+          <strong class="nuvem__title">Certificado de conclusão</strong>
+          <p class="nuvem__who">Dedicado a<br><b>Nilton Vicente</b></p>
+          <div class="nuvem__div"></div>
+          <p class="nuvem__desc">Certificação oficial do programa de parceiros da Nuvemshop, validando o domínio técnico da plataforma.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Soluções -->
+  <section id="solucoes" class="section section--alt">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Soluções</span>
+        <h2>Soluções de desenvolvimento</h2>
+        <p>Da automação de uma tarefa ao sistema completo — com código próprio e arquitetura pensada para cada negócio.</p>
+      </header>
+
+      <div class="solgrid">
+        <article class="sol reveal">
+          <div class="sol__ico">01</div>
+          <h3>Sistemas Web sob medida</h3>
+          <p>Painéis, cadastros, controle, relatórios e regras do seu negócio — acessível de qualquer lugar.</p>
+        </article>
+        <article class="sol reveal">
+          <div class="sol__ico">02</div>
+          <h3>Aplicativos Mobile</h3>
+          <p>Apps para Android (e web app instalável/PWA) conectados ao seu sistema, com a sua cara.</p>
+        </article>
+        <article class="sol reveal">
+          <div class="sol__ico">03</div>
+          <h3>Integrações & APIs</h3>
+          <p>Conecto seu sistema a plataformas externas: APIs, webhooks, captura e processamento de dados.</p>
+        </article>
+        <article class="sol reveal">
+          <div class="sol__ico">04</div>
+          <h3>E-commerce & Nuvemshop</h3>
+          <p>Parceiro certificado: integração da sua loja Nuvemshop com ERP, estoque, CRM e automações.</p>
+        </article>
+        <article class="sol reveal">
+          <div class="sol__ico">05</div>
+          <h3>Automação de Processos</h3>
+          <p>Tarefas repetitivas rodando sozinhas — fim da planilha manual e do retrabalho.</p>
+        </article>
+        <article class="sol reveal">
+          <div class="sol__ico">06</div>
+          <h3>Análise & Performance</h3>
+          <p>Requisitos, modelagem de dados e desenho da solução — além de refatoração e correção de gargalos.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Diferenciais -->
+  <section class="section">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Diferenciais</span>
+        <h2>Software sério, sem atalhos</h2>
+        <p>O que muda ao trabalhar com desenvolvimento profissional, e não com um “montador de site”.</p>
+      </header>
+
+      <div class="diffgrid">
+        <div class="diff reveal"><strong>Código próprio</strong><p>Sem no-code travado. O cliente é dono do sistema e pode evoluí-lo sempre.</p></div>
+        <div class="diff reveal"><strong>Arquitetura escalável</strong><p>Construído para crescer com o negócio, sem necessidade de refazer tudo depois.</p></div>
+        <div class="diff reveal"><strong>Atendimento técnico direto</strong><p>Sem camadas de intermediários: o contato é com quem analisa e desenvolve.</p></div>
+        <div class="diff reveal"><strong>Entrega documentada</strong><p>O sistema é entregue funcionando, documentado e pronto para manter.</p></div>
+        <div class="diff reveal"><strong>Segurança e dados</strong><p>Boas práticas de acesso, backup e proteção de dados (LGPD) desde o início.</p></div>
+        <div class="diff reveal"><strong>Suporte e evolução</strong><p>Após a publicação: manutenção, melhorias e novas funcionalidades.</p></div>
+      </div>
+
+      <div class="stack reveal">
+        <span class="stack__label">Tecnologias utilizadas</span>
+        <div class="stack__chips">
+          <span class="tchip">React</span>
+          <span class="tchip">Next.js</span>
+          <span class="tchip">React Native</span>
+          <span class="tchip">Node.js</span>
+          <span class="tchip">TypeScript</span>
+          <span class="tchip">Firebase</span>
+          <span class="tchip">APIs REST</span>
+          <span class="tchip">Cloud Functions</span>
+          <span class="tchip">PostgreSQL</span>
+          <span class="tchip">Integrações / Webhooks</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projetos -->
+  <section id="projetos" class="section">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Portfólio</span>
+        <h2>Projetos reais, no ar agora</h2>
+        <p>Sistemas e produtos desenvolvidos pela Conect Web e mantidos em produção.</p>
+      </header>
+
+      <div class="workgrid">
+        <article class="work reveal">
+          <div class="work__top">
+            <div>
+              <strong class="work__title">Financer Auto</strong>
+              <p class="work__sub">Sistema web • Revendas de veículos</p>
+            </div>
+            <span class="pill">Sistema completo</span>
+          </div>
+          <p class="work__desc">
+            Plataforma para lojas que vendem na promissória: contratos digitais, controle de parcelas,
+            cobrança automática por WhatsApp, loja virtual, área do cliente e dashboard. Tudo integrado.
+          </p>
+          <div class="work__tags">
+            <span class="tag">Next.js</span><span class="tag">Firebase</span><span class="tag">Cloud Functions</span>
+          </div>
+          <div class="work__actions">
+            <a class="btn btn--ghost" href="https://financer-auto.conectweb.online" target="_blank" rel="noopener" data-event="click_work_financer_live">Ver ao vivo</a>
+            <a class="btn btn--primary" href="#contato" data-event="click_work_financer_cta">Quero algo assim</a>
+          </div>
+        </article>
+
+        <article class="work reveal">
+          <div class="work__top">
+            <div>
+              <strong class="work__title">Desafio Lógico</strong>
+              <p class="work__sub">App Android • Site oficial</p>
+            </div>
+            <span class="pill">App + Site</span>
+          </div>
+          <p class="work__desc">
+            App de raciocínio lógico para Android com site oficial de divulgação. Estrutura rápida,
+            pronta para campanhas e instalação.
+          </p>
+          <div class="work__tags">
+            <span class="tag">Mobile</span><span class="tag">Android</span><span class="tag">Landing</span>
+          </div>
+          <div class="work__actions">
+            <a class="btn btn--ghost" href="https://desafiologico.com" target="_blank" rel="noopener" data-event="click_work_desafiologico_live">Ver ao vivo</a>
+            <a class="btn btn--primary" href="#contato" data-event="click_work_desafiologico_cta">Quero um app</a>
+          </div>
+        </article>
+
+        <article class="work reveal">
+          <div class="work__top">
+            <div>
+              <strong class="work__title">Conect Web</strong>
+              <p class="work__sub">Este site • Captação</p>
+            </div>
+            <span class="pill">Web</span>
+          </div>
+          <p class="work__desc">
+            O próprio site que você está vendo: rápido, responsivo, com contato direto para o WhatsApp
+            e medição configurada.
+          </p>
+          <div class="work__tags">
+            <span class="tag">HTML/CSS</span><span class="tag">Performance</span><span class="tag">Mobile-first</span>
+          </div>
+          <div class="work__actions">
+            <a class="btn btn--primary btn--block" href="#contato" data-event="click_work_conectweb_cta">Quero um site assim</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Processo -->
+  <section id="processo" class="section section--alt">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Como trabalho</span>
+        <h2>Do briefing ao sistema funcionando</h2>
+        <p>Um processo claro, com você acompanhando cada etapa.</p>
+      </header>
+
+      <div class="timeline">
+        <div class="tl reveal"><span class="tl__n">1</span><div><strong>Análise & requisitos</strong><p>Entendo o problema, o fluxo e o que precisa ser resolvido.</p></div></div>
+        <div class="tl reveal"><span class="tl__n">2</span><div><strong>Proposta & arquitetura</strong><p>Escopo claro, prazo, valor e como o sistema será construído.</p></div></div>
+        <div class="tl reveal"><span class="tl__n">3</span><div><strong>Desenvolvimento</strong><p>Construção em ciclos, com entregas para validação a cada etapa.</p></div></div>
+        <div class="tl reveal"><span class="tl__n">4</span><div><strong>Deploy & suporte</strong><p>Publicação, documentação e manutenção com evolução contínua.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato (form -> WhatsApp) -->
+  <section id="contato" class="section section--cta">
+    <div class="container">
+      <div class="cta reveal">
+        <div class="cta__left">
+          <span class="eyebrow">Orçamento sem compromisso</span>
+          <h2>Conte o seu projeto e receba um caminho claro</h2>
+          <p>Preencha 3 detalhes e a Conect Web retorna no WhatsApp com a viabilidade, os próximos passos e uma estimativa. A mensagem já vai pronta.</p>
+          <div class="cta__bullets">
+            <div>Retorno rápido e direto</div>
+            <div>Análise técnica antes de orçar</div>
+            <div>Sua ideia tratada com sigilo</div>
+          </div>
+          <div class="cta__note">
+            <strong>Dica:</strong> mesmo que ainda seja apenas uma ideia, vale o contato — ajudamos a estruturar.
+          </div>
+        </div>
+
+        <form class="form" data-lead-form>
+          <label>
+            Tipo de projeto
+            <select name="tipo" required>
+              <option value="" selected disabled>Escolha...</option>
+              <option>Sistema web sob medida</option>
+              <option>Aplicativo mobile</option>
+              <option>Integração entre sistemas / API</option>
+              <option>Integração com loja Nuvemshop</option>
+              <option>Automação de processo</option>
+              <option>Análise / melhoria de sistema existente</option>
+              <option>Site / landing page</option>
+              <option>Outro / não sei ainda</option>
+            </select>
+          </label>
+          <label>
+            Descreva rapidamente a necessidade
+            <input type="text" name="descricao" placeholder="Ex: integrar meu sistema com uma plataforma externa..." required />
+          </label>
+          <label>
+            Prazo ou orçamento (se tiver)
+            <input type="text" name="prazo" placeholder="Ex: até 60 dias / faixa de investimento..." />
+          </label>
+          <label class="check">
+            <input type="checkbox" name="aceite" required />
+            <span>Concordo em ser contatado(a) via WhatsApp sobre o meu projeto.</span>
+          </label>
+          <button class="btn btn--wa btn--lg btn--block" type="submit" data-event="submit_contato">Enviar no WhatsApp</button>
+          <p class="fine">Ao enviar, abriremos seu WhatsApp com a mensagem pronta. Se preferir, use o botão flutuante.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Dúvidas</span>
+        <h2>Perguntas rápidas</h2>
+        <p>Respostas diretas para o que mais perguntam.</p>
+      </header>
+
+      <div class="faq" data-faq>
+        <button class="faq__q" type="button" aria-expanded="false">É possível integrar com um sistema que já existe? <span>+</span></button>
+        <div class="faq__a" hidden><p>Sim. São feitas integrações via API, webhooks e importação/exportação de dados, conectando o sistema atual a outras plataformas — sem necessidade de trocar o que já funciona.</p></div>
+
+        <button class="faq__q" type="button" aria-expanded="false">Vocês integram com a Nuvemshop? <span>+</span></button>
+        <div class="faq__a" hidden><p>Sim — somos Parceiro Certificado Nuvemshop. Integramos sua loja com ERP, controle de estoque, CRM e automações via API e webhooks oficiais da plataforma, dentro das boas práticas recomendadas.</p></div>
+
+        <button class="faq__q" type="button" aria-expanded="false">Quanto custa e quanto tempo leva? <span>+</span></button>
+        <div class="faq__a" hidden><p>Depende do escopo. Por isso o trabalho começa com uma análise: entendida a necessidade, o caminho é definido e só então são apresentados prazo e valor — tudo claro, antes do início.</p></div>
+
+        <button class="faq__q" type="button" aria-expanded="false">É código próprio ou no-code? <span>+</span></button>
+        <div class="faq__a" hidden><p>Código próprio. O cliente fica dono da solução, sem dependência de plataformas fechadas, e o sistema pode evoluir e escalar sem limites artificiais.</p></div>
+
+        <button class="faq__q" type="button" aria-expanded="false">Há suporte após a entrega? <span>+</span></button>
+        <div class="faq__a" hidden><p>Sim. A entrega é documentada e há manutenção, correções e novas funcionalidades conforme o negócio cresce.</p></div>
+
+        <button class="faq__q" type="button" aria-expanded="false">O atendimento é presencial ou remoto? <span>+</span></button>
+        <div class="faq__a" hidden><p>Atendimento 100% remoto, para todo o Brasil. Todo o processo — análise, validações e entregas — é conduzido online, com contato técnico direto.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <strong>Conect Web</strong>
+        <p>Desenvolvimento de Sistemas • Integrações • Mobile</p>
+        <small>conectweb.online • Parceiro Certificado Nuvemshop</small>
+      </div>
+      <div class="footer__links">
+        <a href="#top">Topo</a>
+        <a href="#nuvemshop">Nuvemshop</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#contato">Orçamento</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flutuante -->
+  <a class="wa-float" href="#" data-wa-btn data-event="click_whatsapp_float" aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 32 32" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 5.2c-5.4 0-9.8 4.2-9.8 9.2 0 2.2.8 4.3 2.2 5.9l.2.2-.8 4.1 4.2-1 .2.1c1.6.9 3.5 1.4 5.4 1.4 5.4 0 9.8-4.2 9.8-9.2S21.4 5.2 16 5.2Z" fill="#fff"/>
+      <path d="M21.3 18.8c-.2.5-.9 1-1.5 1.1-.4.1-.9.1-1.5 0-.4-.1-1-.3-1.7-.6-3-1.3-5-4.4-5.1-4.6-.2-.2-1.2-1.6-1.2-3s.7-2.1.9-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.4.1.5 0 .7-.1.2-.2.3-.3.4l-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.8 2.1 1.2.9 2.2 1.2 2.5 1.3.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1l1.8.8c.3.2.5.3.5.5 0 .2 0 .6-.2 1.1Z" fill="#25D366"/>
+    </svg>
+  </a>
+
+  <!-- Bottom bar (mobile) -->
+  <div class="bottom-bar" data-bottom-bar>
+    <a class="bottom-bar__btn" href="#contato" data-event="click_bottom_bar">Pedir orçamento no WhatsApp</a>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
