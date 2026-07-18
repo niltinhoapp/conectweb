@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#060912" />
 
+  <!-- Google Analytics (GA4) -->
+  <!-- GA4 configurado (propriedade Conect Web) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTNSGRC4ES"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-MTNSGRC4ES');
+  </script>
+
+  <!-- Meta Pixel -->
+  <!-- Meta Pixel configurado (Conect Web Ads) -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1427951505078207');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1427951505078207&ev=PageView&noscript=1"
+  /></noscript>
+
   <title>Conect Web | Cartão Digital</title>
   <meta name="description" content="Conect Web — Desenvolvimento de sistemas, integrações e automação. Fale no WhatsApp, conheça os projetos e salve o contato." />
   <link rel="canonical" href="https://conectweb.online/cartao/" />
@@ -20,10 +48,8 @@
   <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
+  <link rel="preload" href="/fonts/inter-900.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css" />
 
   <style>
@@ -105,8 +131,20 @@
     var msg = encodeURIComponent("Olá! Vim pelo cartão da Conect Web e quero falar sobre um projeto.");
     document.getElementById("wa").href = "https://wa.me/" + NUM + "?text=" + msg;
 
+    // Track simples (GA4 + Meta Pixel) — esta página não carrega o script.js
+    function trackCartao(eventName) {
+      try { if (typeof gtag === "function") gtag("event", eventName); } catch (e) {}
+      try { if (typeof fbq === "function") fbq("trackCustom", eventName); } catch (e) {}
+    }
+
+    document.getElementById("wa").addEventListener("click", function () {
+      try { if (typeof fbq === "function") fbq("track", "Contact"); } catch (e) {}
+      try { if (typeof gtag === "function") gtag("event", "click_whatsapp_cartao"); } catch (e) {}
+    });
+
     // Salvar contato (vCard) — adiciona na agenda do celular
     document.getElementById("save").addEventListener("click", function () {
+      trackCartao("click_save_contact_cartao");
       var vcf = [
         "BEGIN:VCARD",
         "VERSION:3.0",
@@ -134,6 +172,7 @@
     if (navigator.share) {
       shareBtn.hidden = false;
       shareBtn.addEventListener("click", function () {
+        trackCartao("click_share_cartao");
         navigator.share({
           title: "Conect Web",
           text: "Desenvolvimento de sistemas, integrações e automação:",

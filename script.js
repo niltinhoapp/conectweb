@@ -40,13 +40,36 @@ function waLink(message) {
 }
 
 /**
- * TRACK (placeholder)
- * - aqui você liga GA4/GTM depois
- * - por enquanto loga no console
+ * TRACK
+ * - envia pro console (debug), GA4 (gtag) e Meta Pixel (fbq)
+ * - GA4 e Pixel são carregados via <script> no <head> de cada página
+ *   (ver TODO com o ID real em index.html, integracao-de-sistemas/index.html
+ *   e cartao/index.html — enquanto o ID for o placeholder, os eventos são
+ *   enviados só pro "Testar eventos" ou ignorados, nada quebra)
  */
 function track(eventName, extra = {}) {
   try {
     console.log("[track]", eventName, extra);
+  } catch {}
+
+  // Google Analytics (GA4)
+  try {
+    if (typeof gtag === "function") gtag("event", eventName, extra);
+  } catch {}
+
+  // Meta Pixel — eventos padrão (Lead/Contact) otimizam campanha melhor
+  // que eventos customizados; o resto vai como trackCustom.
+  try {
+    if (typeof fbq !== "function") return;
+    const isWhatsApp = String(extra.href || "").indexOf("wa.me") !== -1;
+
+    if (eventName === "lead_submit") {
+      fbq("track", "Lead", extra);
+    } else if (isWhatsApp) {
+      fbq("track", "Contact", extra);
+    } else {
+      fbq("trackCustom", eventName, extra);
+    }
   } catch {}
 }
 
@@ -238,95 +261,6 @@ if (form) {
     window.open(link, "_blank", "noopener");
   });
 }
-
-/* =============================
-   Cards Flip + Fullscreen
-   - no mobile, abre em full por padrão no clique
-   - no desktop, clique abre full; hover só dá um preview (opcional via CSS)
-   ============================= */
-(function flipCards(){
-  const cards = document.querySelectorAll("[data-flip-card]");
-  if (!cards.length) return;
-
-  let backdrop = null;
-  let activeCard = null;
-
-  function openCard(card){
-    activeCard = card;
-
-    // backdrop (fecha clicando fora)
-    backdrop = document.createElement("div");
-    backdrop.className = "flip-backdrop";
-    backdrop.addEventListener("click", closeCard);
-    document.body.appendChild(backdrop);
-
-    // abre em fullscreen e vira
-    card.classList.add("is-full");
-    document.body.style.overflow = "hidden";
-
-    // acessibilidade básica
-    const back = card.querySelector(".card__back");
-    if (back) back.setAttribute("aria-hidden", "false");
-
-    // foco no botão voltar
-    const btn = card.querySelector("[data-close]");
-    if (btn) btn.focus();
-
-    track("open_service_card", {
-      title: card.querySelector("h3")?.textContent || ""
-    });
-  }
-
-  function closeCard(){
-    if (!activeCard) return;
-
-    activeCard.classList.remove("is-full");
-    const back = activeCard.querySelector(".card__back");
-    if (back) back.setAttribute("aria-hidden", "true");
-
-    if (backdrop){
-      backdrop.remove();
-      backdrop = null;
-    }
-
-    document.body.style.overflow = "";
-    activeCard = null;
-
-    track("close_service_card");
-  }
-
-  cards.forEach((card) => {
-    const openBtn = card.querySelector("[data-open]");
-    const closeBtns = card.querySelectorAll("[data-close]");
-
-    // abre clicando no botão
-    if (openBtn){
-      openBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        openCard(card);
-      });
-    }
-
-    // fecha nos botões voltar
-    closeBtns.forEach((b) => b.addEventListener("click", (e) => {
-      e.preventDefault();
-      closeCard();
-    }));
-
-    // clique no card (exceto links/botões) abre também
-    card.addEventListener("click", (e) => {
-      const isLink = e.target.closest("a");
-      const isBtn = e.target.closest("button");
-      if (isLink || isBtn) return;
-      if (!card.classList.contains("is-full")) openCard(card);
-    });
-  });
-
-  // ESC fecha
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeCard();
-  });
-})();
 
 /* =============================
    Reveal on scroll (animação de entrada)
