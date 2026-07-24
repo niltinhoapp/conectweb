@@ -6,33 +6,8 @@
   <meta name="theme-color" content="#060912" />
   <script>document.documentElement.classList.add('js')</script>
 
-  <!-- Google Analytics (GA4) -->
-  <!-- GA4 configurado (propriedade Conect Web) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTNSGRC4ES"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-MTNSGRC4ES');
-  </script>
-
-  <!-- Meta Pixel -->
-  <!-- Meta Pixel configurado (Conect Web Ads) -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1427951505078207');
-    fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1427951505078207&ev=PageView&noscript=1"
-  /></noscript>
+  <!-- Medição (GA4 + Meta Pixel) carregada apenas apos consentimento: ver consent.js -->
+  <script src="/consent.js" defer></script>
 
   <title>Integração de Sistemas via API | Conect Web</title>
   <meta name="description" content="Integração de sistemas via API, captura de dados de plataformas externas, automação de processos e sincronização entre ERP, CRM e softwares proprietários. Conecte seus sistemas sem trocar o que já funciona. Orçamento no WhatsApp." />
@@ -692,6 +667,73 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .footer__links a:hover{ color:#fff; }
 
 /* =============================================================
+   Banner de cookies (LGPD)
+   ============================================================= */
+.cookiebar{
+  position:fixed; left:16px; right:16px; bottom:16px; z-index:80;
+  background:var(--dark); color:var(--dark-text);
+  border:1px solid var(--dark-line); border-radius:18px;
+  box-shadow:0 30px 70px -25px rgba(0,0,0,.6);
+  animation:revealUp .4s ease both;
+}
+.cookiebar__inner{
+  display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+  width:min(var(--max),100%); margin:0 auto; padding:18px 22px;
+}
+.cookiebar__txt{ margin:0; font-size:14px; color:var(--dark-muted); max-width:660px; line-height:1.6; }
+.cookiebar__txt a{ color:#93C5FD; font-weight:600; text-decoration:underline; }
+.cookiebar__btns{ display:flex; gap:10px; flex-shrink:0; }
+.cookiebar .btn--ghost{
+  --btn-bg:rgba(255,255,255,.08); --btn-fg:#fff; --btn-bd:rgba(255,255,255,.22); box-shadow:none;
+}
+.cookiebar .btn--ghost:hover{ --btn-bg:rgba(255,255,255,.14); }
+
+@media (max-width:720px){
+  .cookiebar{ bottom:82px; }
+  .cookiebar__inner{ padding:16px 18px; }
+  .cookiebar__btns{ width:100%; }
+  .cookiebar__btns .btn{ flex:1; }
+}
+
+/* =============================================================
+   Paginas legais (privacidade, termos, cookies)
+   ============================================================= */
+.legal{ padding:clamp(48px,6vw,84px) 0 clamp(60px,7vw,96px); }
+.legal__head{ max-width:760px; margin:0 auto clamp(30px,4vw,46px); }
+.legal__head h1{ font-size:clamp(30px,4vw,44px); margin:12px 0 12px; }
+.legal__head p{ margin:0; font-size:16.5px; color:var(--muted); }
+.legal__updated{ display:inline-block; margin-top:16px; font-size:13px; color:var(--muted2); }
+
+.legal__body{
+  max-width:760px; margin:0 auto; padding:clamp(26px,3.4vw,44px);
+  background:#fff; border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow-sm);
+}
+.legal__body h2{ font-size:clamp(19px,2vw,23px); margin:36px 0 12px; }
+.legal__body h2:first-child{ margin-top:0; }
+.legal__body h3{ font-size:16.5px; font-weight:700; margin:22px 0 8px; }
+.legal__body p{ margin:0 0 14px; font-size:15px; color:var(--muted); line-height:1.72; }
+.legal__body strong{ color:var(--text); font-weight:600; }
+.legal__body a{ color:var(--brand); font-weight:600; }
+.legal__body a:hover{ text-decoration:underline; }
+.legal__body ul{ margin:0 0 16px; padding-left:20px; }
+.legal__body li{ margin-bottom:9px; font-size:15px; color:var(--muted); line-height:1.7; }
+.legal__body li strong{ color:var(--text); }
+
+.legal__table{ width:100%; border-collapse:collapse; margin:0 0 18px; font-size:14px; }
+.legal__table th, .legal__table td{
+  text-align:left; padding:11px 12px; border:1px solid var(--line); vertical-align:top;
+}
+.legal__table th{ background:var(--bg-muted); font-weight:700; color:var(--text); font-size:13px; }
+.legal__table td{ color:var(--muted); }
+
+.legal__note{
+  padding:16px 18px; border-radius:14px; margin:0 0 18px;
+  background:var(--bg-muted); border:1px solid var(--line);
+  font-size:14px; color:var(--muted);
+}
+.legal__note strong{ color:var(--text); }
+
+/* =============================================================
    WhatsApp flutuante + barra mobile
    ============================================================= */
 .wa-float{
@@ -772,7 +814,10 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
       <button class="menu" type="button" aria-label="Abrir menu" aria-expanded="false" data-menu-btn>
         <span></span><span></span><span></span>
       </button>
-    </div>
+      <a href="/privacidade/">Privacidade</a>
+        <a href="/termos/">Termos</a>
+        <a href="/cookies/">Cookies</a>
+      </div>
     <div class="mobile" data-mobile-menu hidden>
       <div class="container mobile__inner">
         <a href="/#solucoes">Soluções</a>

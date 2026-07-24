@@ -5,33 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#060912" />
 
-  <!-- Google Analytics (GA4) -->
-  <!-- GA4 configurado (propriedade Conect Web) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTNSGRC4ES"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-MTNSGRC4ES');
-  </script>
-
-  <!-- Meta Pixel -->
-  <!-- Meta Pixel configurado (Conect Web Ads) -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1427951505078207');
-    fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1427951505078207&ev=PageView&noscript=1"
-  /></noscript>
+  <!-- Medição (GA4 + Meta Pixel) carregada apenas apos consentimento: ver consent.js -->
+  <script src="/consent.js" defer></script>
 
   <title>Conect Web | Cartão Digital</title>
   <meta name="description" content="Conect Web — Desenvolvimento de sistemas, integrações e automação. Fale no WhatsApp, conheça os projetos e salve o contato." />
