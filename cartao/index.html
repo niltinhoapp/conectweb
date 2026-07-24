@@ -56,6 +56,37 @@
   <link rel="stylesheet" href="/styles.css" />
 
   <style>
+    /* Tokens proprios do cartao: ele e uma peca ESCURA e nao deve seguir
+       o tema do site (que passou a ser claro no redesign v3). Declarados
+       aqui para a pagina ficar autossuficiente. */
+    :root{
+      --surface: rgba(255,255,255,.05);
+      --line: rgba(255,255,255,.10);
+      --line2: rgba(255,255,255,.16);
+      --text:#eef2ff;
+      --muted: rgba(231,237,255,.78);
+      --muted2: rgba(231,237,255,.62);
+      --brand:#22d3ee;
+      --grad: linear-gradient(135deg,#7c3aed,#22d3ee);
+      --shadow: 0 24px 70px rgba(0,0,0,.45);
+      --shadow-sm: 0 8px 24px rgba(0,0,0,.25);
+    }
+    body{
+      background-color:#060912;
+      background-image:
+        radial-gradient(900px 520px at 12% -5%, rgba(124,58,237,.22), transparent 60%),
+        radial-gradient(760px 460px at 88% 8%, rgba(34,211,238,.16), transparent 58%);
+      color:var(--text);
+    }
+    /* Botao secundario translucido (o tema claro o deixaria branco solido) */
+    .btn--ghost{
+      --btn-bg: rgba(255,255,255,.07);
+      --btn-fg:#eef2ff;
+      --btn-bd: rgba(255,255,255,.18);
+      box-shadow:none;
+    }
+    .btn--ghost:hover{ --btn-bg: rgba(255,255,255,.12); --btn-bd: rgba(255,255,255,.30); }
+
     .vcard-wrap{ min-height:100vh; display:grid; place-items:center; padding:28px 18px; }
     .vcard{
       width:100%; max-width:420px;
