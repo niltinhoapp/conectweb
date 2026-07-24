@@ -629,8 +629,16 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   transition:border-color .2s ease, box-shadow .2s ease, color .2s ease;
 }
 .faq__q::-webkit-details-marker{ display:none; }
+.faq__q::marker{ content:""; }
 .faq__q:hover{ border-color:var(--line2); color:var(--brand); box-shadow:var(--shadow-xs); }
-.faq__q span{ font-size:19px; font-weight:400; color:var(--muted2); line-height:1; }
+.faq__q span{
+  font-size:21px; font-weight:300; color:var(--muted2); line-height:1; flex-shrink:0;
+  transition:transform .22s ease, color .2s ease;
+}
+/* Aberto: o "+" gira 45deg e vira um "x" */
+.faq__item[open] .faq__q{ border-color:var(--line2); color:var(--brand); }
+.faq__item[open] .faq__q span{ transform:rotate(45deg); color:var(--brand); }
+/* Compatibilidade com o markup antigo (button + aria-expanded) */
 .faq__q[aria-expanded="true"]{ border-color:var(--line2); color:var(--brand); }
 .faq__q[aria-expanded="true"] span{ color:var(--brand); }
 .faq__a{ padding:2px 20px 18px; }
@@ -891,17 +899,25 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
         <h2>Perguntas sobre integração</h2>
       </header>
       <div class="faq" data-faq>
-        <button class="faq__q" type="button" aria-expanded="false">Vocês integram com qualquer sistema? <span>+</span></button>
-        <div class="faq__a" hidden><p>Na grande maioria dos casos, sim. Se o sistema oferece API, banco de dados acessível ou exportação de arquivos, é possível integrar. Em sistemas fechados, avaliamos a melhor abordagem na análise.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Vocês integram com qualquer sistema? <span>+</span></summary>
+          <div class="faq__a"><p>Na grande maioria dos casos, sim. Se o sistema oferece API, banco de dados acessível ou exportação de arquivos, é possível integrar. Em sistemas fechados, avaliamos a melhor abordagem na análise.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Preciso trocar meu sistema atual? <span>+</span></button>
-        <div class="faq__a" hidden><p>Não. A proposta é justamente conectar o que você já usa a outras plataformas, sem substituir o que funciona.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Preciso trocar meu sistema atual? <span>+</span></summary>
+          <div class="faq__a"><p>Não. A proposta é justamente conectar o que você já usa a outras plataformas, sem substituir o que funciona.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Dá para capturar dados de uma plataforma externa automaticamente? <span>+</span></button>
-        <div class="faq__a" hidden><p>Sim. Fazemos a captura via API, webhook ou importação programada, com tratamento e atualização automática no seu sistema.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Dá para capturar dados de uma plataforma externa automaticamente? <span>+</span></summary>
+          <div class="faq__a"><p>Sim. Fazemos a captura via API, webhook ou importação programada, com tratamento e atualização automática no seu sistema.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Como é cobrado? <span>+</span></button>
-        <div class="faq__a" hidden><p>Depende do escopo da integração. Começamos com uma análise técnica e só então apresentamos prazo e valor — tudo claro, antes do início.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Como é cobrado? <span>+</span></summary>
+          <div class="faq__a"><p>Depende do escopo da integração. Começamos com uma análise técnica e só então apresentamos prazo e valor — tudo claro, antes do início.</p></div>
+        </details>
       </div>
     </div>
   </section>

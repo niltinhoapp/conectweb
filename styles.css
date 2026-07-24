@@ -571,8 +571,16 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   transition:border-color .2s ease, box-shadow .2s ease, color .2s ease;
 }
 .faq__q::-webkit-details-marker{ display:none; }
+.faq__q::marker{ content:""; }
 .faq__q:hover{ border-color:var(--line2); color:var(--brand); box-shadow:var(--shadow-xs); }
-.faq__q span{ font-size:19px; font-weight:400; color:var(--muted2); line-height:1; }
+.faq__q span{
+  font-size:21px; font-weight:300; color:var(--muted2); line-height:1; flex-shrink:0;
+  transition:transform .22s ease, color .2s ease;
+}
+/* Aberto: o "+" gira 45deg e vira um "x" */
+.faq__item[open] .faq__q{ border-color:var(--line2); color:var(--brand); }
+.faq__item[open] .faq__q span{ transform:rotate(45deg); color:var(--brand); }
+/* Compatibilidade com o markup antigo (button + aria-expanded) */
 .faq__q[aria-expanded="true"]{ border-color:var(--line2); color:var(--brand); }
 .faq__q[aria-expanded="true"] span{ color:var(--brand); }
 .faq__a{ padding:2px 20px 18px; }

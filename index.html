@@ -632,8 +632,16 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   transition:border-color .2s ease, box-shadow .2s ease, color .2s ease;
 }
 .faq__q::-webkit-details-marker{ display:none; }
+.faq__q::marker{ content:""; }
 .faq__q:hover{ border-color:var(--line2); color:var(--brand); box-shadow:var(--shadow-xs); }
-.faq__q span{ font-size:19px; font-weight:400; color:var(--muted2); line-height:1; }
+.faq__q span{
+  font-size:21px; font-weight:300; color:var(--muted2); line-height:1; flex-shrink:0;
+  transition:transform .22s ease, color .2s ease;
+}
+/* Aberto: o "+" gira 45deg e vira um "x" */
+.faq__item[open] .faq__q{ border-color:var(--line2); color:var(--brand); }
+.faq__item[open] .faq__q span{ transform:rotate(45deg); color:var(--brand); }
+/* Compatibilidade com o markup antigo (button + aria-expanded) */
 .faq__q[aria-expanded="true"]{ border-color:var(--line2); color:var(--brand); }
 .faq__q[aria-expanded="true"] span{ color:var(--brand); }
 .faq__a{ padding:2px 20px 18px; }
@@ -1392,29 +1400,45 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
       </header>
 
       <div class="faq" data-faq>
-        <button class="faq__q" type="button" aria-expanded="false">É possível integrar com um sistema que já existe? <span>+</span></button>
-        <div class="faq__a" hidden><p>Sim. São feitas integrações via API, webhooks e importação/exportação de dados, conectando o sistema atual a outras plataformas — sem necessidade de trocar o que já funciona.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">É possível integrar com um sistema que já existe? <span>+</span></summary>
+          <div class="faq__a"><p>Sim. São feitas integrações via API, webhooks e importação/exportação de dados, conectando o sistema atual a outras plataformas — sem necessidade de trocar o que já funciona.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Vocês integram com a Nuvemshop? <span>+</span></button>
-        <div class="faq__a" hidden><p>Sim — somos Parceiro Certificado Nuvemshop. Integramos sua loja com ERP, controle de estoque, CRM e automações via API e webhooks oficiais da plataforma, dentro das boas práticas recomendadas.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Vocês integram com a Nuvemshop? <span>+</span></summary>
+          <div class="faq__a"><p>Sim — somos Parceiro Certificado Nuvemshop. Integramos sua loja com ERP, controle de estoque, CRM e automações via API e webhooks oficiais da plataforma, dentro das boas práticas recomendadas.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Quanto custa e quanto tempo leva? <span>+</span></button>
-        <div class="faq__a" hidden><p>Depende do escopo. Por isso o trabalho começa com uma análise: entendida a necessidade, o caminho é definido e só então são apresentados prazo e valor — tudo claro, antes do início.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Quanto custa e quanto tempo leva? <span>+</span></summary>
+          <div class="faq__a"><p>Depende do escopo. Por isso o trabalho começa com uma análise: entendida a necessidade, o caminho é definido e só então são apresentados prazo e valor — tudo claro, antes do início.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">É código próprio ou no-code? <span>+</span></button>
-        <div class="faq__a" hidden><p>Código próprio. O cliente fica dono da solução, sem dependência de plataformas fechadas, e o sistema pode evoluir e escalar sem limites artificiais.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">É código próprio ou no-code? <span>+</span></summary>
+          <div class="faq__a"><p>Código próprio. O cliente fica dono da solução, sem dependência de plataformas fechadas, e o sistema pode evoluir e escalar sem limites artificiais.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Há suporte após a entrega? <span>+</span></button>
-        <div class="faq__a" hidden><p>Sim. A entrega é documentada e há manutenção, correções e novas funcionalidades conforme o negócio cresce.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Há suporte após a entrega? <span>+</span></summary>
+          <div class="faq__a"><p>Sim. A entrega é documentada e há manutenção, correções e novas funcionalidades conforme o negócio cresce.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">O atendimento é presencial ou remoto? <span>+</span></button>
-        <div class="faq__a" hidden><p>Atendimento 100% remoto, para todo o Brasil. Todo o processo — análise, validações e entregas — é conduzido online, com contato técnico direto.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">O atendimento é presencial ou remoto? <span>+</span></summary>
+          <div class="faq__a"><p>Atendimento 100% remoto, para todo o Brasil. Todo o processo — análise, validações e entregas — é conduzido online, com contato técnico direto.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Vocês desenvolvem app pra Android e iPhone? <span>+</span></button>
-        <div class="faq__a" hidden><p>Desenvolvemos apps Android nativos, publicados na Play Store, e também PWA — que funciona como app em qualquer aparelho, incluindo iPhone, sem passar pela loja. A melhor opção é definida na análise, conforme o seu caso.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Vocês desenvolvem app pra Android e iPhone? <span>+</span></summary>
+          <div class="faq__a"><p>Desenvolvemos apps Android nativos, publicados na Play Store, e também PWA — que funciona como app em qualquer aparelho, incluindo iPhone, sem passar pela loja. A melhor opção é definida na análise, conforme o seu caso.</p></div>
+        </details>
 
-        <button class="faq__q" type="button" aria-expanded="false">Vocês administram a campanha ou só entregam a página? <span>+</span></button>
-        <div class="faq__a" hidden><p>Administramos a campanha completa — estrutura, configuração de Pixel/GA4 e otimização contínua — não só a página de destino. Isso evita o erro mais comum: anunciar pra uma página que não converte ou que não mede nada.</p></div>
+        <details class="faq__item">
+          <summary class="faq__q">Vocês administram a campanha ou só entregam a página? <span>+</span></summary>
+          <div class="faq__a"><p>Administramos a campanha completa — estrutura, configuração de Pixel/GA4 e otimização contínua — não só a página de destino. Isso evita o erro mais comum: anunciar pra uma página que não converte ou que não mede nada.</p></div>
+        </details>
       </div>
     </div>
   </section>
