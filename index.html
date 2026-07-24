@@ -69,7 +69,7 @@
 :root{
   /* Superficies claras — base cinza com cards brancos por cima,
      o que cria profundidade em vez de um branco chapado. */
-  --bg:#F4F6F9;        /* fundo da pagina */
+  --bg:#E9EDF4;        /* fundo da pagina (cinza fechado) */
   --bg-subtle:#FFFFFF; /* secoes alternadas (brancas) */
   --bg-muted:#EDF0F5;  /* chips e caixas internas */
   --line:#E2E6ED;
@@ -466,6 +466,40 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   transition:border-color .2s ease, color .2s ease, transform .2s ease;
 }
 .tchip:hover{ border-color:var(--line2); color:var(--text); transform:translateY(-2px); }
+
+/* =============================================================
+   Secao escura (vitrine de produtos)
+   ============================================================= */
+.section--dark{ background:var(--dark); color:var(--dark-text); }
+.section--dark .section__head h2{ color:#fff; }
+.section--dark .section__head p{ color:var(--dark-muted); }
+.section--dark .eyebrow{ color:#93C5FD; }
+
+.section--dark .product{
+  background:rgba(255,255,255,.04); border-color:var(--dark-line); box-shadow:none;
+}
+.section--dark .product:hover{
+  background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.20); box-shadow:none;
+}
+.section--dark .product h3{ color:#fff; }
+.section--dark .product__desc{ color:var(--dark-muted); }
+.section--dark .tag{ background:rgba(255,255,255,.07); border-color:var(--dark-line); color:var(--dark-muted); }
+.section--dark .pill{ background:rgba(96,165,250,.14); border-color:rgba(96,165,250,.30); color:#93C5FD; }
+.section--dark .live-badge--light{
+  background:rgba(52,211,153,.12); border-color:rgba(52,211,153,.30); color:#6EE7B7;
+}
+.section--dark .live-badge--light .dot{ background:#34D399; box-shadow:0 0 0 3px rgba(52,211,153,.20); }
+
+/* Mockups claros passam a ler como escuros dentro da secao */
+.section--dark .pmock{ background:rgba(255,255,255,.04); border-color:var(--dark-line); }
+.section--dark .pmock__chip{ background:rgba(255,255,255,.08); border-color:var(--dark-line); color:var(--dark-muted); }
+.section--dark .pmock__card{ background:rgba(255,255,255,.05); border-color:var(--dark-line); }
+.section--dark .pmock__ico{ background:rgba(96,165,250,.18); color:#93C5FD; }
+.section--dark .pmock__txt b{ color:#fff; }
+.section--dark .pmock__txt span{ color:var(--dark-muted); }
+.section--dark .pmock__kpi{ background:rgba(255,255,255,.05); border-color:var(--dark-line); }
+.section--dark .pmock__kpi b{ color:#fff; }
+.section--dark .pmock__kpi span{ color:var(--dark-muted); }
 
 /* =============================================================
    Produtos proprios (destaque SaaS)
@@ -1107,7 +1141,7 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 
   <!-- Projetos -->
   <!-- Produtos próprios -->
-  <section id="produtos" class="section">
+  <section id="produtos" class="section section--dark">
     <div class="container">
       <header class="section__head reveal">
         <span class="eyebrow">Produtos próprios</span>
