@@ -93,6 +93,9 @@
 
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+/* Rede de seguranca: nada rola horizontalmente no mobile */
+html, body{ max-width:100%; overflow-x:hidden; }
+img, svg, table{ max-width:100%; }
 
 body{
   margin:0;
@@ -762,8 +765,11 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 @media (max-width:900px){
   .hero__grid{ grid-template-columns:1fr; gap:40px; }
   .hero__right{ order:-1; }
-  .sys, .integ, .nuvem, .cta{ grid-template-columns:1fr; }
+  .sys, .integ, .nuvem, .cta, .product{ grid-template-columns:1fr; }
   .integ__list{ grid-template-columns:1fr; }
+  /* Com a coluna unica, o mockup sempre vai abaixo do texto */
+  .product:nth-child(even) .product__media,
+  .product .product__media{ order:0; }
 }
 @media (max-width:720px){
   .nav{ display:none; }
@@ -771,6 +777,8 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   .solgrid, .diffgrid, .workgrid, .timeline{ grid-template-columns:1fr; }
   .stats{ grid-template-columns:1fr; }
   .proof__sep{ display:none; }
+  /* Tabelas das paginas legais rolam em vez de estourar a tela */
+  .legal__table{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
   .wa-float{ bottom:80px; }
   .bottom-bar{
     display:block; position:fixed; left:0; right:0; bottom:0; z-index:65;
