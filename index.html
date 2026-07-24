@@ -467,6 +467,65 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .tchip:hover{ border-color:var(--line2); color:var(--text); transform:translateY(-2px); }
 
 /* =============================================================
+   Produtos proprios (destaque SaaS)
+   ============================================================= */
+.products{ display:grid; gap:20px; }
+.product{
+  display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px,4vw,52px); align-items:center;
+  padding:clamp(24px,3.2vw,42px); border-radius:26px;
+  background:#fff; border:1px solid var(--line); box-shadow:var(--shadow-sm);
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.product:hover{ box-shadow:var(--shadow); transform:translateY(-2px); border-color:var(--line2); }
+.product:nth-child(even) .product__media{ order:-1; }
+.product__eyebrow{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:14px; }
+.product h3{ font-size:clamp(22px,2.2vw,29px); margin:0 0 12px; }
+.product__desc{ margin:0 0 18px; font-size:15.5px; color:var(--muted); line-height:1.65; }
+
+/* Badge "em producao" sobre fundo claro */
+.live-badge--light{
+  background:rgba(5,150,105,.08); border-color:rgba(5,150,105,.26); color:var(--ok);
+  backdrop-filter:none;
+}
+.live-badge--light .dot{ background:var(--ok); box-shadow:0 0 0 3px rgba(5,150,105,.16); }
+
+/* Mockup ilustrativo de cada produto */
+.pmock{
+  display:grid; gap:11px; align-content:start;
+  padding:20px; border-radius:20px; min-height:230px;
+  background:var(--bg-subtle); border:1px solid var(--line);
+}
+.pmock--dark{ background:var(--dark); border-color:transparent; color:var(--dark-text); box-shadow:var(--shadow-lg); }
+.pmock__head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.pmock__chip{
+  display:inline-flex; align-items:center; padding:6px 11px; border-radius:999px;
+  font-size:11.5px; font-weight:700; background:#fff; border:1px solid var(--line); color:var(--muted);
+}
+.pmock--dark .pmock__chip{ background:rgba(255,255,255,.08); border-color:var(--dark-line); color:var(--dark-muted); }
+.pmock__card{
+  display:flex; align-items:center; gap:12px;
+  padding:14px; border-radius:14px; background:#fff; border:1px solid var(--line);
+}
+.pmock--dark .pmock__card{ background:rgba(255,255,255,.05); border-color:var(--dark-line); }
+.pmock__ico{
+  width:32px; height:32px; border-radius:10px; display:grid; place-items:center; flex-shrink:0;
+  background:var(--grad-soft); color:var(--brand);
+}
+.pmock--dark .pmock__ico{ background:rgba(96,165,250,.18); color:#93C5FD; }
+.pmock__ico svg{ width:16px; height:16px; }
+.pmock__txt b{ display:block; font-size:13.5px; font-weight:700; }
+.pmock__txt span{ display:block; font-size:12px; color:var(--muted); }
+.pmock--dark .pmock__txt b{ color:#fff; }
+.pmock--dark .pmock__txt span{ color:var(--dark-muted); }
+.pmock__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.pmock__kpi{ padding:12px 8px; border-radius:12px; text-align:center; background:#fff; border:1px solid var(--line); }
+.pmock--dark .pmock__kpi{ background:rgba(255,255,255,.05); border-color:var(--dark-line); }
+.pmock__kpi b{ display:block; font-size:13.5px; font-weight:700; letter-spacing:-.02em; }
+.pmock--dark .pmock__kpi b{ color:#fff; }
+.pmock__kpi span{ display:block; font-size:10.5px; color:var(--muted); margin-top:2px; }
+.pmock--dark .pmock__kpi span{ color:var(--dark-muted); }
+
+/* =============================================================
    Portfolio
    ============================================================= */
 .workgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
@@ -658,6 +717,7 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
         <a href="#nuvemshop">Nuvemshop</a>
         <a href="#trafego">Tráfego Pago</a>
         <a href="#solucoes">Soluções</a>
+        <a href="#produtos">Produtos</a>
         <a href="#projetos">Projetos</a>
         <a class="btn btn--sm btn--primary" href="#contato" data-event="click_cta_top">Pedir orçamento</a>
       </nav>
@@ -674,6 +734,7 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
         <a href="#nuvemshop">Nuvemshop</a>
         <a href="#trafego">Tráfego Pago</a>
         <a href="#solucoes">Soluções</a>
+        <a href="#produtos">Produtos</a>
         <a href="#projetos">Projetos</a>
         <a href="#processo">Metodologia</a>
         <a class="btn btn--primary" href="#contato" data-event="click_cta_top_mobile">Pedir orçamento</a>
@@ -1036,11 +1097,152 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 
 
   <!-- Projetos -->
-  <section id="projetos" class="section">
+  <!-- Produtos próprios -->
+  <section id="produtos" class="section">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Produtos próprios</span>
+        <h2>Não falamos de capacidade técnica. Nós mostramos.</h2>
+        <p>Plataformas construídas e mantidas pela Conect Web, com usuários reais e operação em produção.</p>
+      </header>
+
+      <div class="products">
+        <!-- Nuvem Rush -->
+        <article class="product reveal">
+          <div class="product__content">
+            <div class="product__eyebrow">
+              <span class="pill">SaaS</span>
+              <span class="live-badge live-badge--light"><span class="dot"></span> Em produção</span>
+            </div>
+            <h3>Nuvem Rush</h3>
+            <p class="product__desc">
+              Automação de pós-venda para lojas Nuvemshop. Dispara WhatsApp e e-mail a partir de
+              eventos reais da loja — pedido pago, pedido enviado, carrinho abandonado — com fluxos
+              configuráveis e integração oficial via API.
+            </p>
+            <div class="work__tags">
+              <span class="tag">Next.js</span><span class="tag">Firebase</span>
+              <span class="tag">WhatsApp Cloud API</span><span class="tag">Nuvemshop API</span>
+            </div>
+            <div class="work__actions">
+              <a class="btn btn--primary" href="#contato" data-event="click_produto_nuvemrush">Quero algo assim</a>
+            </div>
+          </div>
+          <div class="product__media">
+            <div class="pmock pmock--dark" aria-hidden="true">
+              <div class="pmock__head">
+                <span class="pmock__chip">Fluxos ativos</span><span class="pmock__chip">4</span>
+              </div>
+              <div class="pmock__card">
+                <span class="pmock__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l2-5.1a8.4 8.4 0 0 1-.9-3.8 8.4 8.4 0 0 1 8.4-8.5 8.4 8.4 0 0 1 8.5 8.4z"/></svg></span>
+                <span class="pmock__txt"><b>Pedido pago</b><span>→ WhatsApp · imediato</span></span>
+              </div>
+              <div class="pmock__card">
+                <span class="pmock__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/></svg></span>
+                <span class="pmock__txt"><b>Carrinho abandonado</b><span>→ E-mail · 2 horas</span></span>
+              </div>
+              <div class="pmock__grid">
+                <div class="pmock__kpi"><b>Fluxos</b><span>Sem código</span></div>
+                <div class="pmock__kpi"><b>Eventos</b><span>Webhooks</span></div>
+                <div class="pmock__kpi"><b>Envios</b><span>Automáticos</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lucro ML -->
+        <article class="product reveal">
+          <div class="product__content">
+            <div class="product__eyebrow">
+              <span class="pill">Inteligência de vendas</span>
+            </div>
+            <h3>Lucro ML</h3>
+            <p class="product__desc">
+              Cálculo de lucro real para vendedores do Mercado Livre. Considera tarifas, frete,
+              impostos e custo do produto para mostrar a margem verdadeira de cada anúncio — e
+              apontar o que está dando prejuízo silencioso.
+            </p>
+            <div class="work__tags">
+              <span class="tag">React</span><span class="tag">TypeScript</span>
+              <span class="tag">API Mercado Livre</span><span class="tag">Dashboards</span>
+            </div>
+            <div class="work__actions">
+              <a class="btn btn--primary" href="#contato" data-event="click_produto_lucroml">Quero algo assim</a>
+            </div>
+          </div>
+          <div class="product__media">
+            <div class="pmock" aria-hidden="true">
+              <div class="pmock__head">
+                <span class="pmock__chip">Margem por anúncio</span><span class="pmock__chip">Mensal</span>
+              </div>
+              <div class="pmock__grid">
+                <div class="pmock__kpi"><b>Receita</b><span>Bruta</span></div>
+                <div class="pmock__kpi"><b>Custos</b><span>Tarifa + frete</span></div>
+                <div class="pmock__kpi"><b>Margem</b><span>Real</span></div>
+              </div>
+              <div class="pmock__card">
+                <span class="pmock__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                <span class="pmock__txt"><b>Tarifas e frete</b><span>Descontados automaticamente</span></span>
+              </div>
+              <div class="pmock__card">
+                <span class="pmock__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.2 2 17a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.2a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+                <span class="pmock__txt"><b>Anúncios no prejuízo</b><span>Identificados na hora</span></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Cidade Conectada -->
+        <article class="product reveal">
+          <div class="product__content">
+            <div class="product__eyebrow">
+              <span class="pill">Aplicativo mobile</span>
+              <span class="live-badge live-badge--light"><span class="dot"></span> Android</span>
+            </div>
+            <h3>Cidade Conectada</h3>
+            <p class="product__desc">
+              Aplicativo que conecta moradores, comércio local e serviços da cidade num só lugar:
+              publicações, categorias, notificações e área de anúncios — construído em React Native
+              com backend próprio.
+            </p>
+            <div class="work__tags">
+              <span class="tag">React Native</span><span class="tag">Expo</span>
+              <span class="tag">Firebase</span><span class="tag">Play Store</span>
+            </div>
+            <div class="work__actions">
+              <a class="btn btn--primary" href="#contato" data-event="click_produto_cidadeconectada">Quero um app assim</a>
+            </div>
+          </div>
+          <div class="product__media">
+            <div class="pmock" aria-hidden="true">
+              <div class="pmock__head">
+                <span class="pmock__chip">Feed da cidade</span><span class="pmock__chip">Ao vivo</span>
+              </div>
+              <div class="pmock__card">
+                <span class="pmock__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <span class="pmock__txt"><b>Comércio local</b><span>Perfis e contato direto</span></span>
+              </div>
+              <div class="pmock__card">
+                <span class="pmock__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+                <span class="pmock__txt"><b>Notificações</b><span>Avisos e novidades</span></span>
+              </div>
+              <div class="pmock__grid">
+                <div class="pmock__kpi"><b>Feed</b><span>Publicações</span></div>
+                <div class="pmock__kpi"><b>Categorias</b><span>Navegação</span></div>
+                <div class="pmock__kpi"><b>Anúncios</b><span>Monetização</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="projetos" class="section section--alt">
     <div class="container">
       <header class="section__head reveal">
         <span class="eyebrow">Portfólio</span>
-        <h2>Projetos reais, no ar agora</h2>
+        <h2>Outros projetos no ar</h2>
         <p>Sistemas e produtos desenvolvidos pela Conect Web e mantidos em produção.</p>
       </header>
 
@@ -1229,6 +1431,7 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
         <a href="#top">Topo</a>
         <a href="#nuvemshop">Nuvemshop</a>
         <a href="#solucoes">Soluções</a>
+        <a href="#produtos">Produtos</a>
         <a href="#projetos">Projetos</a>
         <a href="#contato">Orçamento</a>
       </div>
