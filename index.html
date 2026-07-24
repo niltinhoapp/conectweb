@@ -751,7 +751,6 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   transition:transform .18s ease;
 }
 .wa-float:hover{ transform:scale(1.06); }
-.bottom-bar{ display:none; }
 
 /* =============================================================
    Responsivo
@@ -782,17 +781,8 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   .proof__sep{ display:none; }
   /* Tabelas das paginas legais rolam em vez de estourar a tela */
   .legal__table{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .wa-float{ bottom:80px; }
-  .bottom-bar{
-    display:block; position:fixed; left:0; right:0; bottom:0; z-index:65;
-    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-    background:rgba(255,255,255,.94); backdrop-filter:blur(12px); border-top:1px solid var(--line);
-  }
-  .bottom-bar__btn{
-    display:block; width:100%; text-align:center; padding:14px; border-radius:14px;
-    background:var(--brand); color:#fff; font-weight:600; font-size:15px;
-  }
-  body{ padding-bottom:76px; }
+  /* Botao flutuante um pouco acima da borda, respeitando area segura */
+  .wa-float{ bottom:calc(18px + env(safe-area-inset-bottom)); right:16px; }
 }
 
   </style>
@@ -1568,11 +1558,6 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
       <path d="M21.3 18.8c-.2.5-.9 1-1.5 1.1-.4.1-.9.1-1.5 0-.4-.1-1-.3-1.7-.6-3-1.3-5-4.4-5.1-4.6-.2-.2-1.2-1.6-1.2-3s.7-2.1.9-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.4.1.5 0 .7-.1.2-.2.3-.3.4l-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.8 2.1 1.2.9 2.2 1.2 2.5 1.3.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1l1.8.8c.3.2.5.3.5.5 0 .2 0 .6-.2 1.1Z" fill="#25D366"/>
     </svg>
   </a>
-
-  <!-- Bottom bar (mobile) -->
-  <div class="bottom-bar" data-bottom-bar>
-    <a class="bottom-bar__btn" href="#contato" data-event="click_bottom_bar">Pedir orçamento no WhatsApp</a>
-  </div>
 
   <script src="./script.js" defer></script>
 </body>

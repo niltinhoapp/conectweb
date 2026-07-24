@@ -715,7 +715,6 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   transition:transform .18s ease;
 }
 .wa-float:hover{ transform:scale(1.06); }
-.bottom-bar{ display:none; }
 
 /* =============================================================
    Responsivo
@@ -746,15 +745,6 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   .proof__sep{ display:none; }
   /* Tabelas das paginas legais rolam em vez de estourar a tela */
   .legal__table{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .wa-float{ bottom:80px; }
-  .bottom-bar{
-    display:block; position:fixed; left:0; right:0; bottom:0; z-index:65;
-    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-    background:rgba(255,255,255,.94); backdrop-filter:blur(12px); border-top:1px solid var(--line);
-  }
-  .bottom-bar__btn{
-    display:block; width:100%; text-align:center; padding:14px; border-radius:14px;
-    background:var(--brand); color:#fff; font-weight:600; font-size:15px;
-  }
-  body{ padding-bottom:76px; }
+  /* Botao flutuante um pouco acima da borda, respeitando area segura */
+  .wa-float{ bottom:calc(18px + env(safe-area-inset-bottom)); right:16px; }
 }
