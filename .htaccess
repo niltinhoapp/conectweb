@@ -3,6 +3,9 @@ Options -Indexes
 
 RewriteEngine On
 
+# URL antiga: preserva acessos e autoridade de busca
+RewriteRule ^integracao-de-sistemas/?$ /automacoes-e-integracoes/ [R=301,L]
+
 # Se o arquivo ou pasta existir, entrega normal (robots.txt, sitemap.xml, css, imagens, pdf...)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

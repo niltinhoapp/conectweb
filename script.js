@@ -15,19 +15,14 @@ const DOMAIN = "conectweb.online";
    WhatsApp message helpers
    ============================= */
 function baseMessage() {
-  return (
-    "Olá! Quero falar sobre um projeto de sistema/desenvolvimento.\n\n" +
-    "Tipo de projeto: ____ (sistema / app / integração / automação / outro)\n" +
-    "Necessidade: ____\n" +
-    "Prazo ou orçamento: ____\n\n" +
-    "Site: " + DOMAIN
-  );
+  return "Olá! Conheci a Conect Web pelo site e gostaria de conversar sobre um projeto.";
 }
 
-function filledMessage({ tipo, descricao, prazo }, utmText) {
+function filledMessage({ tipo, estagio, descricao, prazo }, utmText) {
   return (
     "Olá! Quero falar sobre um projeto de sistema/desenvolvimento.\n\n" +
     "Tipo de projeto: " + tipo + "\n" +
+    "Estágio do projeto: " + estagio + "\n" +
     "Necessidade: " + descricao + "\n" +
     "Prazo/orçamento: " + (prazo || "a combinar") + "\n\n" +
     "Site: " + DOMAIN +
@@ -42,10 +37,10 @@ function waLink(message) {
 /**
  * TRACK
  * - envia pro console (debug), GA4 (gtag) e Meta Pixel (fbq)
- * - GA4 e Pixel são carregados via <script> no <head> de cada página
- *   (ver TODO com o ID real em index.html, integracao-de-sistemas/index.html
- *   e cartao/index.html — enquanto o ID for o placeholder, os eventos são
- *   enviados só pro "Testar eventos" ou ignorados, nada quebra)
+ * - GA4 e Meta Pixel são carregados no <head> do index.html
+ *   (troque os IDs placeholder G-XXXXXXXXXX e 0000000000000000 pelos
+ *   IDs reais antes de rodar tráfego — enquanto forem placeholder,
+ *   os eventos são processados aqui mas não chegam a nenhuma conta real)
  */
 function track(eventName, extra = {}) {
   try {
@@ -61,11 +56,10 @@ function track(eventName, extra = {}) {
   // que eventos customizados; o resto vai como trackCustom.
   try {
     if (typeof fbq !== "function") return;
-    const isWhatsApp = String(extra.href || "").indexOf("wa.me") !== -1;
 
     if (eventName === "lead_submit") {
       fbq("track", "Lead", extra);
-    } else if (isWhatsApp) {
+    } else if (eventName === "whatsapp_click") {
       fbq("track", "Contact", extra);
     } else {
       fbq("trackCustom", eventName, extra);
@@ -113,16 +107,20 @@ function getUTM() {
 }
 
 function utmToText(utmObj) {
-  const any = Object.values(utmObj).some(Boolean);
-  if (!any) return "";
-  return (
-    "UTM:\n" +
-    "source=" + (utmObj.utm_source || "-") + "\n" +
-    "medium=" + (utmObj.utm_medium || "-") + "\n" +
-    "campaign=" + (utmObj.utm_campaign || "-") + "\n" +
-    "content=" + (utmObj.utm_content || "-") + "\n" +
-    "term=" + (utmObj.utm_term || "-")
-  );
+  const lines = [];
+
+  if (utmObj.utm_source) {
+    lines.push(
+      "Origem: " + utmObj.utm_source +
+      (utmObj.utm_medium ? " (" + utmObj.utm_medium + ")" : "")
+    );
+  }
+  if (utmObj.utm_campaign) lines.push("Campanha: " + utmObj.utm_campaign);
+  if (utmObj.utm_content) lines.push("Anúncio: " + utmObj.utm_content);
+  if (utmObj.utm_term) lines.push("Termo: " + utmObj.utm_term);
+
+  if (!lines.length) return "";
+  return "Origem do contato:\n" + lines.join("\n");
 }
 
 const utm = getUTM();
@@ -150,7 +148,18 @@ applyDefaultWhatsAppLinks();
 document.addEventListener("click", (e) => {
   const el = e.target.closest("[data-event]");
   if (!el) return;
-  track(el.getAttribute("data-event"), { href: el.getAttribute("href") || "" });
+
+  const eventName = el.getAttribute("data-event");
+  const payload = { href: el.getAttribute("href") || "" };
+
+  if (eventName === "cta_click") {
+    payload.cta_name =
+      el.getAttribute("data-cta") || el.textContent.trim().slice(0, 60);
+    payload.page_path = window.location.pathname;
+    payload.page_title = document.title;
+  }
+
+  track(eventName, payload);
 });
 
 /* =============================
@@ -238,25 +247,38 @@ if (btnMenu && mobileMenu) {
    - valida e abre WhatsApp com msg pronta
    ============================= */
 const form = document.querySelector("[data-lead-form]");
+
+// form_start: dispara 1x quando o usuário realmente começa a preencher
+// (primeiro foco em qualquer campo), não quando o formulário só aparece.
+if (form) {
+  let formStarted = false;
+  form.addEventListener("focusin", () => {
+    if (formStarted) return;
+    formStarted = true;
+    track("form_start", { page_path: window.location.pathname });
+  });
+}
+
 if (form) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const fd = new FormData(form);
     const tipo = String(fd.get("tipo") || "").trim();
+    const estagio = String(fd.get("estagio") || "").trim();
     const descricao = String(fd.get("descricao") || "").trim();
     const prazo = String(fd.get("prazo") || "").trim();
     const aceite = fd.get("aceite");
 
-    if (!tipo || !descricao || !aceite) {
-      alert("Preencha o tipo, a descrição e marque o aceite para enviar no WhatsApp.");
+    if (!tipo || !estagio || !descricao || !aceite) {
+      alert("Preencha o tipo, o estágio, a descrição e marque o aceite para enviar no WhatsApp.");
       return;
     }
 
-    const msg = filledMessage({ tipo, descricao, prazo }, utmText);
+    const msg = filledMessage({ tipo, estagio, descricao, prazo }, utmText);
     const link = waLink(msg);
 
-    track("lead_submit", { tipo, descricao, prazo, utm });
+    track("lead_submit", { tipo, estagio, descricao, prazo, utm });
 
     window.open(link, "_blank", "noopener");
   });

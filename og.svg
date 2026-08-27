@@ -16,12 +16,12 @@
   <rect x="80" y="86" width="92" height="92" rx="26" fill="url(#g)"/>
   <text x="126" y="148" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="46" fill="#04111a">CW</text>
   <text x="190" y="128" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="34" fill="#eef2ff">Conect Web</text>
-  <text x="190" y="160" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="20" fill="#9fb0d0">Sistemas • Integrações • Mobile</text>
+  <text x="190" y="160" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="20" fill="#9fb0d0">Sistemas • Automações • Sites</text>
   <!-- headline -->
-  <text x="80" y="316" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="62" fill="#eef2ff">Sua empresa já tem um sistema.</text>
-  <text x="80" y="388" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="62" fill="url(#g)">Nós conectamos o restante.</text>
-  <text x="80" y="450" font-family="Inter, Arial, sans-serif" font-weight="600" font-size="26" fill="#9fb0d0">Integração de Sistemas • APIs • Automação • Captura de Dados</text>
+  <text x="80" y="320" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="70" fill="#eef2ff">Sistemas web, automação</text>
+  <text x="80" y="395" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="64" fill="url(#g)">e integrações sob medida</text>
+  <text x="80" y="458" font-family="Inter, Arial, sans-serif" font-weight="600" font-size="27" fill="#9fb0d0">Desenvolvimento • Integrações • Sites e landing pages</text>
   <!-- cta pill -->
-  <rect x="80" y="500" width="470" height="64" rx="32" fill="url(#g)"/>
-  <text x="315" y="541" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="26" fill="#04111a">Orçamento no WhatsApp</text>
+  <rect x="80" y="508" width="540" height="64" rx="32" fill="url(#g)"/>
+  <text x="350" y="549" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="26" fill="#04111a">Diagnóstico gratuito no WhatsApp</text>
 </svg>
