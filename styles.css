@@ -540,66 +540,92 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
    Composicao com telas de produto sobre fundo escuro — mockups
    de UI (sem dados/numeros reais ou inventados), nao cards de texto.
    ============================================================= */
-.showcase{ display:flex; flex-direction:column; align-items:center; gap:44px; }
-.showcase__stage{ position:relative; width:100%; max-width:760px; height:400px; margin:0 auto; }
+.showcase{ display:flex; flex-direction:column; align-items:center; gap:40px; }
+.showcase__row{ display:grid; gap:22px; width:100%; justify-content:center; }
+.showcase__row--browsers{ grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); max-width:940px; margin:0 auto; }
+.showcase__row--phones{ grid-template-columns:repeat(2,140px); max-width:320px; margin:0 auto; }
 
-.device{
-  position:absolute; background:#fff; border-radius:14px; overflow:hidden;
-  border:1px solid rgba(255,255,255,.08); box-shadow:0 30px 70px -25px rgba(0,0,0,.7);
-  transition:transform .35s cubic-bezier(.22,.61,.36,1);
+.scard{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+.scard__label{ text-align:center; }
+.scard__label b{ display:flex; align-items:center; justify-content:center; gap:6px; color:#fff; font-weight:700; font-size:14px; letter-spacing:-.01em; }
+.scard__label b::before{ content:""; width:7px; height:7px; border-radius:50%; background:#9CA3AF; flex-shrink:0; }
+.scard__label small{ display:block; color:var(--dark-muted); font-size:11.5px; margin-top:3px; }
+.scard--nuvem .scard__label b::before{ background:var(--brand); }
+.scard--lucro .scard__label b::before{ background:#10B981; }
+.scard--financer .scard__label b::before{ background:var(--brand2); }
+.scard--cidade .scard__label b::before{ background:#EC4899; }
+.scard--desafio .scard__label b::before{ background:#F59E0B; }
+
+/* Mockup "navegador" — usado por Nuvem Rush, Lucro ML e Financer Auto,
+   para transmitir que sao sistemas web reais em producao. */
+.browser{
+  width:100%; background:#fff; border-radius:14px; overflow:hidden;
+  border:1px solid rgba(255,255,255,.08); box-shadow:0 22px 50px -20px rgba(0,0,0,.6);
+  transition:transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease;
 }
+.scard:hover .browser{ transform:translateY(-6px); box-shadow:0 28px 58px -18px rgba(0,0,0,.7); }
+.browser__bar{ display:flex; align-items:center; gap:6px; padding:9px 12px; background:#EDEFF3; border-bottom:1px solid #E2E5EA; }
+.browser__bar span{ width:8px; height:8px; border-radius:50%; background:#D4D8DF; }
+.browser__url{ margin-left:6px; font-size:10.5px; color:#8A93A3; background:#fff; border:1px solid #E2E5EA; border-radius:6px; padding:3px 9px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.browser__screen{ padding:18px 16px; background:#fff; min-height:184px; display:flex; flex-direction:column; justify-content:center; }
+/* Reaproveita .flow/.flow__node existentes, versao clara p/ tela do navegador */
+.browser__screen .flow{ margin-bottom:0; }
+.browser__screen .flow__node{ background:var(--grad-soft); border-color:rgba(37,99,235,.18); color:var(--brand-ink); font-weight:600; }
+.browser__screen .flow__arrow{ color:var(--brand2); }
 
-.device--laptop{ left:50%; top:6px; width:min(560px,72%); z-index:2; transform:translateX(-50%); }
-.device--laptop:hover{ transform:translateX(-50%) translateY(-6px); }
-.device__bar{ display:flex; align-items:center; gap:6px; padding:9px 12px; background:#EDEFF3; border-bottom:1px solid #E2E5EA; }
-.device__bar span{ width:8px; height:8px; border-radius:50%; background:#D4D8DF; }
-.device__url{ margin-left:6px; font-size:11px; color:#8A93A3; background:#fff; border:1px solid #E2E5EA; border-radius:6px; padding:3px 10px; flex:1; }
-.device__screen{ padding:22px 20px; background:#fff; }
-/* Reaproveita .flow/.flow__node existentes, versao clara p/ tela do dispositivo */
-.device__screen .flow__node{ background:var(--grad-soft); border-color:rgba(37,99,235,.18); color:var(--brand-ink); font-weight:600; }
-.device__screen .flow__arrow{ color:var(--brand2); }
+/* Lucro ML — mini-dashboard */
+.dash__kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.dash__kpi{ padding:10px 6px; border-radius:10px; text-align:center; background:#F7F8FA; border:1px solid #EDEFF3; }
+.dash__kpi span{ display:block; font-size:9.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:#8A93A3; }
+.dash__kpi b{ display:block; font-size:13px; font-weight:700; color:#111827; margin-top:3px; }
+.bars{ display:flex; align-items:flex-end; gap:6px; height:56px; }
+.bars span{ flex:1; background:linear-gradient(180deg,#34D399,#059669); border-radius:3px 3px 0 0; }
 
-.device--phone{
-  right:5%; bottom:-6%; width:130px; z-index:3;
-  border-radius:26px; border:6px solid #14161C; box-shadow:0 30px 60px -20px rgba(0,0,0,.75);
+/* Financer Auto — mini-tabela de contratos */
+.tablemock{ display:grid; gap:8px; }
+.tablemock__row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:9px 12px; border-radius:10px; background:#F7F8FA; border:1px solid #EDEFF3;
+  font-size:12px; color:#374151; font-weight:600;
 }
-.device--phone:hover{ transform:translateY(-6px); }
-.device--phone .device__screen{ padding:15px 11px; min-height:216px; background:#F7F8FA; display:grid; gap:8px; align-content:start; }
+.statustag{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:999px; }
+.statustag--ok{ background:#DCFCE7; color:#16803C; }
+.statustag--warn{ background:#FEF3C7; color:#92650C; }
+
+/* Mockup "celular" — Cidade Conectada e Desafio Logico */
+.phone{
+  width:130px; margin:0 auto; background:#fff; border-radius:26px; overflow:hidden;
+  border:6px solid #14161C; box-shadow:0 22px 50px -18px rgba(0,0,0,.65);
+  transition:transform .3s cubic-bezier(.22,.61,.36,1);
+}
+.scard:hover .phone{ transform:translateY(-6px); }
+.phone__screen{ padding:15px 11px; min-height:216px; background:#F7F8FA; display:grid; gap:8px; align-content:start; }
 .chatline{
   display:inline-block; max-width:90%; padding:8px 10px; border-radius:12px 12px 12px 3px;
   background:var(--grad-soft); border:1px solid rgba(37,99,235,.16); font-size:10.5px; color:#374151; line-height:1.4;
 }
 .chatline--out{ justify-self:end; border-radius:12px 12px 3px 12px; background:#DCFCE7; border-color:#BBF0CE; }
 
-.device--card{ width:148px; padding:0; }
-.device--card1{ left:1%; top:24%; transform:rotate(-6deg); z-index:1; }
-.device--card1:hover{ transform:rotate(-6deg) translateY(-6px); }
-.device--card2{ right:1%; top:2%; transform:rotate(5deg); z-index:1; }
-.device--card2:hover{ transform:rotate(5deg) translateY(-6px); }
-.device__mini{ padding:16px 14px; }
-.device__mini-label{ font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#4B5563; margin:0 0 10px; display:flex; align-items:center; gap:6px; }
-.device__mini-label::before{ content:""; width:7px; height:7px; border-radius:50%; background:#9CA3AF; flex-shrink:0; }
-.device--card1 .device__mini-label::before{ background:#10B981; }
-.device--card2 .device__mini-label::before{ background:var(--brand); }
-.device--phone .device__mini-label::before{ background:var(--brand2); }
-.bars{ display:flex; align-items:flex-end; gap:6px; height:56px; }
-.bars span{ flex:1; background:linear-gradient(180deg,#34D399,#059669); border-radius:3px 3px 0 0; }
-.rows{ display:grid; gap:8px; }
-.rows span{ display:block; height:9px; border-radius:4px; background:rgba(37,99,235,.14); }
-.rows span:nth-child(1){ background:linear-gradient(90deg, var(--brand), var(--brand2)); }
-.rows span:nth-child(2){ width:82%; background:rgba(37,99,235,.32); }
-.rows span:nth-child(3){ width:58%; background:rgba(37,99,235,.16); }
+/* Desafio Logico — grade de numeros estilo jogo */
+.phone__screen--game{ align-content:center; justify-items:center; }
+.gamegrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+.gamegrid span{
+  width:30px; height:30px; display:grid; place-items:center; border-radius:8px;
+  background:#fff; border:1px solid #E5E8ED; font-size:12px; font-weight:700; color:#374151;
+}
+.gamegrid__hi{ background:var(--grad) !important; color:#fff !important; border-color:transparent !important; }
 
-.showcase__labels{ display:flex; flex-wrap:wrap; gap:28px; justify-content:center; }
-.showcase__label{ text-align:center; }
-.showcase__label b{ display:block; color:#fff; font-weight:700; font-size:14px; letter-spacing:-.01em; }
-.showcase__label small{ display:block; color:var(--dark-muted); font-size:11.5px; margin-top:3px; }
+.scard__links{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; }
+.playbadge{
+  display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700;
+  padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid var(--dark-line);
+  color:#fff; transition:border-color .2s ease, background .2s ease;
+}
+.playbadge:hover{ background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.3); }
 
-@media (max-width:720px){
-  .showcase__stage{ position:static; height:auto; display:flex; flex-direction:column; align-items:center; gap:22px; }
-  .device{ position:static !important; transform:none !important; width:min(320px,90%) !important; }
-  .device--phone{ border-radius:22px; }
-  .device:hover{ transform:none !important; }
+@media (max-width:480px){
+  .showcase__row--phones{ grid-template-columns:repeat(2,120px); }
+  .phone{ width:120px; }
 }
 
 /* =============================================================
