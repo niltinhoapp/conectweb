@@ -1,10 +1,17 @@
 # Conect Web
 
-> Empresa de tecnologia que desenvolve sistemas sob medida, integrações entre plataformas (ERP, CRM, e-commerce), automação de processos e IA aplicada a operações empresariais. Parceiro Certificado Nuvemshop. Projetos e produtos próprios reais, com arquitetura e tecnologias apresentadas. Atendimento remoto para todo o Brasil, contato pelo WhatsApp.
+> Empresa de tecnologia que desenvolve produtos próprios de IA e automação — como a Lívia, recepcionista inteligente para WhatsApp — além de sistemas sob medida, integrações entre plataformas (ERP, CRM, e-commerce) e automação de processos. Parceiro Certificado Nuvemshop. Projetos e produtos próprios reais, com arquitetura e tecnologias apresentadas. Atendimento remoto para todo o Brasil, contato pelo WhatsApp.
+
+## Produtos próprios
+
+- [Lívia](https://livia.conectweb.online/): Recepcionista inteligente com IA para WhatsApp — atendimento automático, agenda, agendamento e organização de clientes e oportunidades. Voltada a clínicas, salões, barbearias e pet shops.
+- [Nuvem Rush](https://nuvemrush.com.br): Automação de pós-venda para lojas Nuvemshop — recupera carrinhos abandonados e reengaja clientes via WhatsApp Oficial.
+- [Financer Auto](https://financer-auto.conectweb.online): Sistema de gestão para revendas de veículos — contratos, parcelas, cobrança via WhatsApp e loja virtual.
+- [Lucro ML](https://lucro.conectweb.online): Inteligência financeira para vendedores do Mercado Livre — DRE automático e diagnóstico de margem.
 
 ## Páginas
 
-- [Início](https://conectweb.online/): Posicionamento, problemas resolvidos, soluções, produtos próprios e formulário de contato.
+- [Início](https://conectweb.online/): Posicionamento, produtos próprios (Lívia em destaque), problemas resolvidos, soluções e formulário de contato.
 - [Engenharia de Software](https://conectweb.online/desenvolvimento-de-sistemas/): Sistemas web, plataformas internas, produtos SaaS e aplicações mobile sob medida.
 - [Integrações & Automação](https://conectweb.online/automacoes-e-integracoes/): Integração via API e webhooks entre ERP, CRM, e-commerce e sistemas proprietários; automação de processos e IA aplicada.
 - [Sites e Landing Pages](https://conectweb.online/sites-e-landing-pages/): Sites e páginas de alta performance, oferecidos como capacidade complementar às soluções de sistema.

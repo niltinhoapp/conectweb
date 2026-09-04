@@ -177,6 +177,16 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .nav a:not(.btn):hover{ color:var(--text); background:var(--bg-muted); }
 .nav .btn{ margin-left:8px; }
 
+.nav__livia{
+  display:inline-flex !important; align-items:center; gap:7px;
+  margin-left:6px; padding:7px 13px 7px 11px !important;
+  background:var(--grad-soft); border:1px solid rgba(37,99,235,.20);
+  color:var(--brand-ink) !important; font-weight:700 !important;
+}
+.nav__livia:hover{ background:var(--grad-soft); border-color:rgba(37,99,235,.36); color:var(--brand-ink) !important; }
+.nav__livia-dot{ width:6px; height:6px; border-radius:50%; background:var(--grad); flex-shrink:0; }
+.mobile .nav__livia{ background:var(--grad-soft); border:1px solid rgba(37,99,235,.20); color:var(--brand-ink); font-weight:700; margin-bottom:4px; }
+
 .menu{
   display:none; place-items:center; width:40px; height:40px;
   background:#fff; border:1px solid var(--line2); border-radius:10px; cursor:pointer;
@@ -222,6 +232,22 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .hero .lead{ color:var(--dark-muted); max-width:540px; margin:0 0 28px; }
 .hero .lead b{ color:#fff; }
 .hero__cta{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
+
+/* Faixa de destaque da Livia, no topo do hero */
+.livia-strip{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  padding:10px 16px; border-radius:999px; margin-bottom:18px; max-width:fit-content;
+  background:linear-gradient(90deg, rgba(37,99,235,.16), rgba(124,58,237,.16));
+  border:1px solid rgba(124,58,237,.35); text-decoration:none;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.livia-strip:hover{ border-color:rgba(124,58,237,.6); transform:translateY(-1px); }
+.livia-strip__badge{
+  font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+  padding:3px 9px; border-radius:999px; background:var(--grad); color:#fff; flex-shrink:0;
+}
+.livia-strip__text{ font-weight:600; font-size:13.5px; color:#fff; }
+.livia-strip__arrow{ margin-left:auto; font-weight:700; font-size:13px; color:#C4B5FD; white-space:nowrap; }
 
 /* Badges do hero */
 .badge-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
@@ -279,18 +305,50 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .step p{ margin:3px 0 0; font-size:13px; color:var(--dark-muted); line-height:1.55; }
 
 /* =============================================================
-   Faixa de prova social
+   Produtos ConectWeb (home) — Livia em destaque + produtos SaaS
    ============================================================= */
-.proof{ padding:28px 0 0; }
-.proof__inner{
-  display:flex; align-items:center; justify-content:center; gap:12px 26px; flex-wrap:wrap;
-  padding:18px 24px; border-radius:18px;
-  background:var(--bg-subtle); border:1px solid var(--line);
+.prodhub{ display:flex; flex-direction:column; gap:22px; }
+
+.prodcard{
+  background:#fff; border:1px solid var(--line); border-radius:22px;
+  padding:26px; box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column; gap:14px;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
 }
-.proof__label{ font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted2); }
-.proof__item{ display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:600; color:var(--muted); }
-.proof__item .pdot{ width:6px; height:6px; border-radius:50%; background:var(--brand); }
-.proof__sep{ width:1px; height:16px; background:var(--line2); }
+.prodcard:hover{ box-shadow:var(--shadow); transform:translateY(-2px); border-color:var(--line2); }
+.prodcard__top{ display:flex; flex-direction:column; gap:6px; }
+.prodcard__tag{
+  align-self:flex-start; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+  padding:5px 11px; border-radius:999px; color:var(--brand); background:var(--grad-soft); border:1px solid rgba(37,99,235,.16);
+}
+.prodcard h3{ margin:2px 0 0; font-size:21px; }
+.prodcard__tagline{ margin:0; font-size:14.5px; color:var(--muted); line-height:1.55; }
+.prodcard .link{ margin-top:auto; }
+
+.prodcard--flagship{
+  background:var(--dark); border:none; padding:34px;
+  border-radius:26px; box-shadow:0 30px 70px -35px rgba(37,99,235,.55);
+  position:relative; overflow:hidden;
+}
+.prodcard--flagship::before{ content:""; position:absolute; inset:0; background:var(--grad-soft); opacity:.6; pointer-events:none; }
+.prodcard--flagship > *{ position:relative; z-index:1; }
+.prodcard--flagship h3{ color:#fff; font-size:27px; }
+.prodcard--flagship .prodcard__tagline{ color:var(--dark-muted); font-size:16px; }
+.prodcard__tag--flagship{ background:var(--grad); color:#fff; border:none; }
+.prodcard__list{ list-style:none; margin:2px 0 6px; padding:0; display:grid; grid-template-columns:repeat(2,1fr); gap:9px 20px; }
+.prodcard__list li{ position:relative; padding-left:22px; font-size:14px; color:var(--dark-muted); }
+.prodcard__list li::before{
+  content:""; position:absolute; left:0; top:6px; width:13px; height:8px;
+  border-left:2px solid #93C5FD; border-bottom:2px solid #93C5FD; transform:rotate(-45deg);
+}
+.prodcard--flagship .btn--primary{ align-self:flex-start; }
+
+.prodhub__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+
+@media (max-width:900px){
+  .prodhub__grid{ grid-template-columns:1fr; }
+  .prodcard__list{ grid-template-columns:1fr; }
+}
 
 /* =============================================================
    Blocos de destaque (Sistemas / Integracao / Nuvemshop / Trafego)
@@ -816,7 +874,6 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   .menu{ display:grid; }
   .solgrid, .diffgrid, .workgrid, .timeline{ grid-template-columns:1fr; }
   .stats{ grid-template-columns:1fr; }
-  .proof__sep{ display:none; }
   /* Tabelas das paginas legais rolam em vez de estourar a tela */
   .legal__table{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
   /* Botao flutuante um pouco acima da borda, respeitando area segura */
