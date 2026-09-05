@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ConnectWeb Tracking — Suíte de testes V1.1</title>
+<title>ConnectWeb Tracking — Suíte de testes V1.2</title>
 <style>
   body{font-family:system-ui,sans-serif;max-width:960px;margin:40px auto;padding:0 20px;line-height:1.5;background:#f6f7f9;color:#15171a}
   h1{margin-bottom:4px}
@@ -19,7 +19,7 @@
 </style>
 </head>
 <body>
-  <h1>ConnectWeb Tracking — Suíte de testes V1.1</h1>
+  <h1>ConnectWeb Tracking — Suíte de testes V1.2</h1>
   <p>Roda no navegador, sem dependências externas. Cada teste usa uma <code>data-account</code> própria para isolar o storage.</p>
   <div id="summary">Rodando…</div>
   <table>
@@ -91,6 +91,23 @@ function assert(cond, okMsg, failMsg) {
 
 var results = [];
 
+// Cada teste usa uma account propria, e o tracker grava um cookie de
+// fallback por account. Com dezenas de testes o cabecalho Cookie cresce
+// ate estourar o limite de linha de servidores de desenvolvimento simples
+// (HTTP 431), quebrando as navegacoes seguintes. Isso e artefato do
+// ambiente de teste, nao do produto - entao limpamos os cookies do tracker
+// ao final de cada teste. Nao afeta nenhuma assercao: elas rodam antes.
+function clearTrackingCookies() {
+  try {
+    document.cookie.split(';').forEach(function (chunk) {
+      var name = chunk.split('=')[0].trim();
+      if (name.indexOf('cw_tracking') === 0) {
+        document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax';
+      }
+    });
+  } catch (e) {}
+}
+
 async function runTest(name, fn) {
   var iframe = createIframe();
   var outcome;
@@ -101,6 +118,7 @@ async function runTest(name, fn) {
   }
   results.push({ name: name, pass: outcome.pass, message: outcome.message });
   iframe.parentNode && iframe.parentNode.removeChild(iframe);
+  clearTrackingCookies();
 }
 
 // 1. Acesso direto
@@ -484,7 +502,8 @@ async function testHrefChangeBackToUnlisted(iframe) {
 async function testHotmartKiwifyExcludeClickIds(iframe) {
   await navigate(iframe, fixtureUrl({
     t_account: 't24_noclickids', utm_source: 'facebook', utm_medium: 'paid', utm_campaign: 'campA',
-    fbclid: 'fb123', gclid: 'g456', ttclid: 'tt789'
+    fbclid: 'fb123', gclid: 'g456', ttclid: 'tt789',
+    utm_id: 'uid1', ad_id: 'ad1', campaign_id: 'cid1', adset_id: 'as1'
   }));
   await waitReady(iframe);
   await sleep(150);
@@ -493,11 +512,21 @@ async function testHotmartKiwifyExcludeClickIds(iframe) {
   var kiwifyHref = iframe.contentWindow.document.getElementById('linkKiwify').getAttribute('href');
   var raw = iframe.contentWindow.ConnectWebTracking.getRaw();
 
+  // Nem click IDs nem os 4 IDs de campanha/anuncio podem vazar para o
+  // checkout: Hotmart/Kiwify documentam oficialmente so os 5 UTMs + src.
+  function semParametrosProibidos(href) {
+    return ['fbclid', 'gclid', 'ttclid', 'utm_id', 'ad_id', 'campaign_id', 'adset_id']
+      .every(function (k) { return href.indexOf(k) === -1; });
+  }
+
   var hotmartOk = hotmartHref.indexOf('utm_source=facebook') !== -1 && hotmartHref.indexOf('src=') !== -1 &&
-    hotmartHref.indexOf('fbclid') === -1 && hotmartHref.indexOf('gclid') === -1 && hotmartHref.indexOf('ttclid') === -1;
+    semParametrosProibidos(hotmartHref);
   var kiwifyOk = kiwifyHref.indexOf('utm_source=facebook') !== -1 && kiwifyHref.indexOf('src=') !== -1 &&
-    kiwifyHref.indexOf('fbclid') === -1 && kiwifyHref.indexOf('gclid') === -1 && kiwifyHref.indexOf('ttclid') === -1;
-  var storageOk = raw.first_touch.fbclid === 'fb123' && raw.first_touch.gclid === 'g456' && raw.first_touch.ttclid === 'tt789';
+    semParametrosProibidos(kiwifyHref);
+  var storageOk = raw.first_touch.fbclid === 'fb123' && raw.first_touch.gclid === 'g456' &&
+    raw.first_touch.ttclid === 'tt789' && raw.first_touch.ad_id === 'ad1' &&
+    raw.first_touch.campaign_id === 'cid1' && raw.first_touch.adset_id === 'as1' &&
+    raw.first_touch.utm_id === 'uid1';
 
   var ok = hotmartOk && kiwifyOk && storageOk;
   return assert(ok,
@@ -573,9 +602,203 @@ async function testNetworkIndependence(iframe) {
   iframe.contentWindow.ConnectWebTracking.getRaw();
   await sleep(100);
 
+  // V1.2: os recursos novos tambem precisam ser 100% locais - eventos,
+  // lead com dados pessoais, submit de formulario marcado e leitura de
+  // fbp/fbc nao podem introduzir nenhuma chamada de rede.
+  iframe.contentWindow.ConnectWebTracking.track('view_content');
+  iframe.contentWindow.ConnectWebTracking.trackLead({
+    name: 'Joao Teste', email: 'joao@exemplo.com', phone: '14999999999'
+  });
+  iframe.contentWindow.ConnectWebTracking.getEvents();
+  iframe.contentWindow.__cwSubmit('formLead');
+  await sleep(200);
+
   var calls = iframe.contentWindow.__cwNetworkCalls || [];
   var ok = calls.length === 0;
-  return assert(ok, 'nenhuma chamada de rede feita em todo o ciclo (fetch/XHR/sendBeacon)', 'chamadas registradas: ' + JSON.stringify(calls));
+  return assert(ok,
+    'nenhuma chamada de rede em todo o ciclo, incluindo track/trackLead/submit/fbp-fbc (fetch/XHR/sendBeacon)',
+    'chamadas registradas: ' + JSON.stringify(calls));
+}
+
+// 29. session_id criado no primeiro acesso e distinto do visitor_id
+async function testSessionCreated(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't29_session', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = !!data.session_id && data.session_id.indexOf('cws_') === 0 &&
+    !!data.visitor_id && data.session_id !== data.visitor_id && !!data.session_started_at;
+  return assert(ok, 'session_id criado (' + data.session_id + '), distinto do visitor_id',
+    'session_id=' + data.session_id + ' visitor_id=' + data.visitor_id);
+}
+
+// 30. Sessao estavel: recarregar a mesma URL nao cria sessao nova
+async function testSessionStable(iframe) {
+  var url = fixtureUrl({ t_account: 't30_stable', utm_source: 'facebook', utm_campaign: 'campA' });
+  await navigate(iframe, url);
+  await waitReady(iframe);
+  var first = iframe.contentWindow.ConnectWebTracking.get();
+
+  await navigate(iframe, url);
+  await waitReady(iframe);
+  var second = iframe.contentWindow.ConnectWebTracking.get();
+
+  var ok = first.session_id && first.session_id === second.session_id &&
+    first.visitor_id === second.visitor_id;
+  return assert(ok, 'reload da mesma campanha manteve o mesmo session_id',
+    'sessao1=' + first.session_id + ' sessao2=' + second.session_id);
+}
+
+// 31. Nova sessao apos 30 min de inatividade (registro semeado com
+// atividade antiga, mas dentro do TTL de 90 dias)
+async function testSessionTimeout(iframe) {
+  var account = 't31_timeout';
+  var key = storageKeyForTest(account);
+  var recent = new Date().toISOString();
+  var stale = new Date(Date.now() - 45 * 60 * 1000).toISOString();
+  var seeded = {
+    version: '1.2.0', account: account, visitor_id: 'VISITOR_ESTAVEL',
+    session_id: 'cws_SESSAO_ANTIGA', session_started_at: stale, session_last_activity_at: stale,
+    events: [],
+    first_touch: { utm_source: 'facebook' }, last_touch: { utm_source: 'facebook' },
+    last_touch_source: 'facebook', source: 'facebook',
+    landing_page: { url: '', path: '', referrer: '', captured_at: stale },
+    last_page: '', updated_at: recent, history: []
+  };
+  await navigate(iframe, fixtureUrl({ t_account: account, t_seed_key: key, t_seed_value: JSON.stringify(seeded) }));
+  await waitReady(iframe);
+
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = data.visitor_id === 'VISITOR_ESTAVEL' &&
+    data.session_id !== 'cws_SESSAO_ANTIGA' &&
+    data.first_touch.utm_source === 'facebook';
+  return assert(ok, 'apos 45 min de inatividade abriu sessao nova, mantendo visitor_id e first_touch',
+    'visitor_id=' + data.visitor_id + ' session_id=' + data.session_id);
+}
+
+// 32. Nova campanha gera nova sessao, preservando visitor_id e first_touch
+async function testNewCampaignNewSession(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't32_newcamp', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  var before = iframe.contentWindow.ConnectWebTracking.get();
+
+  await navigate(iframe, fixtureUrl({ t_account: 't32_newcamp', utm_source: 'google', gclid: 'g999' }));
+  await waitReady(iframe);
+  var after = iframe.contentWindow.ConnectWebTracking.get();
+
+  var ok = after.visitor_id === before.visitor_id &&
+    after.session_id !== before.session_id &&
+    after.first_touch.utm_source === 'facebook' &&
+    after.last_touch.utm_source === 'google' &&
+    after.last_touch.gclid === 'g999' &&
+    !after.last_touch.utm_campaign;
+  return assert(ok, 'nova campanha abriu sessao nova; visitor_id e first_touch preservados; last_touch trocado',
+    'visitor before/after=' + before.visitor_id + '/' + after.visitor_id +
+    ' sessao before/after=' + before.session_id + '/' + after.session_id +
+    ' first_touch=' + JSON.stringify(after.first_touch) + ' last_touch=' + JSON.stringify(after.last_touch));
+}
+
+// 33. Captura dos 4 parametros novos
+async function testNewAdParamsCaptured(iframe) {
+  await navigate(iframe, fixtureUrl({
+    t_account: 't33_adparams', utm_source: 'facebook', utm_campaign: 'campA',
+    utm_id: 'UTMID1', ad_id: 'AD1', campaign_id: 'CAMP1', adset_id: 'ADSET1'
+  }));
+  await waitReady(iframe);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ft = data.first_touch, lt = data.last_touch;
+  var ok = ft.utm_id === 'UTMID1' && ft.ad_id === 'AD1' && ft.campaign_id === 'CAMP1' && ft.adset_id === 'ADSET1' &&
+    lt.ad_id === 'AD1' && lt.adset_id === 'ADSET1';
+  return assert(ok, 'utm_id, ad_id, campaign_id e adset_id capturados em first_touch e last_touch',
+    'first_touch=' + JSON.stringify(ft));
+}
+
+// 34. Transporte dos novos parametros: NAO vao para Hotmart/Kiwify,
+// mas VAO para os campos ocultos do formulario
+async function testNewAdParamsTransport(iframe) {
+  await navigate(iframe, fixtureUrl({
+    t_account: 't34_transport', utm_source: 'facebook', utm_campaign: 'campA',
+    utm_id: 'UTMID1', ad_id: 'AD1', campaign_id: 'CAMP1', adset_id: 'ADSET1'
+  }));
+  await waitReady(iframe);
+  await sleep(150);
+
+  var doc = iframe.contentWindow.document;
+  var hotmartHref = doc.getElementById('linkHotmart').getAttribute('href');
+  var kiwifyHref = doc.getElementById('linkKiwify').getAttribute('href');
+  var form = doc.getElementById('formInitial');
+
+  function val(name) {
+    var el = form.querySelector('input[name="' + name + '"]');
+    return el ? el.value : null;
+  }
+
+  var checkoutLimpo = ['utm_id', 'ad_id', 'campaign_id', 'adset_id'].every(function (k) {
+    return hotmartHref.indexOf(k) === -1 && kiwifyHref.indexOf(k) === -1;
+  });
+  var formCompleto = val('utm_id') === 'UTMID1' && val('ad_id') === 'AD1' &&
+    val('campaign_id') === 'CAMP1' && val('adset_id') === 'ADSET1' &&
+    !!val('cw_session_id') && !!val('cw_visitor_id');
+
+  var ok = checkoutLimpo && formCompleto && hotmartHref.indexOf('utm_source=facebook') !== -1;
+  return assert(ok, 'novos IDs ficam fora da URL de Hotmart/Kiwify e presentes nos campos do formulario (com cw_session_id)',
+    'hotmart=' + hotmartHref + ' | form ad_id=' + val('ad_id') + ' cw_session_id=' + val('cw_session_id'));
+}
+
+// 35. track('lead'): event_id unico, event_time, sessao e atribuicao;
+// PII do trackLead NAO pode ser persistida
+async function testTrackLeadEvent(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't35_event', utm_source: 'facebook', utm_campaign: 'campA', ad_id: 'AD1' }));
+  await waitReady(iframe);
+
+  var cw = iframe.contentWindow.ConnectWebTracking;
+  var received = null;
+  iframe.contentWindow.addEventListener('connectweb:tracking-event', function (e) { received = e.detail; });
+
+  var e1 = cw.track('lead');
+  var e2 = cw.trackLead({ name: 'Joao Teste', email: 'joao@exemplo.com', phone: '14999999999' });
+  await sleep(100);
+
+  var data = cw.get();
+  var events = cw.getEvents();
+  var raw = iframe.contentWindow.localStorage.getItem(storageKeyForTest('t35_event')) || '';
+
+  var idsUnicos = e1.event_id && e2.event_id && e1.event_id !== e2.event_id;
+  var estruturaOk = e2.event_name === 'lead' && !!e2.event_time &&
+    e2.session_id === data.session_id && e2.visitor_id === data.visitor_id &&
+    e2.first_touch.utm_source === 'facebook' && e2.last_touch.ad_id === 'AD1';
+  var payloadEntregue = e2.data.email === 'joao@exemplo.com' &&
+    received && received.data && received.data.email === 'joao@exemplo.com';
+  var persistidoOk = events.length === 2 && !events[1].data &&
+    raw.indexOf('joao@exemplo.com') === -1 && raw.indexOf('Joao Teste') === -1 &&
+    raw.indexOf('14999999999') === -1;
+
+  var ok = idsUnicos && estruturaOk && payloadEntregue && persistidoOk;
+  return assert(ok, 'eventos com event_id unico, sessao/atribuicao corretas; PII entregue no evento mas NAO persistida',
+    'idsUnicos=' + idsUnicos + ' estrutura=' + estruturaOk + ' payload=' + payloadEntregue +
+    ' persistencia=' + persistidoOk + ' eventos=' + JSON.stringify(events));
+}
+
+// 36. Formulario com data-cw-lead dispara lead; sem o atributo, nao dispara
+async function testLeadFormOptIn(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't36_leadform', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+
+  var cw = iframe.contentWindow.ConnectWebTracking;
+  var antes = cw.getEvents().length;
+
+  iframe.contentWindow.__cwSubmit('formNoLead');
+  await sleep(150);
+  var depoisSemAtributo = cw.getEvents().length;
+
+  iframe.contentWindow.__cwSubmit('formLead');
+  await sleep(150);
+  var depoisComAtributo = cw.getEvents();
+
+  var ok = antes === 0 && depoisSemAtributo === 0 &&
+    depoisComAtributo.length === 1 && depoisComAtributo[0].event_name === 'lead' &&
+    !!depoisComAtributo[0].session_id;
+  return assert(ok, 'formulario sem data-cw-lead nao disparou; com data-cw-lead disparou 1 evento lead',
+    'antes=' + antes + ' semAtributo=' + depoisSemAtributo + ' comAtributo=' + JSON.stringify(depoisComAtributo));
 }
 
 var TESTS = [
@@ -606,10 +829,19 @@ var TESTS = [
   ['Entrada por TikTok (ttclid)', testTikTokEntry],
   ['Preservacao de sck pre-existente no destino', testPreservesExistingSck],
   ['Link inserido dinamicamente (MutationObserver)', testDynamicLinkInsertion],
-  ['Independencia de rede (zero chamadas ao servidor)', testNetworkIndependence]
+  ['Independencia de rede (zero chamadas ao servidor)', testNetworkIndependence],
+  ['session_id criado e distinto do visitor_id', testSessionCreated],
+  ['Sessao estavel entre reloads', testSessionStable],
+  ['Nova sessao apos 30 min de inatividade', testSessionTimeout],
+  ['Nova campanha = nova sessao (visitor_id/first_touch preservados)', testNewCampaignNewSession],
+  ['Captura de utm_id/ad_id/campaign_id/adset_id', testNewAdParamsCaptured],
+  ['Transporte dos novos IDs (fora do checkout, dentro do form)', testNewAdParamsTransport],
+  ['track/trackLead: event_id unico e PII nao persistida', testTrackLeadEvent],
+  ['Formulario data-cw-lead (opt-in) dispara lead', testLeadFormOptIn]
 ];
 
 async function run() {
+  clearTrackingCookies(); // limpa restos de execucoes anteriores
   for (var i = 0; i < TESTS.length; i++) {
     await runTest(TESTS[i][0], TESTS[i][1]);
     render();

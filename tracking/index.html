@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ConnectWeb Tracking — Teste V1.1</title>
+  <title>ConnectWeb Tracking — Teste V1.2</title>
   <style>
     body{font-family:system-ui,sans-serif;max-width:960px;margin:40px auto;padding:0 20px;line-height:1.5;background:#f6f7f9;color:#15171a}
     .card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:22px;margin:18px 0}
@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <h1>ConnectWeb Tracking V1.1</h1>
+  <h1>ConnectWeb Tracking V1.2</h1>
   <p>Página de teste do rastreador. Abra esta URL com UTMs e click IDs para verificar a persistência e a decoração dos links.</p>
   <p>Esta página carrega o tracker em <code>data-consent-required="true"</code> para você testar o fluxo de consentimento manualmente. Use a suíte automatizada em <a href="/tracking/tests.html">/tracking/tests.html</a> para os demais cenários.</p>
 
@@ -43,8 +43,26 @@
   </div>
 
   <div class="card">
+    <h2>Eventos locais</h2>
+    <p>Registrados apenas no navegador. Nenhuma chamada de rede é feita.</p>
+    <button class="primary" onclick="window.ConnectWebTracking.trackLead({ name: 'Teste', email: 'teste@exemplo.com' }); atualizar()">trackLead()</button>
+    <button onclick="window.ConnectWebTracking.track('view_content'); atualizar()">track('view_content')</button>
+    <pre id="eventos">—</pre>
+  </div>
+
+  <div class="card">
     <h2>Formulário de teste</h2>
+    <p>Sem <code>data-cw-lead</code>: recebe os campos ocultos, mas não dispara evento de conversão.</p>
     <form action="#enviado" method="get">
+      <label>Nome <input name="nome" autocomplete="off"></label>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Formulário marcado como conversão</h2>
+    <p>Com <code>data-cw-lead</code>: dispara <code>track('lead')</code> no submit. Os valores digitados não são lidos nem armazenados.</p>
+    <form action="#enviado" method="get" data-cw-lead>
       <label>Nome <input name="nome" autocomplete="off"></label>
       <button type="submit">Enviar</button>
     </form>
@@ -59,6 +77,11 @@
     }
     window.addEventListener('connectweb:tracking-ready', atualizar);
     window.addEventListener('connectweb:tracking-updated', atualizar);
+    window.addEventListener('connectweb:tracking-event', function (e) {
+      // O payload com dados pessoais chega aqui e no retorno da funcao,
+      // mas nunca e gravado em localStorage/cookie.
+      document.getElementById('eventos').textContent = JSON.stringify(e.detail, null, 2);
+    });
     atualizar();
   </script>
 </body>

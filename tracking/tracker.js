@@ -1,5 +1,5 @@
 /*
- * ConnectWeb Tracking V1.1
+ * ConnectWeb Tracking V1.2
  * Client-side attribution and parameter preservation.
  *
  * Install (modo simples, sem exigir consentimento):
@@ -27,9 +27,18 @@
  * Explorer 11 nao e suportado - o script identifica a ausencia dessas
  * APIs e nao executa, em vez de lancar erros nao tratados.
  *
- * Esta biblioteca nao envia eventos de conversao para Meta/Google por si
- * so. Ela captura e preserva dados de atribuicao para uma camada futura
- * de servidor/eventos consumir o mesmo registro com seguranca.
+ * ARQUITETURA: este script NAO faz nenhuma chamada de rede. Nao existe
+ * fetch, XMLHttpRequest, sendBeacon, WebSocket ou qualquer outra forma de
+ * comunicacao externa. Tudo o que ele captura fica no ambiente do proprio
+ * visitante (localStorage/cookie) e so sai dali pelos canais que o site do
+ * cliente ja usa: campos ocultos em formularios e parametros em URLs de
+ * destinos autorizados. A ConnectWeb nao recebe esses dados e nao
+ * participa do fluxo. A suite de testes verifica isso automaticamente.
+ *
+ * Esta biblioteca tambem nao envia eventos de conversao para Meta/Google.
+ * Os campos preparatorios (event_id, event_time, fbp, fbc) existem apenas
+ * como estrutura local, para uma eventual V2 opcional consumir - nunca
+ * como comunicacao embutida nesta versao.
  */
 (function (window, document) {
   'use strict';
@@ -48,12 +57,16 @@
   );
   if (!SUPPORTED) return;
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var VERSION_MAJOR = 1;
   var STORAGE_PREFIX = '__cw_tracking_v1__';
   var COOKIE_PREFIX = 'cw_tracking_v1';
   var OPTOUT_COOKIE_PREFIX = 'cw_tracking_optout_v1';
   var TTL_MS = 90 * 24 * 60 * 60 * 1000;
+  // Janela de inatividade que encerra a sessao. Uma nova campanha
+  // significativa tambem abre uma sessao nova (ver touchSession).
+  var SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+  var MAX_EVENTS = 20;
 
   var CAMPAIGN_KEYS = [
     'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'
@@ -62,7 +75,11 @@
     'fbclid', 'gclid', 'gbraid', 'wbraid', 'ttclid', 'msclkid', 'twclid',
     'li_fat_id', 'yclid', 'dclid'
   ];
-  var ATTRIBUTION_KEYS = CAMPAIGN_KEYS.concat(CLICK_ID_KEYS);
+  // IDs de campanha/anuncio. Sao capturados e armazenados como qualquer
+  // outro parametro de atribuicao, mas NAO vao na URL de Hotmart/Kiwify:
+  // essas duas plataformas documentam oficialmente apenas os 5 UTMs + src.
+  var AD_KEYS = ['utm_id', 'ad_id', 'campaign_id', 'adset_id'];
+  var ATTRIBUTION_KEYS = CAMPAIGN_KEYS.concat(CLICK_ID_KEYS).concat(AD_KEYS);
 
   // -----------------------------------------------------------------------
   // Configuracao via atributos da tag <script>
@@ -184,6 +201,13 @@
     if (!record.last_touch) record.last_touch = {};
     if (!record.landing_page) record.landing_page = { url: '', path: '', referrer: '', captured_at: record.updated_at || nowIso() };
     if (!record.history) record.history = [];
+    // Migracao 1.1.0 -> 1.2.0: registros gravados pela versao anterior nao
+    // tem sessao nem eventos. Preenchemos com defaults SEM tocar em
+    // visitor_id, first_touch ou last_touch, que continuam valendo.
+    if (!record.events) record.events = [];
+    if (!record.session_id) newSession(record);
+    if (!record.session_started_at) record.session_started_at = record.updated_at || nowIso();
+    if (!record.session_last_activity_at) record.session_last_activity_at = record.updated_at || nowIso();
     return record;
   }
 
@@ -208,13 +232,18 @@
     return record;
   }
 
-  // Versao compacta do registro para o cookie: sem o array `history`
-  // (que pode crescer e estourar o limite de ~4KB de um cookie).
+  // Versao compacta do registro para o cookie: sem os arrays `history` e
+  // `events` (que crescem e estourariam o limite de ~4KB de um cookie).
+  // Os identificadores de sessao entram porque sao curtos e precisam
+  // sobreviver quando o localStorage nao esta disponivel.
   function compactForCookie(data) {
     return {
       version: data.version,
       account: data.account,
       visitor_id: data.visitor_id,
+      session_id: data.session_id,
+      session_started_at: data.session_started_at,
+      session_last_activity_at: data.session_last_activity_at,
       first_touch: data.first_touch,
       last_touch: data.last_touch,
       last_touch_source: data.last_touch_source,
@@ -265,8 +294,20 @@
   }
 
   function hasCampaignData(data) {
-    return CAMPAIGN_KEYS.some(function (key) { return !!data[key]; }) ||
-      CLICK_ID_KEYS.some(function (key) { return !!data[key]; });
+    return ATTRIBUTION_KEYS.some(function (key) { return !!data[key]; });
+  }
+
+  // Compara dois conjuntos de atribuicao ja "limpos" (cleanCopy). Usada
+  // para decidir se o toque atual e realmente uma campanha NOVA - um
+  // reload da mesma URL com os mesmos UTMs nao pode abrir sessao nova.
+  function sameAttribution(a, b) {
+    var keysA = Object.keys(a || {});
+    var keysB = Object.keys(b || {});
+    if (keysA.length !== keysB.length) return false;
+    for (var i = 0; i < keysA.length; i++) {
+      if (a[keysA[i]] !== (b || {})[keysA[i]]) return false;
+    }
+    return true;
   }
 
   function classifySource(data, referrer) {
@@ -301,6 +342,84 @@
     var random = Math.random().toString(36).slice(2);
     var time = Date.now().toString(36);
     return 'cw_' + time + '_' + random;
+  }
+
+  function createSessionId() {
+    return 'cws_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+  }
+
+  // Sequencial na pagina para garantir unicidade mesmo quando duas chamadas
+  // caem no mesmo milissegundo.
+  var eventSeq = 0;
+  function createEventId() {
+    eventSeq += 1;
+    return 'cw_evt_' + Date.now().toString(36) + '_' + eventSeq + '_' +
+      Math.random().toString(36).slice(2);
+  }
+
+  // -----------------------------------------------------------------------
+  // Sessao
+  //
+  // visitor_id = quem e o visitante (persiste entre sessoes, nunca trocado)
+  // session_id = qual foi esta visita (origem/momento)
+  //
+  // O first_touch e imutavel durante toda a vida do visitante; abrir uma
+  // sessao nova nunca o recria, nem recria o visitor_id.
+  // -----------------------------------------------------------------------
+  function newSession(record) {
+    record.session_id = createSessionId();
+    record.session_started_at = nowIso();
+    record.session_last_activity_at = nowIso();
+    return record;
+  }
+
+  function sessionExpired(record) {
+    if (!record || !record.session_id || !record.session_last_activity_at) return true;
+    var last = Date.parse(record.session_last_activity_at);
+    if (isNaN(last)) return true;
+    return (Date.now() - last) > SESSION_TIMEOUT_MS;
+  }
+
+  function touchSession(record, isNewCampaign) {
+    if (!record) return record;
+    if (isNewCampaign || sessionExpired(record)) {
+      newSession(record);
+    } else {
+      record.session_last_activity_at = nowIso();
+    }
+    return record;
+  }
+
+  // -----------------------------------------------------------------------
+  // fbp / fbc - leitura estritamente LOCAL, preparacao para uma eventual V2.
+  //
+  // `_fbp` e `_fbc` sao cookies first-party gravados pelo proprio Meta Pixel
+  // do site, quando ele existe. Aqui eles apenas sao LIDOS; nada e gravado,
+  // e absolutamente nada e enviado para lugar nenhum. Se o site nao usa
+  // Pixel, os campos ficam vazios e nada muda.
+  // -----------------------------------------------------------------------
+  function readMetaCookies(record) {
+    var out = { fbp: '', fbc: '' };
+    out.fbp = readCookieRaw('_fbp') || '';
+
+    var existingFbc = readCookieRaw('_fbc');
+    if (existingFbc) {
+      out.fbc = existingFbc;
+      return out;
+    }
+
+    // Sem cookie _fbc: deriva no formato documentado pela Meta
+    // (fb.<subdomain_index>.<creation_time_ms>.<fbclid>) a partir do
+    // fbclid que o proprio tracker ja capturou.
+    var last = (record && record.last_touch) || {};
+    var first = (record && record.first_touch) || {};
+    var fbclid = last.fbclid || first.fbclid || '';
+    if (fbclid) {
+      var created = Date.parse((record && record.session_started_at) || '');
+      if (isNaN(created)) created = Date.now();
+      out.fbc = 'fb.1.' + created + '.' + fbclid;
+    }
+    return out;
   }
 
   // Copia "limpa" de um conjunto de atribuicao: so as chaves realmente
@@ -344,6 +463,10 @@
       version: VERSION,
       account: account || '',
       visitor_id: createId(),
+      session_id: createSessionId(),
+      session_started_at: nowIso(),
+      session_last_activity_at: nowIso(),
+      events: [],
       first_touch: cleanCurrent,
       last_touch: cleanCurrent,
       last_touch_source: classifySource(cleanCurrent, referrer),
@@ -383,6 +506,13 @@
     stored.last_page = window.location.href;
     stored.updated_at = nowIso();
 
+    // Sessao: so uma campanha REALMENTE nova (conjunto de atribuicao
+    // diferente do last_touch atual) abre sessao nova. Recarregar a mesma
+    // URL com os mesmos UTMs mantem a sessao. Precisa ser calculado antes
+    // de substituir o last_touch abaixo.
+    var isNewCampaign = meaningful && !sameAttribution(cleanCopy(currentAttribution), stored.last_touch);
+    touchSession(stored, isNewCampaign);
+
     if (meaningful) {
       // FIX: last_touch passa a ser uma copia limpa do toque atual, nunca
       // uma mistura com o last_touch anterior. Uma campanha nova SUBSTITUI
@@ -411,18 +541,95 @@
     var record = getRecord();
     var first = record.first_touch || {};
     var last = record.last_touch || {};
+    var meta = readMetaCookies(record);
     return {
       version: VERSION,
       account: record.account || account || '',
       visitor_id: record.visitor_id || '',
+      session_id: record.session_id || '',
+      session_started_at: record.session_started_at || '',
       first_touch: first,
       last_touch: last,
       source: record.last_touch_source || record.source || classifySource(last, document.referrer),
       landing_page: record.landing_page || {},
       current_page: window.location.href,
       updated_at: record.updated_at || nowIso(),
-      consent: consentState
+      consent: consentState,
+      events: (record.events || []).slice(),
+      // Somente leitura local dos cookies do Pixel do proprio site.
+      // Nao sao enviados para lugar nenhum nesta versao.
+      fbp: meta.fbp,
+      fbc: meta.fbc
     };
+  }
+
+  // -----------------------------------------------------------------------
+  // Eventos (registro estritamente LOCAL - nenhuma chamada de rede)
+  // -----------------------------------------------------------------------
+  function track(eventName, data) {
+    var name = cleanValue(eventName);
+    if (!name) return null;
+
+    var record = getRecord();
+
+    // O que e PERSISTIDO: so tracking/atribuicao. Repare que `data` (que
+    // pode conter nome, e-mail, telefone) nao entra neste objeto.
+    var stored = {
+      event_id: createEventId(),
+      event_name: name,
+      event_time: nowIso(),
+      visitor_id: record.visitor_id || '',
+      session_id: record.session_id || '',
+      first_touch: cleanCopy(record.first_touch),
+      last_touch: cleanCopy(record.last_touch),
+      source: record.last_touch_source || record.source || ''
+    };
+
+    if (canTrack()) {
+      record.events = record.events || [];
+      record.events.push(stored);
+      if (record.events.length > MAX_EVENTS) {
+        record.events = record.events.slice(-MAX_EVENTS);
+      }
+      record.updated_at = nowIso();
+      touchSession(record, false);
+      writeStorage(record);
+    }
+
+    // O que e EMITIDO: o mesmo evento + o payload informado pelo site.
+    // Este objeto so existe em memoria - vai no CustomEvent e no retorno da
+    // funcao, para o proprio site fazer o que quiser com ele. Nunca e
+    // gravado em localStorage/cookie e nunca sai por rede.
+    var emitted = {};
+    Object.keys(stored).forEach(function (key) { emitted[key] = stored[key]; });
+    emitted.data = data || {};
+    emitted.meta = readMetaCookies(record);
+
+    log('Evento registrado:', name, stored.event_id);
+    fireEvent('connectweb:tracking-event', emitted);
+    return emitted;
+  }
+
+  function trackLead(payload) {
+    return track('lead', payload);
+  }
+
+  function getEvents() {
+    var record = getRecord();
+    return (record.events || []).slice();
+  }
+
+  // Conversao por formulario: OPT-IN. So formularios marcados com
+  // data-cw-lead disparam o evento. Os valores digitados nao sao lidos -
+  // o tracker registra que houve conversao, nao o que foi preenchido.
+  function setupLeadForms() {
+    document.addEventListener('submit', function (e) {
+      var form = e && e.target;
+      if (!form || form.tagName !== 'FORM') return;
+      if (!form.hasAttribute('data-cw-lead')) return;
+      if (form.hasAttribute('data-cw-ignore')) return;
+      track('lead');
+    }, true);
   }
 
   // -----------------------------------------------------------------------
@@ -478,12 +685,13 @@
     var source = mergeForDecoration(record.first_touch || {}, record.last_touch || {});
 
     // Hotmart e Kiwify: so os parametros oficialmente documentados por
-    // ambas (os 5 UTMs + src). Os 10 click IDs (fbclid, gclid etc.) NAO
+    // ambas (os 5 UTMs + src). Os 10 click IDs (fbclid, gclid etc.) e os 4
+    // IDs de campanha/anuncio (utm_id, ad_id, campaign_id, adset_id) NAO
     // sao enviados para essas duas plataformas - continuam sendo
-    // capturados e armazenados normalmente pelo tracker (para uso futuro
-    // na atribuicao/camada server-side), so nao vao mais na URL de saida
-    // do checkout. Outros destinos (data-decorate-domains) continuam
-    // recebendo o conjunto completo, como antes.
+    // capturados e armazenados normalmente pelo tracker, e disponiveis
+    // localmente via get()/getRaw() e nos campos ocultos de formulario,
+    // so nao vao na URL de saida do checkout. Outros destinos
+    // (data-decorate-domains) continuam recebendo o conjunto completo.
     var keysToDecorate = (destination === 'hotmart' || destination === 'kiwify')
       ? CAMPAIGN_KEYS
       : ATTRIBUTION_KEYS;
@@ -538,10 +746,14 @@
     var data = buildPublicData();
     var fields = {};
 
-    CAMPAIGN_KEYS.concat(CLICK_ID_KEYS).forEach(function (key) {
+    // Formularios recebem o conjunto COMPLETO (UTMs + click IDs + IDs de
+    // campanha/anuncio): aqui o destino e o proprio CRM/backend do cliente,
+    // nao um checkout de terceiro com parametros documentados.
+    ATTRIBUTION_KEYS.forEach(function (key) {
       fields[key] = data.last_touch[key] || data.first_touch[key] || '';
     });
     fields.cw_visitor_id = data.visitor_id;
+    fields.cw_session_id = data.session_id;
     fields.cw_first_touch = JSON.stringify(data.first_touch);
     fields.cw_last_touch = JSON.stringify(data.last_touch);
     fields.cw_landing_page = data.landing_page.url || '';
@@ -714,6 +926,7 @@
 
     setupObserver();
     setupSpaSupport();
+    setupLeadForms();
 
     window.addEventListener('connectweb:consent-changed', function (e) {
       var granted = !!(e && e.detail && e.detail.granted);
@@ -733,6 +946,9 @@
         return next;
       },
       decorateUrl: addParamsToUrl,
+      track: track,
+      trackLead: trackLead,
+      getEvents: getEvents,
       setConsent: setConsent,
       clear: clear,
       optOut: optOut,

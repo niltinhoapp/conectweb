@@ -1,4 +1,4 @@
-# ConnectWeb Tracking V1.1
+# ConnectWeb Tracking V1.2
 
 ConnectWeb Tracking é um script JavaScript universal que captura e
 preserva a origem do visitante durante a navegação e transporta os
@@ -39,6 +39,11 @@ direção a nenhum servidor da ConnectWeb.
 - Funciona sem internet, exceto pelo carregamento inicial do próprio
   arquivo `tracker.js` — que também pode ser auto-hospedado pelo
   cliente, sem depender de nenhum domínio da ConnectWeb.
+- Os recursos da V1.2 não mudam nada disso: `session_id`, `event_id`,
+  `track()`, `trackLead()` e a leitura de `fbp`/`fbc` são **todos
+  locais**. Existem para o próprio site do cliente usar (e para deixar a
+  estrutura pronta para uma eventual V2 opcional), nunca como canal de
+  envio para a ConnectWeb.
 
 ## Compatibilidade universal
 
@@ -119,23 +124,51 @@ sobrescreve dados de outra conta — só passa a gravar em um slot separado.
 | `data-consent-cookie` | — | Nome de um cookie já existente (ex.: do CMP/consent.js do site) usado para checar consentimento já dado. |
 | `data-consent-cookie-value` | `granted` | Valor esperado nesse cookie para considerar consentimento concedido. |
 
-## O que a V1.1 faz
+## O que a V1.2 faz
 
 - Captura UTMs (`utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`).
 - Captura click IDs: `fbclid`, `gclid`, `gbraid`, `wbraid`, `ttclid`, `msclkid`, `twclid`, `li_fat_id`, `yclid` e `dclid`.
+- Captura IDs de campanha/anúncio: `utm_id`, `ad_id`, `campaign_id` e `adset_id`. Nenhum parâmetro é obrigatório — o que não estiver na URL simplesmente não é registrado.
+- Mantém `visitor_id` (quem é o visitante, estável entre sessões) e `session_id` (qual foi esta visita). Uma sessão nova começa após **30 minutos de inatividade** ou quando chega uma campanha realmente diferente da anterior — recarregar a mesma URL com os mesmos parâmetros **não** cria sessão nova. Abrir sessão nova nunca altera o `visitor_id` nem o `first_touch`.
 - Registra **first touch** (nunca sobrescrito) e **last touch** — uma campanha nova **substitui por completo** o conjunto de atribuição anterior (nunca mistura `utm_campaign` de uma campanha com `gclid` de outra). Acesso direto nunca apaga o last touch existente.
 - Persiste em `localStorage` (principal) com cookie como fallback, ambos com TTL de 90 dias verificado na leitura (registro expirado inicia um novo ciclo de atribuição). Cookie gravado sem o histórico completo (evita estourar o limite de ~4KB) e com `Secure` quando o site é HTTPS.
 - Preserva parâmetros ao navegar por links — **apenas** para domínios permitidos: Hotmart e Kiwify por padrão, mais qualquer domínio listado em `data-decorate-domains`. Links internos (mesmo domínio) e qualquer domínio não listado **nunca** são alterados.
-- Para Hotmart e Kiwify especificamente, só os parâmetros oficialmente documentados por ambas vão para a URL de saída: os 5 UTMs + `src`. Os 10 click IDs (`fbclid`, `gclid` etc.) **não** são enviados a essas duas plataformas — continuam sendo capturados e armazenados normalmente pelo tracker (disponíveis localmente via `get()`/`getRaw()`, caso o próprio site precise deles para algo além do checkout), só não vão mais na URL do checkout. Destinos configurados via `data-decorate-domains` continuam recebendo o conjunto completo de parâmetros.
+- Para Hotmart e Kiwify especificamente, só os parâmetros oficialmente documentados por ambas vão para a URL de saída: os 5 UTMs + `src`. Os 10 click IDs (`fbclid`, `gclid` etc.) e os 4 IDs de campanha/anúncio (`utm_id`, `ad_id`, `campaign_id`, `adset_id`) **não** são enviados a essas duas plataformas — continuam sendo capturados e armazenados normalmente pelo tracker (disponíveis localmente via `get()`/`getRaw()` e nos campos ocultos de formulário, caso o próprio site precise deles para algo além do checkout), só não vão na URL do checkout. Destinos configurados via `data-decorate-domains` continuam recebendo o conjunto completo de parâmetros.
 - Adiciona o parâmetro `src` (texto livre, suportado oficialmente por Hotmart e Kiwify) quando o destino é uma dessas plataformas e o link ainda não tem um `src` definido. Não sintetiza mais um `sck` artificial — esse comportamento não é documentado oficialmente por nenhuma das duas plataformas; se o link já tiver `sck`, ele é preservado como está.
-- Injeta dados de atribuição em formulários como campos ocultos, incluindo formulários adicionados dinamicamente e **aninhados** dentro de containers inseridos depois do carregamento.
+- Injeta dados de atribuição em formulários como campos ocultos — o conjunto **completo** (UTMs + click IDs + IDs de campanha/anúncio) mais `cw_visitor_id`, `cw_session_id`, `cw_first_touch`, `cw_last_touch` e `cw_landing_page`. Vale para formulários adicionados dinamicamente e **aninhados** dentro de containers inseridos depois do carregamento.
 - Detecta mudanças de `href` em links já existentes (não só links novos).
 - Detecta navegação de SPA via `pushState`/`replaceState`/`popstate`, atualizando o last touch quando aplicável sem nunca recriar o first touch.
-- Processa mutações do DOM em lote (debounce via `requestAnimationFrame`) para não sobrecarregar páginas com muito churn de DOM.
+- Processa mutações do DOM em lote (debounce via `setTimeout`, e não `requestAnimationFrame`, que fica suspenso em abas em segundo plano) para não sobrecarregar páginas com muito churn de DOM.
 - Suporte a consentimento configurável por conta: em modo `data-consent-required="true"`, nada é gravado em `localStorage`/cookie nem decorado em links/formulários antes da concessão. Integração via `window.ConnectWebTracking.setConsent(true|false)` ou pelo evento `connectweb:consent-changed`.
-- API pública `window.ConnectWebTracking`: `get()`, `getRaw()`, `refresh()`, `decorateUrl()`, `setConsent()`, `clear()`, `optOut()`, `hasConsent()`, `consentState()`.
+- Registra **eventos locais** com `track(nome)` e `trackLead(payload)`, cada um com `event_id` único, `event_time`, `session_id`, `visitor_id` e a atribuição do momento. Ficam guardados no próprio navegador (últimos 20) e são emitidos no evento `connectweb:tracking-event` para o site consumir. **Nada é enviado para lugar nenhum.**
+- Lê localmente os cookies `_fbp`/`_fbc` do Meta Pixel do próprio site, quando existem, e deriva o `fbc` a partir do `fbclid` capturado. É só leitura e preparação estrutural — nenhum envio, nenhuma CAPI.
+- API pública `window.ConnectWebTracking`: `get()`, `getRaw()`, `refresh()`, `decorateUrl()`, `track()`, `trackLead()`, `getEvents()`, `setConsent()`, `clear()`, `optOut()`, `hasConsent()`, `consentState()`.
 
-## Limites intencionais da V1.1
+### Conversões (opt-in)
+
+Nenhum formulário vira conversão automaticamente. Há duas formas de marcar uma:
+
+```html
+<!-- 1. Atributo no formulário: dispara track('lead') no submit -->
+<form data-cw-lead action="/enviar" method="post"> … </form>
+```
+
+```js
+// 2. Chamada direta, quando o site controla o envio
+var evento = window.ConnectWebTracking.trackLead({
+  name: 'João', email: 'joao@exemplo.com', phone: '14999999999'
+});
+```
+
+**Dados pessoais passados ao `trackLead()` nunca são gravados.** Eles chegam
+ao site pelo retorno da função e pelo `CustomEvent`, e desaparecem dali —
+o `localStorage`/cookie guarda apenas `event_id`, `event_name`,
+`event_time`, `session_id`, `visitor_id` e a atribuição. No caso do
+`data-cw-lead`, o tracker sequer lê os valores digitados: só registra que
+houve uma conversão. O produto continua não sendo banco de dados de dados
+pessoais.
+
+## Limites intencionais da V1.2
 
 É, por decisão de produto, **só** um tracker client-side: captura,
 preserva e transporta a origem do visitante até o checkout. Ela **não
@@ -148,7 +181,7 @@ escopo.
 ## Teste
 
 - `/tracking/` — página de demonstração manual (mesma da V1, com botões de consentimento adicionados).
-- `/tracking/tests.html` — suíte de testes automatizados (roda no navegador, sem dependências) cobrindo os cenários abaixo.
+- `/tracking/tests.html` — suíte de 36 testes automatizados (roda no navegador, sem dependências) cobrindo os cenários abaixo.
 
 Cenários cobertos pela suíte automatizada:
 
@@ -179,7 +212,15 @@ Cenários cobertos pela suíte automatizada:
 25. Entrada por TikTok (`ttclid`).
 26. Preservação de um `sck` pré-existente no link de destino (nunca sintetizado, nunca sobrescrito).
 27. Link inserido dinamicamente (novo `<a>`, via `MutationObserver`) é decorado sem click IDs.
-28. Independência de rede: nenhuma chamada de `fetch`/`XMLHttpRequest`/`sendBeacon` é feita em nenhum momento (captura, decoração, SPA, formulários, consentimento) — confirma que o tracker não depende de nenhum servidor da ConnectWeb para funcionar.
+28. Independência de rede: nenhuma chamada de `fetch`/`XMLHttpRequest`/`sendBeacon` é feita em nenhum momento (captura, decoração, SPA, formulários, consentimento, `track()`, `trackLead()`, submit de conversão e leitura de `fbp`/`fbc`) — confirma que o tracker não depende de nenhum servidor da ConnectWeb para funcionar.
+29. `session_id` criado no primeiro acesso e distinto do `visitor_id`.
+30. Sessão estável: recarregar a mesma URL não abre sessão nova.
+31. Nova sessão após 30 minutos de inatividade, preservando `visitor_id` e `first_touch`.
+32. Campanha nova abre sessão nova, mas `visitor_id` e `first_touch` permanecem intactos e o `last_touch` é substituído por completo.
+33. Captura de `utm_id`, `ad_id`, `campaign_id` e `adset_id`.
+34. Transporte dos novos IDs: ficam **fora** da URL de Hotmart/Kiwify e **dentro** dos campos ocultos do formulário (junto de `cw_session_id`).
+35. `track()`/`trackLead()`: `event_id` único por evento, sessão e atribuição corretas, e os dados pessoais do payload **não** persistidos em `localStorage`/cookie.
+36. Formulário com `data-cw-lead` dispara a conversão; formulário sem o atributo não dispara.
 
 ## Próximas etapas
 

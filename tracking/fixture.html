@@ -60,8 +60,23 @@
   <a id="linkKiwify" href="https://pay.kiwify.com.br/TESTE">kiwify</a>
   <a id="linkExternal" href="https://exemplo-nao-listado.com/parceiro">externo nao listado</a>
   <form id="formInitial" action="#"><input name="nome"></form>
+  <form id="formLead" data-cw-lead action="#"><input name="nome"></form>
+  <form id="formNoLead" action="#"><input name="nome"></form>
 
   <script>
+    // Impede navegacao real ao submeter nos testes. O listener do tracker
+    // roda na fase de captura em document, entao dispara antes deste.
+    ['formInitial', 'formLead', 'formNoLead'].forEach(function (id) {
+      var f = document.getElementById(id);
+      if (f) f.addEventListener('submit', function (e) { e.preventDefault(); });
+    });
+
+    window.__cwSubmit = function (id) {
+      var f = document.getElementById(id);
+      if (!f) return false;
+      return f.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    };
+
     window.__cwAddDynamicLink = function () {
       var a = document.createElement('a');
       a.id = 'linkDynamic';
