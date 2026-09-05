@@ -547,6 +547,37 @@ async function testDynamicLinkInsertion(iframe) {
   return assert(ok, 'link novo (inserido via JS) foi decorado pelo MutationObserver, sem fbclid', 'href obtido: ' + href);
 }
 
+// 28. Independencia de rede - nenhuma chamada de rede e feita pelo
+// tracker durante um ciclo completo (captura, decoracao de links,
+// formularios, SPA, consentimento). Verifica na pratica a exigencia
+// de que o produto nao depende de nenhuma infraestrutura da ConnectWeb.
+async function testNetworkIndependence(iframe) {
+  await navigate(iframe, fixtureUrl({
+    t_account: 't28_noserver', t_consent_required: 'true',
+    utm_source: 'facebook', utm_medium: 'paid', utm_campaign: 'campA',
+    fbclid: 'fb1', gclid: 'g1', ttclid: 'tt1'
+  }));
+  await waitReady(iframe);
+
+  // exercita: consentimento, decoracao de link/form existentes,
+  // link e form dinamicos, SPA (pushState), refresh()
+  iframe.contentWindow.ConnectWebTracking.setConsent(true);
+  await sleep(100);
+  iframe.contentWindow.__cwAddDynamicLink();
+  iframe.contentWindow.__cwAddDynamicForm();
+  await sleep(200);
+  iframe.contentWindow.__cwPushState('/tracking/fixture.html?t_account=t28_noserver&utm_source=google&gclid=g2');
+  await sleep(200);
+  iframe.contentWindow.ConnectWebTracking.refresh();
+  iframe.contentWindow.ConnectWebTracking.get();
+  iframe.contentWindow.ConnectWebTracking.getRaw();
+  await sleep(100);
+
+  var calls = iframe.contentWindow.__cwNetworkCalls || [];
+  var ok = calls.length === 0;
+  return assert(ok, 'nenhuma chamada de rede feita em todo o ciclo (fetch/XHR/sendBeacon)', 'chamadas registradas: ' + JSON.stringify(calls));
+}
+
 var TESTS = [
   ['Acesso direto', testDirect],
   ['Facebook com UTMs completos', testFacebookUtms],
@@ -574,7 +605,8 @@ var TESTS = [
   ['Hotmart/Kiwify sem click IDs na URL (mas armazenados)', testHotmartKiwifyExcludeClickIds],
   ['Entrada por TikTok (ttclid)', testTikTokEntry],
   ['Preservacao de sck pre-existente no destino', testPreservesExistingSck],
-  ['Link inserido dinamicamente (MutationObserver)', testDynamicLinkInsertion]
+  ['Link inserido dinamicamente (MutationObserver)', testDynamicLinkInsertion],
+  ['Independencia de rede (zero chamadas ao servidor)', testNetworkIndependence]
 ];
 
 async function run() {

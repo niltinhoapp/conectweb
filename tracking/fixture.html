@@ -7,6 +7,34 @@
 (function () {
   var params = new URLSearchParams(location.search);
 
+  // Instrumentacao para o teste de "independencia de rede": registra
+  // qualquer tentativa de chamada de rede feita pela pagina (deveria
+  // ficar sempre vazio, ja que o tracker.js nao faz nenhuma chamada
+  // de rede para funcionar). Nao interfere no funcionamento normal -
+  // so observa e deixa a chamada original prosseguir.
+  window.__cwNetworkCalls = [];
+  var origFetch = window.fetch;
+  if (typeof origFetch === 'function') {
+    window.fetch = function () {
+      window.__cwNetworkCalls.push({ type: 'fetch', arg: String(arguments[0]) });
+      return origFetch.apply(this, arguments);
+    };
+  }
+  var origOpen = window.XMLHttpRequest && window.XMLHttpRequest.prototype.open;
+  if (origOpen) {
+    window.XMLHttpRequest.prototype.open = function (method, url) {
+      window.__cwNetworkCalls.push({ type: 'xhr', arg: String(url) });
+      return origOpen.apply(this, arguments);
+    };
+  }
+  if (navigator.sendBeacon) {
+    var origBeacon = navigator.sendBeacon.bind(navigator);
+    navigator.sendBeacon = function (url) {
+      window.__cwNetworkCalls.push({ type: 'sendBeacon', arg: String(url) });
+      return origBeacon.apply(navigator, arguments);
+    };
+  }
+
   var seedKey = params.get('t_seed_key');
   var seedValue = params.get('t_seed_value');
   if (seedKey && seedValue) {

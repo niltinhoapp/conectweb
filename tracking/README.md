@@ -8,6 +8,38 @@ checkout` — nada além disso. Não é uma plataforma de analytics, CRM,
 gestão de leads ou concorrente das ferramentas de atribuição das
 próprias plataformas de anúncio.
 
+## Quem comercializa e como isso funciona tecnicamente
+
+O ConnectWeb Tracking é comercializado pela ConnectWeb (inclusive via
+WhatsApp) como um produto pronto: o cliente recebe o arquivo
+`tracker.js`, o snippet de instalação e instruções — não uma conta, não
+um painel, não um contrato de processamento de dados com a ConnectWeb.
+
+**A ConnectWeb desenvolve, mantém e vende o produto, mas não participa
+do fluxo de dados.** O `tracker.js` executa inteiramente no navegador
+do visitante: toda a captura, preservação e decoração de links
+acontece localmente, usando o `localStorage`/cookie do próprio site
+onde o script está instalado. Hospedar o arquivo num domínio da
+ConnectWeb (só para facilitar a distribuição) não torna a ConnectWeb
+intermediária dos dados — é só onde o arquivo `.js` mora, como um CDN
+qualquer; o conteúdo capturado nunca sai do navegador do visitante em
+direção a nenhum servidor da ConnectWeb.
+
+### O que a ConnectWeb NÃO faz
+
+- Não recebe os dados capturados pelo tracker (UTMs, click IDs,
+  `visitor_id`, first/last touch) — eles nunca saem do navegador do
+  visitante rumo a um servidor da ConnectWeb.
+- Não exige conta, login, painel ou dashboard para o tracker funcionar.
+- O tracker não faz nenhuma chamada de rede (`fetch`, `XMLHttpRequest`,
+  `sendBeacon` ou qualquer outra) para infraestrutura da ConnectWeb —
+  nem para registrar a instalação, nem para buscar configuração, nem
+  para relatar uso. Isso é verificado automaticamente pela suíte de
+  testes (cenário "Independência de rede").
+- Funciona sem internet, exceto pelo carregamento inicial do próprio
+  arquivo `tracker.js` — que também pode ser auto-hospedado pelo
+  cliente, sem depender de nenhum domínio da ConnectWeb.
+
 ## Compatibilidade universal
 
 O núcleo não tem nenhuma dependência de plataforma. Se o site permite
@@ -94,7 +126,7 @@ sobrescreve dados de outra conta — só passa a gravar em um slot separado.
 - Registra **first touch** (nunca sobrescrito) e **last touch** — uma campanha nova **substitui por completo** o conjunto de atribuição anterior (nunca mistura `utm_campaign` de uma campanha com `gclid` de outra). Acesso direto nunca apaga o last touch existente.
 - Persiste em `localStorage` (principal) com cookie como fallback, ambos com TTL de 90 dias verificado na leitura (registro expirado inicia um novo ciclo de atribuição). Cookie gravado sem o histórico completo (evita estourar o limite de ~4KB) e com `Secure` quando o site é HTTPS.
 - Preserva parâmetros ao navegar por links — **apenas** para domínios permitidos: Hotmart e Kiwify por padrão, mais qualquer domínio listado em `data-decorate-domains`. Links internos (mesmo domínio) e qualquer domínio não listado **nunca** são alterados.
-- Para Hotmart e Kiwify especificamente, só os parâmetros oficialmente documentados por ambas vão para a URL de saída: os 5 UTMs + `src`. Os 10 click IDs (`fbclid`, `gclid` etc.) **não** são enviados a essas duas plataformas — continuam sendo capturados e armazenados normalmente pelo tracker (disponíveis via `get()`/`getRaw()` para uso futuro na atribuição/camada server-side), só não vão mais na URL do checkout. Destinos configurados via `data-decorate-domains` continuam recebendo o conjunto completo de parâmetros.
+- Para Hotmart e Kiwify especificamente, só os parâmetros oficialmente documentados por ambas vão para a URL de saída: os 5 UTMs + `src`. Os 10 click IDs (`fbclid`, `gclid` etc.) **não** são enviados a essas duas plataformas — continuam sendo capturados e armazenados normalmente pelo tracker (disponíveis localmente via `get()`/`getRaw()`, caso o próprio site precise deles para algo além do checkout), só não vão mais na URL do checkout. Destinos configurados via `data-decorate-domains` continuam recebendo o conjunto completo de parâmetros.
 - Adiciona o parâmetro `src` (texto livre, suportado oficialmente por Hotmart e Kiwify) quando o destino é uma dessas plataformas e o link ainda não tem um `src` definido. Não sintetiza mais um `sck` artificial — esse comportamento não é documentado oficialmente por nenhuma das duas plataformas; se o link já tiver `sck`, ele é preservado como está.
 - Injeta dados de atribuição em formulários como campos ocultos, incluindo formulários adicionados dinamicamente e **aninhados** dentro de containers inseridos depois do carregamento.
 - Detecta mudanças de `href` em links já existentes (não só links novos).
@@ -147,6 +179,7 @@ Cenários cobertos pela suíte automatizada:
 25. Entrada por TikTok (`ttclid`).
 26. Preservação de um `sck` pré-existente no link de destino (nunca sintetizado, nunca sobrescrito).
 27. Link inserido dinamicamente (novo `<a>`, via `MutationObserver`) é decorado sem click IDs.
+28. Independência de rede: nenhuma chamada de `fetch`/`XMLHttpRequest`/`sendBeacon` é feita em nenhum momento (captura, decoração, SPA, formulários, consentimento) — confirma que o tracker não depende de nenhum servidor da ConnectWeb para funcionar.
 
 ## Próximas etapas
 
