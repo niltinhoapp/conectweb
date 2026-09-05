@@ -233,21 +233,16 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .hero .lead b{ color:#fff; }
 .hero__cta{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
 
-/* Faixa de destaque da Livia, no topo do hero */
-.livia-strip{
-  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-  padding:10px 16px; border-radius:999px; margin-bottom:18px; max-width:fit-content;
-  background:linear-gradient(90deg, rgba(37,99,235,.16), rgba(124,58,237,.16));
-  border:1px solid rgba(124,58,237,.35); text-decoration:none;
+/* Badge da Livia no hero — mesmo tamanho dos demais badges da badge-row */
+.livia-badge{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:6px 13px; border-radius:999px; font-size:12.5px; font-weight:600;
+  background:linear-gradient(90deg, rgba(37,99,235,.20), rgba(124,58,237,.20));
+  border:1px solid rgba(124,58,237,.4); color:#fff; text-decoration:none;
   transition:border-color .2s ease, transform .2s ease;
 }
-.livia-strip:hover{ border-color:rgba(124,58,237,.6); transform:translateY(-1px); }
-.livia-strip__badge{
-  font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
-  padding:3px 9px; border-radius:999px; background:var(--grad); color:#fff; flex-shrink:0;
-}
-.livia-strip__text{ font-weight:600; font-size:13.5px; color:#fff; }
-.livia-strip__arrow{ margin-left:auto; font-weight:700; font-size:13px; color:#C4B5FD; white-space:nowrap; }
+.livia-badge:hover{ border-color:rgba(124,58,237,.65); transform:translateY(-1px); }
+.livia-badge__dot{ width:7px; height:7px; border-radius:50%; background:var(--grad); flex-shrink:0; }
 
 /* Badges do hero */
 .badge-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
