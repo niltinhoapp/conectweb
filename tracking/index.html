@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ConnectWeb Tracking — Teste V1</title>
+  <style>
+    body{font-family:system-ui,sans-serif;max-width:960px;margin:40px auto;padding:0 20px;line-height:1.5;background:#f6f7f9;color:#15171a}
+    .card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:22px;margin:18px 0}
+    code,pre{background:#f1f2f4;border-radius:8px;padding:3px 6px}
+    pre{padding:14px;overflow:auto}
+    a{display:inline-block;margin:7px 10px 7px 0}
+    button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <h1>ConnectWeb Tracking V1</h1>
+  <p>Página de teste do rastreador. Abra esta URL com UTMs e click IDs para verificar a persistência e a decoração dos links.</p>
+
+  <div class="card">
+    <h2>Dados capturados</h2>
+    <pre id="output">Carregando...</pre>
+  </div>
+
+  <div class="card">
+    <h2>Links de teste</h2>
+    <a href="/tracking/checkout.html">Checkout interno</a>
+    <a href="https://pay.hotmart.com/TESTE">Hotmart</a>
+    <a href="https://pay.kiwify.com.br/TESTE">Kiwify</a>
+  </div>
+
+  <div class="card">
+    <h2>Formulário de teste</h2>
+    <form action="#enviado" method="get">
+      <label>Nome <input name="nome" autocomplete="off"></label>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script src="/tracking/tracker.js" data-account="CW_TESTE_V1" data-debug="true"></script>
+  <script>
+    window.addEventListener('connectweb:tracking-ready', function () {
+      document.getElementById('output').textContent = JSON.stringify(
+        window.ConnectWebTracking.get(), null, 2
+      );
+    });
+  </script>
+</body>
+</html>
