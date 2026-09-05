@@ -436,6 +436,75 @@ async function testAccountSwitch(iframe) {
     'vidA=' + vidA + ' vidB=' + vidB + ' vidA(volta)=' + vidA2);
 }
 
+// 22. Alteracao dinamica de href para Hotmart (MutationObserver de atributo)
+async function testHrefChangeToHotmart(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't22_hrefhotmart', utm_source: 'facebook', utm_campaign: 'campA', fbclid: 'shouldnotleak' }));
+  await waitReady(iframe);
+
+  iframe.contentWindow.__cwChangeHref('https://checkout.hotmart.com/produtoX');
+  var got = await waitFor(function () {
+    var h = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+    return h.indexOf('utm_source') !== -1;
+  }, 4000);
+  var href = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+
+  var ok = got && href.indexOf('utm_source=facebook') !== -1 && href.indexOf('src=') !== -1 && href.indexOf('fbclid') === -1;
+  return assert(ok,
+    'href alterado dinamicamente para Hotmart foi decorado (utm+src, sem fbclid)',
+    'href obtido: ' + href);
+}
+
+// 23. Alteracao dinamica de href de volta para destino nao permitido
+// (bug real encontrado na auditoria: matchesDomainList dava falso
+// positivo quando o host tinha o mesmo comprimento de "hotmart.com")
+async function testHrefChangeBackToUnlisted(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't23_hrefback', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+
+  iframe.contentWindow.__cwChangeHref('https://checkout.hotmart.com/produtoY');
+  await waitFor(function () {
+    var h = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+    return h.indexOf('utm_source') !== -1;
+  }, 4000);
+
+  // "exemplo.com" tem o mesmo numero de caracteres que "hotmart.com" -
+  // e exatamente o caso que expunha o bug do matching por comprimento.
+  iframe.contentWindow.__cwChangeHref('https://exemplo.com/pagina');
+  await sleep(500);
+  var href = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+
+  var ok = href === 'https://exemplo.com/pagina';
+  return assert(ok,
+    'href alterado de volta para dominio nao permitido nao ficou decorado',
+    'href obtido: ' + href + ' (esperado: https://exemplo.com/pagina, sem parametros)');
+}
+
+// 24. Hotmart/Kiwify recebem somente os parametros documentados
+// (sem click IDs), mas os click IDs continuam armazenados internamente
+async function testHotmartKiwifyExcludeClickIds(iframe) {
+  await navigate(iframe, fixtureUrl({
+    t_account: 't24_noclickids', utm_source: 'facebook', utm_medium: 'paid', utm_campaign: 'campA',
+    fbclid: 'fb123', gclid: 'g456', ttclid: 'tt789'
+  }));
+  await waitReady(iframe);
+  await sleep(150);
+
+  var hotmartHref = iframe.contentWindow.document.getElementById('linkHotmart').getAttribute('href');
+  var kiwifyHref = iframe.contentWindow.document.getElementById('linkKiwify').getAttribute('href');
+  var raw = iframe.contentWindow.ConnectWebTracking.getRaw();
+
+  var hotmartOk = hotmartHref.indexOf('utm_source=facebook') !== -1 && hotmartHref.indexOf('src=') !== -1 &&
+    hotmartHref.indexOf('fbclid') === -1 && hotmartHref.indexOf('gclid') === -1 && hotmartHref.indexOf('ttclid') === -1;
+  var kiwifyOk = kiwifyHref.indexOf('utm_source=facebook') !== -1 && kiwifyHref.indexOf('src=') !== -1 &&
+    kiwifyHref.indexOf('fbclid') === -1 && kiwifyHref.indexOf('gclid') === -1 && kiwifyHref.indexOf('ttclid') === -1;
+  var storageOk = raw.first_touch.fbclid === 'fb123' && raw.first_touch.gclid === 'g456' && raw.first_touch.ttclid === 'tt789';
+
+  var ok = hotmartOk && kiwifyOk && storageOk;
+  return assert(ok,
+    'Hotmart/Kiwify sem click IDs na URL; click IDs continuam no armazenamento interno',
+    'hotmart=' + hotmartHref + ' | kiwify=' + kiwifyHref + ' | armazenado=' + JSON.stringify(raw.first_touch));
+}
+
 var TESTS = [
   ['Acesso direto', testDirect],
   ['Facebook com UTMs completos', testFacebookUtms],
@@ -457,7 +526,10 @@ var TESTS = [
   ['Consentimento negado', testConsentDenied],
   ['Opt-out persiste entre reloads', testOptOut],
   ['Expiracao por TTL (90 dias)', testExpiry],
-  ['Troca de data-account (isolamento)', testAccountSwitch]
+  ['Troca de data-account (isolamento)', testAccountSwitch],
+  ['Alteracao dinamica de href para Hotmart', testHrefChangeToHotmart],
+  ['Alteracao dinamica de href de volta para nao permitido', testHrefChangeBackToUnlisted],
+  ['Hotmart/Kiwify sem click IDs na URL (mas armazenados)', testHotmartKiwifyExcludeClickIds]
 ];
 
 async function run() {

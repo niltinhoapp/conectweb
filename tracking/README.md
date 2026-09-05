@@ -56,6 +56,7 @@ sobrescreve dados de outra conta — só passa a gravar em um slot separado.
 - Registra **first touch** (nunca sobrescrito) e **last touch** — uma campanha nova **substitui por completo** o conjunto de atribuição anterior (nunca mistura `utm_campaign` de uma campanha com `gclid` de outra). Acesso direto nunca apaga o last touch existente.
 - Persiste em `localStorage` (principal) com cookie como fallback, ambos com TTL de 90 dias verificado na leitura (registro expirado inicia um novo ciclo de atribuição). Cookie gravado sem o histórico completo (evita estourar o limite de ~4KB) e com `Secure` quando o site é HTTPS.
 - Preserva parâmetros ao navegar por links — **apenas** para domínios permitidos: Hotmart e Kiwify por padrão, mais qualquer domínio listado em `data-decorate-domains`. Links internos (mesmo domínio) e qualquer domínio não listado **nunca** são alterados.
+- Para Hotmart e Kiwify especificamente, só os parâmetros oficialmente documentados por ambas vão para a URL de saída: os 5 UTMs + `src`. Os 10 click IDs (`fbclid`, `gclid` etc.) **não** são enviados a essas duas plataformas — continuam sendo capturados e armazenados normalmente pelo tracker (disponíveis via `get()`/`getRaw()` para uso futuro na atribuição/camada server-side), só não vão mais na URL do checkout. Destinos configurados via `data-decorate-domains` continuam recebendo o conjunto completo de parâmetros.
 - Adiciona o parâmetro `src` (texto livre, suportado oficialmente por Hotmart e Kiwify) quando o destino é uma dessas plataformas e o link ainda não tem um `src` definido. Não sintetiza mais um `sck` artificial — esse comportamento não é documentado oficialmente por nenhuma das duas plataformas; se o link já tiver `sck`, ele é preservado como está.
 - Injeta dados de atribuição em formulários como campos ocultos, incluindo formulários adicionados dinamicamente e **aninhados** dentro de containers inseridos depois do carregamento.
 - Detecta mudanças de `href` em links já existentes (não só links novos).
@@ -103,6 +104,9 @@ Cenários cobertos pela suíte automatizada:
 19. Opt-out (`optOut()` + persistência do opt-out entre reloads).
 20. Expiração por TTL (registro antigo simulado é descartado).
 21. Troca de `data-account` (isolamento — não reaproveita dados da conta anterior).
+22. Alteração dinâmica de `href` para Hotmart (o link é decorado ao virar um destino permitido).
+23. Alteração dinâmica de `href` de volta para um destino não permitido (o link não fica decorado indevidamente).
+24. Hotmart/Kiwify recebem só os parâmetros documentados (sem click IDs), que continuam armazenados internamente.
 
 ## Próximas etapas
 

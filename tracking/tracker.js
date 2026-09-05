@@ -433,7 +433,11 @@
     for (var i = 0; i < list.length; i++) {
       var d = list[i];
       if (!d) continue;
-      if (host === d || host.indexOf('.' + d) === (host.length - d.length - 1)) return true;
+      // endsWith (nao indexOf com calculo manual de posicao): a formula
+      // anterior dava falso positivo quando host e d tinham o mesmo
+      // comprimento (indexOf retornava -1 e a posicao esperada tambem
+      // era -1, entao -1===-1 batia mesmo sem nenhuma relacao real).
+      if (host === d || host.endsWith('.' + d)) return true;
     }
     return false;
   }
@@ -473,7 +477,18 @@
     var record = getRecord();
     var source = mergeForDecoration(record.first_touch || {}, record.last_touch || {});
 
-    ATTRIBUTION_KEYS.forEach(function (key) {
+    // Hotmart e Kiwify: so os parametros oficialmente documentados por
+    // ambas (os 5 UTMs + src). Os 10 click IDs (fbclid, gclid etc.) NAO
+    // sao enviados para essas duas plataformas - continuam sendo
+    // capturados e armazenados normalmente pelo tracker (para uso futuro
+    // na atribuicao/camada server-side), so nao vao mais na URL de saida
+    // do checkout. Outros destinos (data-decorate-domains) continuam
+    // recebendo o conjunto completo, como antes.
+    var keysToDecorate = (destination === 'hotmart' || destination === 'kiwify')
+      ? CAMPAIGN_KEYS
+      : ATTRIBUTION_KEYS;
+
+    keysToDecorate.forEach(function (key) {
       if (!parsed.searchParams.get(key) && source[key]) {
         parsed.searchParams.set(key, source[key]);
       }
