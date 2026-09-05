@@ -1,6 +1,44 @@
 # ConnectWeb Tracking V1.1
 
-Primeira versão do produto de rastreamento e atribuição da ConnectWeb.
+ConnectWeb Tracking é um script JavaScript universal que captura e
+preserva a origem do visitante durante a navegação e transporta os
+parâmetros de atribuição até o checkout/destino final. Resolve a perda
+de origem entre `anúncio → site/LP → navegação → botão/formulário →
+checkout` — nada além disso. Não é uma plataforma de analytics, CRM,
+gestão de leads ou concorrente das ferramentas de atribuição das
+próprias plataformas de anúncio.
+
+## Compatibilidade universal
+
+O núcleo não tem nenhuma dependência de plataforma. Se o site permite
+inserir um `<script>` (no `<head>` ou em qualquer parte do HTML), o
+Tracking funciona — independente de a página ser HTML puro, PHP,
+WordPress, Elementor, Shopify, Nuvemshop, Wix, Webflow, Framer, React,
+Next.js ou qualquer outro ambiente que permita JavaScript.
+
+## O que este produto NÃO é
+
+Fora de escopo, permanentemente — não por falta de tempo, mas por
+decisão de produto:
+
+- Dashboard de analytics, CRM ou gestão de leads.
+- Sistema de anúncios, públicos ou remarketing.
+- Substituto do Meta Pixel, Google Analytics ou das ferramentas de
+  atribuição de Meta/Google/TikTok Ads.
+- Atribuição própria de conversões publicitárias, CAPI ou qualquer
+  envio de eventos de conversão para plataformas de anúncio.
+- Banco de dados de clientes ou coleta de nome, telefone, e-mail ou
+  qualquer dado pessoal como finalidade do produto — o tracker só lida
+  com parâmetros de atribuição (UTMs, click IDs, IDs técnicos gerados
+  pelo próprio script).
+- Sistema de gerenciamento de consentimento (CMP) ou banner de
+  cookies — o suporte a consentimento existente é opt-in e reage a um
+  consentimento já resolvido por outro sistema no site; o Tracking não
+  exige que o cliente instale nada além dele mesmo.
+
+Regra para qualquer funcionalidade nova: "isso é necessário para
+preservar e transportar a origem do visitante até o checkout?" Se não
+for, não entra no V1.
 
 ## Requisitos de navegador
 
@@ -67,14 +105,13 @@ sobrescreve dados de outra conta — só passa a gravar em um slot separado.
 
 ## Limites intencionais da V1.1
 
-Ainda é um tracker client-side. Ela **não envia conversões para Meta,
-Google ou TikTok** e não promete que uma plataforma de anúncios registre
-toda conversão. O próximo estágio é adicionar uma camada server-side/
-eventos, mantendo o mesmo modelo de atribuição.
-
-Isso ainda é uma biblioteca de cliente única por domínio, não um produto
-SaaS multi-conta completo: falta painel, API de ingestão server-side,
-autenticação multi-tenant e testes automatizados de regressão contínua.
+É, por decisão de produto, **só** um tracker client-side: captura,
+preserva e transporta a origem do visitante até o checkout. Ela **não
+envia conversões para Meta, Google ou TikTok** e não promete que uma
+plataforma de anúncios registre toda conversão — isso é papel do pixel/
+CAPI de cada plataforma, não deste script. Ver "O que este produto NÃO
+é" acima para a lista completa do que está permanentemente fora de
+escopo.
 
 ## Teste
 
@@ -107,11 +144,17 @@ Cenários cobertos pela suíte automatizada:
 22. Alteração dinâmica de `href` para Hotmart (o link é decorado ao virar um destino permitido).
 23. Alteração dinâmica de `href` de volta para um destino não permitido (o link não fica decorado indevidamente).
 24. Hotmart/Kiwify recebem só os parâmetros documentados (sem click IDs), que continuam armazenados internamente.
+25. Entrada por TikTok (`ttclid`).
+26. Preservação de um `sck` pré-existente no link de destino (nunca sintetizado, nunca sobrescrito).
+27. Link inserido dinamicamente (novo `<a>`, via `MutationObserver`) é decorado sem click IDs.
 
 ## Próximas etapas
 
-1. Endpoint de ingestão server-side.
-2. Painel multi-conta.
-3. Eventos de conversão e `event_id`.
-4. Integrações com plataformas de checkout/anúncios além de Hotmart/Kiwify.
-5. Testes de regressão automatizados em CI (a suíte atual roda manualmente no navegador).
+Só o que continua dentro do escopo do V1 (capturar → preservar →
+transportar) — ver "O que este produto NÃO é" acima para o que
+permanece deliberadamente fora:
+
+1. Testes de regressão automatizados em CI (a suíte atual roda manualmente no navegador).
+2. Suporte a novos destinos de checkout além de Hotmart/Kiwify, caso surja demanda real
+   (mesmo modelo: só os parâmetros de atribuição, nunca uma integração específica de
+   plataforma).

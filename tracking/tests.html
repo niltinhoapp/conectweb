@@ -505,6 +505,48 @@ async function testHotmartKiwifyExcludeClickIds(iframe) {
     'hotmart=' + hotmartHref + ' | kiwify=' + kiwifyHref + ' | armazenado=' + JSON.stringify(raw.first_touch));
 }
 
+// 25. Entrada por TikTok (ttclid)
+async function testTikTokEntry(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't25_tiktok', ttclid: 'tt999' }));
+  await waitReady(iframe);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = data.first_touch.ttclid === 'tt999' && !data.first_touch.utm_source && data.source === 'tiktok';
+  return assert(ok, 'first_touch.ttclid=tt999, sem utm_source, source=tiktok', 'obtido ' + JSON.stringify(data));
+}
+
+// 26. Preservacao de sck pre-existente no link de destino
+async function testPreservesExistingSck(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't26_sck', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+
+  iframe.contentWindow.__cwChangeHref('https://checkout.hotmart.com/produtoZ?sck=meu_sck_manual');
+  await waitFor(function () {
+    var h = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+    return h.indexOf('utm_source') !== -1;
+  }, 4000);
+  var href = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+
+  var ok = href.indexOf('sck=meu_sck_manual') !== -1 && href.indexOf('utm_source=facebook') !== -1;
+  return assert(ok, 'sck pre-existente preservado, utm_source adicionado (' + href + ')', 'href obtido: ' + href);
+}
+
+// 27. Link inserido dinamicamente (novo <a>, nao href trocado) e decorado
+// pelo MutationObserver sem click IDs
+async function testDynamicLinkInsertion(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't27_dynlink', utm_source: 'facebook', utm_campaign: 'campA', fbclid: 'shouldnotleak' }));
+  await waitReady(iframe);
+
+  iframe.contentWindow.__cwAddDynamicLink();
+  var got = await waitFor(function () {
+    var el = iframe.contentWindow.document.getElementById('linkDynamic');
+    return el && el.getAttribute('href').indexOf('utm_source') !== -1;
+  }, 4000);
+  var href = iframe.contentWindow.document.getElementById('linkDynamic').getAttribute('href');
+
+  var ok = got && href.indexOf('utm_source=facebook') !== -1 && href.indexOf('src=') !== -1 && href.indexOf('fbclid') === -1;
+  return assert(ok, 'link novo (inserido via JS) foi decorado pelo MutationObserver, sem fbclid', 'href obtido: ' + href);
+}
+
 var TESTS = [
   ['Acesso direto', testDirect],
   ['Facebook com UTMs completos', testFacebookUtms],
@@ -529,7 +571,10 @@ var TESTS = [
   ['Troca de data-account (isolamento)', testAccountSwitch],
   ['Alteracao dinamica de href para Hotmart', testHrefChangeToHotmart],
   ['Alteracao dinamica de href de volta para nao permitido', testHrefChangeBackToUnlisted],
-  ['Hotmart/Kiwify sem click IDs na URL (mas armazenados)', testHotmartKiwifyExcludeClickIds]
+  ['Hotmart/Kiwify sem click IDs na URL (mas armazenados)', testHotmartKiwifyExcludeClickIds],
+  ['Entrada por TikTok (ttclid)', testTikTokEntry],
+  ['Preservacao de sck pre-existente no destino', testPreservesExistingSck],
+  ['Link inserido dinamicamente (MutationObserver)', testDynamicLinkInsertion]
 ];
 
 async function run() {
