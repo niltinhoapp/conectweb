@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ConnectWeb Tracking — Suíte de testes V1.1</title>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:960px;margin:40px auto;padding:0 20px;line-height:1.5;background:#f6f7f9;color:#15171a}
+  h1{margin-bottom:4px}
+  #summary{font-size:18px;font-weight:700;margin:14px 0}
+  .pass{color:#0a7a2f}
+  .fail{color:#b91c1c}
+  table{border-collapse:collapse;width:100%;background:#fff;border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid #e5e7eb;font-size:14px;vertical-align:top}
+  th{background:#eef0f3}
+  tr.fail td{background:#fef2f2}
+  code{background:#f1f2f4;border-radius:5px;padding:1px 5px}
+  iframe{display:none}
+</style>
+</head>
+<body>
+  <h1>ConnectWeb Tracking — Suíte de testes V1.1</h1>
+  <p>Roda no navegador, sem dependências externas. Cada teste usa uma <code>data-account</code> própria para isolar o storage.</p>
+  <div id="summary">Rodando…</div>
+  <table>
+    <thead><tr><th style="width:26px">#</th><th style="width:260px">Cenário</th><th style="width:70px">Resultado</th><th>Detalhe</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+<script>
+function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+function storageKeyFor(account) {
+  var slug = account ? account.replace(/[^a-zA-Z0-9_-]/g, '_') : 'default';
+  return '__cw_tracking_v1____' + slug;
+}
+
+function createIframe() {
+  var f = document.createElement('iframe');
+  f.style.width = '1px'; f.style.height = '1px';
+  document.body.appendChild(f);
+  return f;
+}
+
+function navigate(iframe, url) {
+  return new Promise(function (resolve) {
+    iframe.addEventListener('load', function onLoad() {
+      iframe.removeEventListener('load', onLoad);
+      resolve();
+    });
+    iframe.src = url;
+  });
+}
+
+async function waitFor(fn, timeout) {
+  var start = Date.now();
+  while (Date.now() - start < timeout) {
+    try { if (fn()) return true; } catch (e) {}
+    await sleep(25);
+  }
+  return false;
+}
+
+async function waitReady(iframe, timeout) {
+  return waitFor(function () {
+    return !!(iframe.contentWindow && iframe.contentWindow.ConnectWebTracking);
+  }, timeout || 3000);
+}
+
+// Cada execucao da suite usa um RUN_ID unico nas contas de teste, para
+// nunca reaproveitar localStorage/cookies deixados por uma execucao
+// anterior no mesmo navegador (o storage e por account, nao por sessao
+// de teste).
+var RUN_ID = Date.now().toString(36);
+
+function fixtureUrl(params) {
+  if (params.t_account) params.t_account = params.t_account + '_' + RUN_ID;
+  var qs = Object.keys(params).map(function (k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  return '/tracking/fixture.html?' + qs;
+}
+
+function storageKeyForTest(account) {
+  return storageKeyFor(account + '_' + RUN_ID);
+}
+
+function assert(cond, okMsg, failMsg) {
+  return { pass: !!cond, message: cond ? okMsg : failMsg };
+}
+
+var results = [];
+
+async function runTest(name, fn) {
+  var iframe = createIframe();
+  var outcome;
+  try {
+    outcome = await fn(iframe);
+  } catch (err) {
+    outcome = { pass: false, message: 'Excecao: ' + (err && err.message ? err.message : String(err)) };
+  }
+  results.push({ name: name, pass: outcome.pass, message: outcome.message });
+  iframe.parentNode && iframe.parentNode.removeChild(iframe);
+}
+
+// 1. Acesso direto
+async function testDirect(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't01_direct' }));
+  await waitReady(iframe);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ft = data.first_touch || {};
+  var ftEmpty = Object.keys(ft).length === 0;
+  // Dentro do iframe de teste, document.referrer aponta para tests.html
+  // (mesma origem) - por isso o classifySource acerta "internal" em vez
+  // de "direct" (nao ha unico "direct" real neste harness sem referrer).
+  // Ambos sao classificacoes corretas de "sem campanha"; o que importa
+  // aqui e o first_touch vazio.
+  var ok = ftEmpty && (data.source === 'direct' || data.source === 'internal');
+  return assert(ok,
+    'first_touch vazio, source=' + data.source + ' (sem campanha, como esperado)',
+    'esperado first_touch vazio e source direct/internal, obtido ' + JSON.stringify(data));
+}
+
+// 2. Facebook com UTMs completos
+async function testFacebookUtms(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't02_fb', utm_source: 'facebook', utm_medium: 'paid', utm_campaign: 'campA', fbclid: 'abc123' }));
+  await waitReady(iframe);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = data.first_touch.utm_source === 'facebook' && data.first_touch.fbclid === 'abc123' &&
+    data.last_touch.utm_source === 'facebook' && data.source === 'facebook';
+  return assert(ok, 'first/last touch = facebook/campA/abc123', 'obtido ' + JSON.stringify(data));
+}
+
+// 3. Google Ads somente com gclid
+async function testGoogleGclidOnly(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't03_google', gclid: 'xyz789' }));
+  await waitReady(iframe);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = data.first_touch.gclid === 'xyz789' && !data.first_touch.utm_source && data.source === 'google';
+  return assert(ok, 'first_touch.gclid=xyz789, sem utm_source, source=google', 'obtido ' + JSON.stringify(data));
+}
+
+// 4. Troca Facebook -> Google (bug do merge)
+async function testSwitchFbToGoogle(iframe) {
+  var url1 = fixtureUrl({ t_account: 't04_switch', utm_source: 'facebook', utm_campaign: 'campA', fbclid: 'abc' });
+  await navigate(iframe, url1);
+  await waitReady(iframe);
+
+  var url2 = fixtureUrl({ t_account: 't04_switch', utm_source: 'google', gclid: 'xyz' });
+  await navigate(iframe, url2);
+  await waitReady(iframe);
+
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var last = data.last_touch;
+  var ok = last.utm_source === 'google' && last.gclid === 'xyz' &&
+    !last.utm_campaign && !last.fbclid &&
+    data.first_touch.utm_source === 'facebook';
+  return assert(ok,
+    'last_touch limpo (google/xyz, sem campA/fbclid antigos), first_touch preservado (facebook)',
+    'last_touch obtido ' + JSON.stringify(last) + ' | first_touch ' + JSON.stringify(data.first_touch));
+}
+
+// 5. Troca Google -> Facebook
+async function testSwitchGoogleToFb(iframe) {
+  var url1 = fixtureUrl({ t_account: 't05_switch', gclid: 'xyz1' });
+  await navigate(iframe, url1);
+  await waitReady(iframe);
+
+  var url2 = fixtureUrl({ t_account: 't05_switch', utm_source: 'facebook', utm_campaign: 'campB', fbclid: 'newfb' });
+  await navigate(iframe, url2);
+  await waitReady(iframe);
+
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var last = data.last_touch;
+  var ok = last.utm_source === 'facebook' && last.utm_campaign === 'campB' && last.fbclid === 'newfb' &&
+    !last.gclid && data.first_touch.gclid === 'xyz1';
+  return assert(ok,
+    'last_touch limpo (facebook/campB, sem gclid antigo), first_touch preservado (gclid=xyz1)',
+    'last_touch obtido ' + JSON.stringify(last) + ' | first_touch ' + JSON.stringify(data.first_touch));
+}
+
+// 6. Campanha completa -> campanha parcial
+async function testFullThenPartial(iframe) {
+  var url1 = fixtureUrl({ t_account: 't06_partial', utm_source: 'facebook', utm_medium: 'paid', utm_campaign: 'campFull', utm_content: 'ad1', utm_term: 'termo' });
+  await navigate(iframe, url1);
+  await waitReady(iframe);
+
+  var url2 = fixtureUrl({ t_account: 't06_partial', utm_source: 'facebook' });
+  await navigate(iframe, url2);
+  await waitReady(iframe);
+
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var last = data.last_touch;
+  var ok = last.utm_source === 'facebook' && !last.utm_medium && !last.utm_campaign && !last.utm_content && !last.utm_term;
+  return assert(ok, 'last_touch so com utm_source, sem resquicio da campanha anterior', 'obtido ' + JSON.stringify(last));
+}
+
+// 7. Retorno direto nao apaga last touch
+async function testDirectReturnKeepsLastTouch(iframe) {
+  var url1 = fixtureUrl({ t_account: 't07_return', utm_source: 'facebook', utm_campaign: 'campA', fbclid: 'abc' });
+  await navigate(iframe, url1);
+  await waitReady(iframe);
+  var before = iframe.contentWindow.ConnectWebTracking.get().last_touch;
+
+  var url2 = fixtureUrl({ t_account: 't07_return' }); // sem parametros = acesso direto
+  await navigate(iframe, url2);
+  await waitReady(iframe);
+  var after = iframe.contentWindow.ConnectWebTracking.get().last_touch;
+
+  var ok = JSON.stringify(before) === JSON.stringify(after) && after.utm_source === 'facebook';
+  return assert(ok, 'last_touch inalterado apos visita direta (' + JSON.stringify(after) + ')',
+    'antes ' + JSON.stringify(before) + ' depois ' + JSON.stringify(after));
+}
+
+// 8. Multiplas paginas (persistencia)
+async function testMultiplePages(iframe) {
+  var url1 = fixtureUrl({ t_account: 't08_multi', utm_source: 'google', gclid: 'g1' });
+  await navigate(iframe, url1);
+  await waitReady(iframe);
+  var first = iframe.contentWindow.ConnectWebTracking.get();
+  var vid1 = first.visitor_id;
+
+  var url2 = fixtureUrl({ t_account: 't08_multi', pagina: '2' });
+  await navigate(iframe, url2);
+  await waitReady(iframe);
+  var second = iframe.contentWindow.ConnectWebTracking.get();
+
+  var ok = vid1 && vid1 === second.visitor_id && second.first_touch.utm_source === 'google';
+  return assert(ok, 'visitor_id e first_touch preservados entre paginas (' + vid1 + ')',
+    'vid1=' + vid1 + ' vid2=' + second.visitor_id);
+}
+
+// 9. Link interno nao decorado
+async function testInternalLinkNotDecorated(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't09_internal', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  await sleep(150);
+  var href = iframe.contentWindow.document.getElementById('linkInternal').getAttribute('href');
+  var ok = href.indexOf('utm_source') === -1;
+  return assert(ok, 'link interno permanece sem utm_source (' + href + ')', 'href obtido: ' + href);
+}
+
+// 10. Link externo nao listado nao decorado
+async function testExternalNotListed(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't10_external', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  await sleep(150);
+  var href = iframe.contentWindow.document.getElementById('linkExternal').getAttribute('href');
+  var ok = href.indexOf('utm_source') === -1;
+  return assert(ok, 'link externo nao listado permanece intacto (' + href + ')', 'href obtido: ' + href);
+}
+
+// 11. Link Hotmart decorado
+async function testHotmartDecorated(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't11_hotmart', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  await sleep(150);
+  var href = iframe.contentWindow.document.getElementById('linkHotmart').getAttribute('href');
+  var ok = href.indexOf('utm_source=facebook') !== -1 && href.indexOf('src=') !== -1;
+  return assert(ok, 'link hotmart ganhou utm_source + src (' + href + ')', 'href obtido: ' + href);
+}
+
+// 12. Link Kiwify decorado
+async function testKiwifyDecorated(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't12_kiwify', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  await sleep(150);
+  var href = iframe.contentWindow.document.getElementById('linkKiwify').getAttribute('href');
+  var ok = href.indexOf('utm_source=facebook') !== -1 && href.indexOf('src=') !== -1;
+  return assert(ok, 'link kiwify ganhou utm_source + src (' + href + ')', 'href obtido: ' + href);
+}
+
+// 13. Formulario inicial
+async function testInitialForm(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't13_form', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  await sleep(150);
+  var form = iframe.contentWindow.document.getElementById('formInitial');
+  var field = form.querySelector('input[name="utm_source"]');
+  var vid = form.querySelector('input[name="cw_visitor_id"]');
+  var ok = field && field.value === 'facebook' && vid && vid.value;
+  return assert(ok, 'formulario inicial recebeu utm_source + cw_visitor_id', 'campo utm_source=' + (field && field.value));
+}
+
+// 14. Formulario dinamico
+async function testDynamicForm(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't14_dynform', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  iframe.contentWindow.__cwAddDynamicForm();
+  // O MutationObserver processa em lote via requestAnimationFrame - em aba
+  // de fundo/automatizada o rAF pode ser bem mais lento que o normal,
+  // entao fazemos polling generoso em vez de um sleep fixo curto.
+  await waitFor(function () {
+    var form = iframe.contentWindow.document.getElementById('formDynamic');
+    var field = form && form.querySelector('input[name="utm_source"]');
+    return field && field.value === 'facebook';
+  }, 4000);
+  var form = iframe.contentWindow.document.getElementById('formDynamic');
+  var field = form && form.querySelector('input[name="utm_source"]');
+  return assert(field && field.value === 'facebook', 'form dinamico recebeu campos ocultos', 'form/field: ' + (field && field.value));
+}
+
+// 15. Formulario aninhado dentro de container dinamico
+async function testNestedForm(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't15_nested', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  iframe.contentWindow.__cwAddNestedForm();
+  await waitFor(function () {
+    var form = iframe.contentWindow.document.getElementById('formNested');
+    var field = form && form.querySelector('input[name="utm_source"]');
+    return field && field.value === 'facebook';
+  }, 4000);
+  var form = iframe.contentWindow.document.getElementById('formNested');
+  var field = form && form.querySelector('input[name="utm_source"]');
+  return assert(field && field.value === 'facebook', 'form aninhado (dentro de div nova) recebeu campos ocultos', 'form/field: ' + (field && field.value));
+}
+
+// 16. SPA via pushState
+async function testSpaPushState(iframe) {
+  await navigate(iframe, fixtureUrl({ t_account: 't16_spa', utm_source: 'facebook', utm_campaign: 'campA' }));
+  await waitReady(iframe);
+  var before = iframe.contentWindow.ConnectWebTracking.get();
+
+  iframe.contentWindow.__cwPushState('/tracking/fixture.html?t_account=t16_spa&utm_source=google&gclid=zzz');
+  await sleep(200);
+
+  var after = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = after.last_touch.utm_source === 'google' && after.last_touch.gclid === 'zzz' &&
+    !after.last_touch.utm_campaign && after.first_touch.utm_source === 'facebook' &&
+    after.visitor_id === before.visitor_id;
+  return assert(ok, 'pushState atualizou last_touch sem recriar first_touch/visitor_id',
+    'antes ' + JSON.stringify(before.last_touch) + ' depois ' + JSON.stringify(after.last_touch));
+}
+
+// 17. Consentimento aceito
+async function testConsentGranted(iframe) {
+  var url = fixtureUrl({ t_account: 't17_consent', t_consent_required: 'true', utm_source: 'facebook', utm_campaign: 'campA' });
+  await navigate(iframe, url);
+  await waitReady(iframe);
+
+  var key = storageKeyForTest('t17_consent');
+  var beforeStorage = iframe.contentWindow.localStorage.getItem(key);
+  var stateBefore = iframe.contentWindow.ConnectWebTracking.consentState();
+
+  iframe.contentWindow.ConnectWebTracking.setConsent(true);
+  await sleep(150);
+
+  var afterStorage = iframe.contentWindow.localStorage.getItem(key);
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = beforeStorage === null && stateBefore === 'unknown' && !!afterStorage && data.first_touch.utm_source === 'facebook';
+  return assert(ok, 'nada gravado antes do consentimento; apos setConsent(true), registro criado com first_touch correto',
+    'beforeStorage=' + beforeStorage + ' stateBefore=' + stateBefore + ' afterStorage=' + !!afterStorage + ' data=' + JSON.stringify(data.first_touch));
+}
+
+// 18. Consentimento negado
+async function testConsentDenied(iframe) {
+  var url = fixtureUrl({ t_account: 't18_consent_deny', t_consent_required: 'true', utm_source: 'facebook' });
+  await navigate(iframe, url);
+  await waitReady(iframe);
+
+  iframe.contentWindow.ConnectWebTracking.setConsent(false);
+  await sleep(150);
+
+  var key = storageKeyForTest('t18_consent_deny');
+  var storage = iframe.contentWindow.localStorage.getItem(key);
+  var ok = storage === null && iframe.contentWindow.ConnectWebTracking.consentState() === 'denied';
+  return assert(ok, 'nenhum dado persistido apos negar consentimento', 'storage=' + storage);
+}
+
+// 19. Opt-out persiste entre reloads
+async function testOptOut(iframe) {
+  var url = fixtureUrl({ t_account: 't19_optout', t_consent_required: 'true', utm_source: 'facebook' });
+  await navigate(iframe, url);
+  await waitReady(iframe);
+
+  iframe.contentWindow.ConnectWebTracking.optOut();
+  await sleep(150);
+
+  var key = storageKeyForTest('t19_optout');
+  var storageAfterOptout = iframe.contentWindow.localStorage.getItem(key);
+  var cookieHasOptout = iframe.contentWindow.document.cookie.indexOf('cw_tracking_optout_v1__t19_optout_' + RUN_ID) !== -1;
+
+  // recarrega a mesma pagina/conta - opt-out deve ser lido automaticamente
+  await navigate(iframe, url);
+  await waitReady(iframe);
+  var stateAfterReload = iframe.contentWindow.ConnectWebTracking.consentState();
+  var storageAfterReload = iframe.contentWindow.localStorage.getItem(key);
+
+  var ok = storageAfterOptout === null && cookieHasOptout && stateAfterReload === 'denied' && storageAfterReload === null;
+  return assert(ok, 'opt-out limpou dados e persistiu como negado apos reload',
+    'storageAfterOptout=' + storageAfterOptout + ' cookie=' + cookieHasOptout + ' stateAfterReload=' + stateAfterReload);
+}
+
+// 20. Expiracao por TTL
+async function testExpiry(iframe) {
+  var account = 't20_expiry';
+  var key = storageKeyForTest(account);
+  var oldDate = new Date(Date.now() - 100 * 24 * 60 * 60 * 1000).toISOString();
+  var seeded = {
+    version: '1.1.0', account: account, visitor_id: 'SEEDED_OLD',
+    first_touch: { utm_source: 'old' }, last_touch: { utm_source: 'old' },
+    last_touch_source: 'old', source: 'old',
+    landing_page: { url: '', path: '', referrer: '', captured_at: oldDate },
+    last_page: '', updated_at: oldDate, history: []
+  };
+  // t_seed_key/t_seed_value precisam ser calculados ANTES de fixtureUrl()
+  // sufixar t_account com o RUN_ID, entao usamos storageKeyForTest (que
+  // aplica o mesmo sufixo) para as duas coisas baterem.
+  var url = fixtureUrl({ t_account: account, t_seed_key: key, t_seed_value: JSON.stringify(seeded) });
+  await navigate(iframe, url);
+  await waitReady(iframe);
+
+  var data = iframe.contentWindow.ConnectWebTracking.get();
+  var ok = data.visitor_id !== 'SEEDED_OLD';
+  return assert(ok, 'registro com 100 dias foi descartado (novo visitor_id gerado)', 'visitor_id obtido: ' + data.visitor_id);
+}
+
+// 21. Troca de account (isolamento)
+async function testAccountSwitch(iframe) {
+  var urlA = fixtureUrl({ t_account: 't21_acctA' });
+  await navigate(iframe, urlA);
+  await waitReady(iframe);
+  var vidA = iframe.contentWindow.ConnectWebTracking.get().visitor_id;
+
+  var urlB = fixtureUrl({ t_account: 't21_acctB' });
+  await navigate(iframe, urlB);
+  await waitReady(iframe);
+  var vidB = iframe.contentWindow.ConnectWebTracking.get().visitor_id;
+
+  await navigate(iframe, urlA);
+  await waitReady(iframe);
+  var vidA2 = iframe.contentWindow.ConnectWebTracking.get().visitor_id;
+
+  var ok = vidA && vidB && vidA !== vidB && vidA2 === vidA;
+  return assert(ok, 'conta B nao reaproveitou dados da conta A; conta A preservada ao voltar',
+    'vidA=' + vidA + ' vidB=' + vidB + ' vidA(volta)=' + vidA2);
+}
+
+var TESTS = [
+  ['Acesso direto', testDirect],
+  ['Facebook com UTMs completos', testFacebookUtms],
+  ['Google Ads somente com gclid', testGoogleGclidOnly],
+  ['Troca Facebook -> Google (bug do merge)', testSwitchFbToGoogle],
+  ['Troca Google -> Facebook', testSwitchGoogleToFb],
+  ['Campanha completa -> parcial', testFullThenPartial],
+  ['Retorno direto nao apaga last touch', testDirectReturnKeepsLastTouch],
+  ['Multiplas paginas (persistencia)', testMultiplePages],
+  ['Link interno nao decorado', testInternalLinkNotDecorated],
+  ['Link externo nao listado nao decorado', testExternalNotListed],
+  ['Link Hotmart decorado (utm + src)', testHotmartDecorated],
+  ['Link Kiwify decorado (utm + src)', testKiwifyDecorated],
+  ['Formulario inicial recebe campos', testInitialForm],
+  ['Formulario inserido dinamicamente', testDynamicForm],
+  ['Formulario aninhado em container dinamico', testNestedForm],
+  ['SPA via pushState', testSpaPushState],
+  ['Consentimento aceito', testConsentGranted],
+  ['Consentimento negado', testConsentDenied],
+  ['Opt-out persiste entre reloads', testOptOut],
+  ['Expiracao por TTL (90 dias)', testExpiry],
+  ['Troca de data-account (isolamento)', testAccountSwitch]
+];
+
+async function run() {
+  for (var i = 0; i < TESTS.length; i++) {
+    await runTest(TESTS[i][0], TESTS[i][1]);
+    render();
+  }
+  render(true);
+}
+
+function render(done) {
+  var rows = document.getElementById('rows');
+  rows.innerHTML = '';
+  var passCount = 0;
+  results.forEach(function (r, i) {
+    var tr = document.createElement('tr');
+    if (!r.pass) tr.className = 'fail';
+    tr.innerHTML = '<td>' + (i + 1) + '</td><td>' + r.name + '</td>' +
+      '<td class="' + (r.pass ? 'pass' : 'fail') + '">' + (r.pass ? 'PASS' : 'FAIL') + '</td>' +
+      '<td>' + (r.message || '') + '</td>';
+    rows.appendChild(tr);
+    if (r.pass) passCount++;
+  });
+  var summary = document.getElementById('summary');
+  var total = TESTS.length;
+  var ran = results.length;
+  if (!done) {
+    summary.textContent = 'Rodando... ' + ran + '/' + total;
+  } else {
+    summary.innerHTML = passCount === total
+      ? '<span class="pass">' + passCount + '/' + total + ' testes passaram</span>'
+      : '<span class="fail">' + passCount + '/' + total + ' testes passaram (' + (total - passCount) + ' falharam)</span>';
+  }
+}
+
+run();
+</script>
+</body>
+</html>

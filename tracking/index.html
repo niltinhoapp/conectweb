@@ -3,19 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ConnectWeb Tracking — Teste V1</title>
+  <title>ConnectWeb Tracking — Teste V1.1</title>
   <style>
     body{font-family:system-ui,sans-serif;max-width:960px;margin:40px auto;padding:0 20px;line-height:1.5;background:#f6f7f9;color:#15171a}
     .card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:22px;margin:18px 0}
     code,pre{background:#f1f2f4;border-radius:8px;padding:3px 6px}
     pre{padding:14px;overflow:auto}
     a{display:inline-block;margin:7px 10px 7px 0}
-    button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer}
+    button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer;margin:4px 6px 4px 0;background:#e5e7eb}
+    button.primary{background:#2563eb;color:#fff}
+    button.danger{background:#dc2626;color:#fff}
   </style>
 </head>
 <body>
-  <h1>ConnectWeb Tracking V1</h1>
+  <h1>ConnectWeb Tracking V1.1</h1>
   <p>Página de teste do rastreador. Abra esta URL com UTMs e click IDs para verificar a persistência e a decoração dos links.</p>
+  <p>Esta página carrega o tracker em <code>data-consent-required="true"</code> para você testar o fluxo de consentimento manualmente. Use a suíte automatizada em <a href="/tracking/tests.html">/tracking/tests.html</a> para os demais cenários.</p>
+
+  <div class="card">
+    <h2>Consentimento</h2>
+    <button class="primary" onclick="window.ConnectWebTracking.setConsent(true); atualizar()">Aceitar</button>
+    <button onclick="window.ConnectWebTracking.setConsent(false); atualizar()">Recusar</button>
+    <button class="danger" onclick="window.ConnectWebTracking.optOut(); atualizar()">Opt-out definitivo</button>
+    <button onclick="window.ConnectWebTracking.clear(); atualizar()">Limpar dados</button>
+  </div>
 
   <div class="card">
     <h2>Dados capturados</h2>
@@ -24,9 +35,11 @@
 
   <div class="card">
     <h2>Links de teste</h2>
-    <a href="/tracking/checkout.html">Checkout interno</a>
+    <a href="/tracking/checkout.html" data-cw-ignore>Checkout interno (ignorado)</a>
+    <a href="/produtos/interno.html">Link interno (não deve ser decorado)</a>
     <a href="https://pay.hotmart.com/TESTE">Hotmart</a>
     <a href="https://pay.kiwify.com.br/TESTE">Kiwify</a>
+    <a href="https://exemplo-nao-listado.com/parceiro">Domínio externo não listado (não deve ser decorado)</a>
   </div>
 
   <div class="card">
@@ -37,13 +50,16 @@
     </form>
   </div>
 
-  <script src="/tracking/tracker.js" data-account="CW_TESTE_V1" data-debug="true"></script>
+  <script src="/tracking/tracker.js" data-account="CW_TESTE_V1" data-debug="true" data-consent-required="true"></script>
   <script>
-    window.addEventListener('connectweb:tracking-ready', function () {
+    function atualizar() {
       document.getElementById('output').textContent = JSON.stringify(
         window.ConnectWebTracking.get(), null, 2
       );
-    });
+    }
+    window.addEventListener('connectweb:tracking-ready', atualizar);
+    window.addEventListener('connectweb:tracking-updated', atualizar);
+    atualizar();
   </script>
 </body>
 </html>

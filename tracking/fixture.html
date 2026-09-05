@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Tracker test fixture</title>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+
+  var seedKey = params.get('t_seed_key');
+  var seedValue = params.get('t_seed_value');
+  if (seedKey && seedValue) {
+    try { window.localStorage.setItem(seedKey, seedValue); } catch (e) {}
+  }
+
+  var s = document.createElement('script');
+  s.src = '/tracking/tracker.js?_=' + Date.now();
+  s.setAttribute('data-debug', 'true');
+  if (params.get('t_account')) s.setAttribute('data-account', params.get('t_account'));
+  if (params.get('t_consent_required')) s.setAttribute('data-consent-required', params.get('t_consent_required'));
+  if (params.get('t_consent_granted')) s.setAttribute('data-consent-granted', params.get('t_consent_granted'));
+  if (params.get('t_consent_cookie')) s.setAttribute('data-consent-cookie', params.get('t_consent_cookie'));
+  if (params.get('t_consent_cookie_value')) s.setAttribute('data-consent-cookie-value', params.get('t_consent_cookie_value'));
+  if (params.get('t_decorate_domains')) s.setAttribute('data-decorate-domains', params.get('t_decorate_domains'));
+  document.head.appendChild(s);
+})();
+</script>
+</head>
+<body>
+  <a id="linkInternal" href="/tracking/fixture.html?other=1">interno</a>
+  <a id="linkHotmart" href="https://pay.hotmart.com/TESTE">hotmart</a>
+  <a id="linkKiwify" href="https://pay.kiwify.com.br/TESTE">kiwify</a>
+  <a id="linkExternal" href="https://exemplo-nao-listado.com/parceiro">externo nao listado</a>
+  <form id="formInitial" action="#"><input name="nome"></form>
+
+  <script>
+    window.__cwAddDynamicLink = function () {
+      var a = document.createElement('a');
+      a.id = 'linkDynamic';
+      a.href = 'https://pay.hotmart.com/DINAMICO';
+      document.body.appendChild(a);
+      return a;
+    };
+    window.__cwAddDynamicForm = function () {
+      var f = document.createElement('form');
+      f.id = 'formDynamic';
+      document.body.appendChild(f);
+      return f;
+    };
+    window.__cwAddNestedForm = function () {
+      var wrap = document.createElement('div');
+      var f = document.createElement('form');
+      f.id = 'formNested';
+      wrap.appendChild(f);
+      document.body.appendChild(wrap);
+      return f;
+    };
+    window.__cwChangeHref = function (newHref) {
+      var a = document.getElementById('linkInternal');
+      a.setAttribute('href', newHref);
+      return a;
+    };
+    window.__cwPushState = function (url) {
+      history.pushState({}, '', url);
+    };
+  </script>
+</body>
+</html>
