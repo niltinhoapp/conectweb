@@ -1,0 +1,131 @@
+/* Conect Web — ajuste visual isolado da seção #produtos.
+   Não altera conteúdo, links, IDs ou comportamento.
+*/
+#produtos{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  color:#f8fafc;
+  background:
+    radial-gradient(700px 360px at 12% 0%, rgba(37,99,235,.20), transparent 62%),
+    radial-gradient(620px 360px at 92% 18%, rgba(124,58,237,.18), transparent 64%),
+    linear-gradient(180deg,#080c16 0%,#0b1020 48%,#080c16 100%);
+  border-block:1px solid rgba(148,163,184,.16);
+}
+
+#produtos::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(148,163,184,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(148,163,184,.055) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 92%);
+}
+
+#produtos::after{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  right:-180px;
+  bottom:-220px;
+  z-index:-1;
+  border-radius:50%;
+  background:rgba(37,99,235,.12);
+  filter:blur(80px);
+  pointer-events:none;
+}
+
+#produtos > .container{
+  position:relative;
+  z-index:1;
+}
+
+#produtos h1,
+#produtos h2,
+#produtos h3,
+#produtos h4,
+#produtos strong{
+  color:#f8fafc;
+}
+
+#produtos p{
+  color:rgba(226,232,240,.72);
+}
+
+#produtos a{
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;
+}
+
+/* Cartões da prova técnica: formato consistente, sem alterar a estrutura. */
+#produtos article{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.20);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(20,27,43,.94),rgba(10,15,28,.94));
+  box-shadow:0 18px 45px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.045);
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+
+#produtos article::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.7),rgba(167,139,250,.65),transparent);
+  opacity:.7;
+  pointer-events:none;
+}
+
+#produtos article:hover{
+  transform:translateY(-3px);
+  border-color:rgba(96,165,250,.38);
+  box-shadow:0 24px 55px rgba(0,0,0,.30),0 0 0 1px rgba(96,165,250,.05);
+}
+
+#produtos article :is(span,small){
+  color:rgba(191,219,254,.78);
+}
+
+#produtos article a:not([class*="button"]):not([class*="btn"]){
+  color:#93c5fd;
+}
+
+#produtos article a:hover{
+  transform:translateY(-1px);
+}
+
+/* Mantém o conteúdo confortável em telas pequenas. */
+@media (max-width:767px){
+  #produtos{
+    min-height:0;
+    background:
+      radial-gradient(520px 300px at 0% 0%,rgba(37,99,235,.18),transparent 66%),
+      radial-gradient(480px 300px at 100% 20%,rgba(124,58,237,.14),transparent 68%),
+      #080c16;
+  }
+
+  #produtos::before{
+    background-size:32px 32px;
+    opacity:.9;
+  }
+
+  #produtos article{
+    border-radius:18px;
+    box-shadow:0 14px 32px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.04);
+  }
+
+  #produtos article:hover{
+    transform:none;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #produtos article,
+  #produtos a{transition:none;}
+}

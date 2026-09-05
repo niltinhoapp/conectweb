@@ -120,3 +120,15 @@
     }
   };
 })();
+
+/* ---------- Estilo isolado da secao #produtos ----------
+   Nao participa do fluxo de consentimento nem altera a medicao.
+*/
+(function () {
+  "use strict";
+  if (!document.getElementById("produtos")) return;
+  var link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "/produtos-visual.css?v=1";
+  document.head.appendChild(link);
+})();
