@@ -4,80 +4,39 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#060912" />
-
-  <!-- Medição (GA4 + Meta Pixel) carregada apenas apos consentimento: ver consent.js -->
   <script src="/consent.js?v=2" defer></script>
-
   <title>Conect Web | Cartão Digital</title>
   <meta name="description" content="Conect Web — Desenvolvimento de sistemas, integrações e automação. Fale no WhatsApp, conheça os projetos e salve o contato." />
   <link rel="canonical" href="https://conectweb.online/cartao/" />
   <meta name="robots" content="noindex" />
-
   <meta property="og:title" content="Conect Web | Cartão Digital" />
   <meta property="og:description" content="Desenvolvimento de sistemas, integrações e automação. Toque para falar no WhatsApp e salvar o contato." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://conectweb.online/cartao/" />
   <meta property="og:image" content="https://conectweb.online/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-
   <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
   <link rel="preload" href="/fonts/inter-900.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/inter-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/inter-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/inter-600.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=6" />
-
+  <link rel="stylesheet" href="/styles.css?v=12" />
   <style>
-    /* Tokens proprios do cartao: ele e uma peca ESCURA e nao deve seguir
-       o tema do site (que passou a ser claro no redesign v3). Declarados
-       aqui para a pagina ficar autossuficiente. */
     :root{
-      --surface: rgba(255,255,255,.05);
-      --line: rgba(255,255,255,.10);
-      --line2: rgba(255,255,255,.16);
-      --text:#eef2ff;
-      --muted: rgba(231,237,255,.78);
-      --muted2: rgba(231,237,255,.62);
-      --brand:#22d3ee;
-      --grad: linear-gradient(135deg,#7c3aed,#22d3ee);
-      --shadow: 0 24px 70px rgba(0,0,0,.45);
-      --shadow-sm: 0 8px 24px rgba(0,0,0,.25);
+      --surface: rgba(255,255,255,.05); --line: rgba(255,255,255,.10); --line2: rgba(255,255,255,.16);
+      --text:#eef2ff; --muted: rgba(231,237,255,.78); --muted2: rgba(231,237,255,.62);
+      --brand:#22d3ee; --grad: linear-gradient(135deg,#7c3aed,#22d3ee);
+      --shadow: 0 24px 70px rgba(0,0,0,.45); --shadow-sm: 0 8px 24px rgba(0,0,0,.25);
     }
-    body{
-      background-color:#060912;
-      background-image:
-        radial-gradient(900px 520px at 12% -5%, rgba(124,58,237,.22), transparent 60%),
-        radial-gradient(760px 460px at 88% 8%, rgba(34,211,238,.16), transparent 58%);
-      color:var(--text);
-    }
-    /* Botao secundario translucido (o tema claro o deixaria branco solido) */
-    .btn--ghost{
-      --btn-bg: rgba(255,255,255,.07);
-      --btn-fg:#eef2ff;
-      --btn-bd: rgba(255,255,255,.18);
-      box-shadow:none;
-    }
+    body{ background-color:#060912; background-image: radial-gradient(900px 520px at 12% -5%, rgba(124,58,237,.22), transparent 60%), radial-gradient(760px 460px at 88% 8%, rgba(34,211,238,.16), transparent 58%); color:var(--text); }
+    .btn--ghost{ --btn-bg: rgba(255,255,255,.07); --btn-fg:#eef2ff; --btn-bd: rgba(255,255,255,.18); box-shadow:none; }
     .btn--ghost:hover{ --btn-bg: rgba(255,255,255,.12); --btn-bd: rgba(255,255,255,.30); }
-
     .vcard-wrap{ min-height:100vh; display:grid; place-items:center; padding:28px 18px; }
-    .vcard{
-      width:100%; max-width:420px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid var(--line2); border-radius:26px; padding:30px 26px 26px;
-      box-shadow: var(--shadow); text-align:center; position:relative; overflow:hidden;
-    }
-    .vcard::before{
-      content:""; position:absolute; inset:0 0 auto 0; height:120px;
-      background: var(--grad); opacity:.18; pointer-events:none;
-    }
-    .vcard__logo{
-      position:relative; width:84px; height:84px; border-radius:24px; margin:6px auto 14px;
-      background: var(--grad); display:grid; place-items:center; color:#04111a;
-      font-weight:900; font-size:34px; box-shadow: var(--shadow-sm);
-    }
+    .vcard{ width:100%; max-width:420px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid var(--line2); border-radius:26px; padding:30px 26px 26px; box-shadow: var(--shadow); text-align:center; position:relative; overflow:hidden; }
+    .vcard::before{ content:""; position:absolute; inset:0 0 auto 0; height:120px; background: var(--grad); opacity:.18; pointer-events:none; }
+    .vcard__logo{ position:relative; width:84px; height:84px; border-radius:24px; margin:6px auto 14px; background: var(--grad); display:grid; place-items:center; color:#04111a; font-weight:900; font-size:34px; box-shadow: var(--shadow-sm); }
     .vcard__name{ font-size:24px; font-weight:900; letter-spacing:-.02em; margin:0; }
     .vcard__role{ color: var(--muted); font-size:14.5px; margin:4px 0 0; font-weight:600; }
     .vcard__tags{ display:flex; gap:7px; justify-content:center; flex-wrap:wrap; margin:16px 0 22px; }
@@ -91,104 +50,60 @@
     .vcard__foot a{ color: var(--brand); font-weight:700; }
   </style>
 </head>
-
 <body>
   <div class="vcard-wrap">
     <main class="vcard">
       <div class="vcard__logo">CW</div>
       <h1 class="vcard__name">Conect Web</h1>
       <p class="vcard__role">Desenvolvimento de Sistemas, Integrações e Automação</p>
-
       <div class="vcard__tags">
         <span class="vcard__tag">Integração de Sistemas</span>
         <span class="vcard__tag">Sistemas Web</span>
         <span class="vcard__tag">Apps Mobile</span>
       </div>
-
       <div class="vcard__btns">
         <a class="btn btn--wa btn--lg" id="wa" href="#" target="_blank" rel="noopener">
-          💬 Falar no WhatsApp
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+          Falar no WhatsApp
         </a>
         <a class="btn btn--primary btn--lg" href="https://conectweb.online" target="_blank" rel="noopener">
-          🌐 Conhecer o site
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+          Conhecer o site
         </a>
         <a class="btn btn--ghost btn--lg" href="https://conectweb.online/#projetos" target="_blank" rel="noopener">
-          🚀 Ver projetos
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+          Ver projetos
         </a>
         <button class="btn btn--ghost btn--lg" id="save" type="button">
-          📇 Salvar contato
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Salvar contato
         </button>
         <button class="btn btn--ghost btn--lg" id="share" type="button" hidden>
-          🔗 Compartilhar cartão
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+          Compartilhar cartão
         </button>
       </div>
-
       <div class="vcard__qr">
         <p>Aponte a câmera para abrir este cartão</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=https%3A%2F%2Fconectweb.online%2Fcartao%2F"
-             alt="QR Code do cartão Conect Web" loading="lazy" />
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=https%3A%2F%2Fconectweb.online%2Fcartao%2F" alt="QR Code do cartão Conect Web" loading="lazy" />
       </div>
-
-      <p class="vcard__foot">
-        <a href="https://conectweb.online">conectweb.online</a>
-      </p>
+      <p class="vcard__foot"><a href="https://conectweb.online">conectweb.online</a></p>
     </main>
   </div>
-
   <script>
     var NUM = "5514996807881";
     var msg = encodeURIComponent("Olá! Vim pelo cartão da Conect Web e quero falar sobre um projeto.");
     document.getElementById("wa").href = "https://wa.me/" + NUM + "?text=" + msg;
-
-    // Track simples (GA4 + Meta Pixel) — esta página não carrega o script.js
-    function trackCartao(eventName) {
-      try { if (typeof gtag === "function") gtag("event", eventName); } catch (e) {}
-      try { if (typeof fbq === "function") fbq("trackCustom", eventName); } catch (e) {}
-    }
-
-    document.getElementById("wa").addEventListener("click", function () {
-      try { if (typeof fbq === "function") fbq("track", "Contact"); } catch (e) {}
-      try { if (typeof gtag === "function") gtag("event", "click_whatsapp_cartao"); } catch (e) {}
-    });
-
-    // Salvar contato (vCard) — adiciona na agenda do celular
-    document.getElementById("save").addEventListener("click", function () {
+    function trackCartao(eventName){ try{ if(typeof gtag==="function") gtag("event", eventName);}catch(e){} try{ if(typeof fbq==="function") fbq("trackCustom", eventName);}catch(e){} }
+    document.getElementById("wa").addEventListener("click", function(){ try{ if(typeof fbq==="function") fbq("track","Contact");}catch(e){} try{ if(typeof gtag==="function") gtag("event","click_whatsapp_cartao");}catch(e){} });
+    document.getElementById("save").addEventListener("click", function(){
       trackCartao("click_save_contact_cartao");
-      var vcf = [
-        "BEGIN:VCARD",
-        "VERSION:3.0",
-        "FN:Conect Web",
-        "ORG:Conect Web — Sistemas e Integrações",
-        "TITLE:Desenvolvimento de Software",
-        "TEL;TYPE=CELL:+" + NUM,
-        "URL:https://conectweb.online",
-        "NOTE:Sistemas web, integrações, automação e apps mobile.",
-        "END:VCARD"
-      ].join("\n");
-      var blob = new Blob([vcf], { type: "text/vcard" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "ConectWeb.vcf";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      var vcf = ["BEGIN:VCARD","VERSION:3.0","FN:Conect Web","ORG:Conect Web — Sistemas e Integrações","TITLE:Desenvolvimento de Software","TEL;TYPE=CELL:+"+NUM,"URL:https://conectweb.online","NOTE:Sistemas web, integrações, automação e apps mobile.","END:VCARD"].join("\n");
+      var blob=new Blob([vcf],{type:"text/vcard"}); var url=URL.createObjectURL(blob);
+      var a=document.createElement("a"); a.href=url; a.download="ConectWeb.vcf"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
-
-    // Compartilhar (Web Share API — abre o menu nativo: WhatsApp, etc.)
-    var shareBtn = document.getElementById("share");
-    if (navigator.share) {
-      shareBtn.hidden = false;
-      shareBtn.addEventListener("click", function () {
-        trackCartao("click_share_cartao");
-        navigator.share({
-          title: "Conect Web",
-          text: "Desenvolvimento de sistemas, integrações e automação:",
-          url: "https://conectweb.online/cartao/"
-        }).catch(function(){});
-      });
-    }
+    var shareBtn=document.getElementById("share");
+    if(navigator.share){ shareBtn.hidden=false; shareBtn.addEventListener("click", function(){ trackCartao("click_share_cartao"); navigator.share({title:"Conect Web",text:"Desenvolvimento de sistemas, integrações e automação:",url:"https://conectweb.online/cartao/"}).catch(function(){}); }); }
   </script>
 </body>
 </html>
