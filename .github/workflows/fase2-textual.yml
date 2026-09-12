@@ -1,0 +1,30 @@
+name: Fase 2 textual
+on:
+  push:
+    branches: [copy/fase2-hierarquia-conectweb]
+permissions:
+  contents: write
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar refinamento textual
+        run: python3 .github/scripts/fase2_textual.py
+      - name: Validar resultado
+        run: |
+          grep -q 'Produtos desenvolvidos pela Conect Web' index.html
+          grep -q 'Capacidades para construir, integrar e evoluir sua operação' index.html
+          grep -q 'Tecnologia com responsabilidade de ponta a ponta' index.html
+          ! grep -q 'hero_livia_strip' index.html
+          ! grep -q 'nav_mobile_livia' index.html
+          ! grep -q 'Produto em destaque · IA' index.html
+          ! grep -q '>Diagnóstico<' index.html
+      - name: Limpar arquivos temporários e commitar
+        run: |
+          rm .github/scripts/fase2_textual.py .github/workflows/fase2-textual.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html .github/scripts/fase2_textual.py .github/workflows/fase2-textual.yml
+          git commit -m 'refactor(home): reforça protagonismo da Conect Web'
+          git push
