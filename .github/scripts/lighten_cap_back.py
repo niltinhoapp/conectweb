@@ -49,3 +49,5 @@ if marker not in css:
 }
 '''
 styles.write_text(css)
+
+# trigger workflow after it exists
