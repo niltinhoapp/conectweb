@@ -1,6 +1,6 @@
 # Conect Web
 
-> Empresa de tecnologia que desenvolve produtos próprios de IA e automação — como a Lívia, recepcionista inteligente para WhatsApp — além de sistemas sob medida, integrações entre plataformas (ERP, CRM, e-commerce) e automação de processos. Parceiro Certificado Nuvemshop. Projetos e produtos próprios reais, com arquitetura e tecnologias apresentadas. Atendimento remoto para todo o Brasil, contato pelo WhatsApp.
+> Operação técnica que tira o trabalho manual de dentro de empresas e lojas: integrações entre sistemas (ERP, CRM, e-commerce, pagamentos), automação de processos e atendimento, e software sob medida. Projetos com faixa de investimento aberta, a partir de R$ 1.000, conduzidos direto pelo desenvolvedor. Especialista certificado Nuvemshop e parceiro Hostinger. Também monta lojas Nuvemshop já automatizadas, a partir de R$ 2.500. Atendimento remoto para todo o Brasil, contato pelo WhatsApp.
 
 ## Produtos próprios
 
@@ -11,10 +11,9 @@
 
 ## Páginas
 
-- [Início](https://conectweb.online/): Posicionamento, produtos próprios (Lívia em destaque), problemas resolvidos, soluções e formulário de contato.
+- [Início](https://conectweb.online/): Posicionamento, duas frentes de trabalho (integração & automação e software sob medida), produtos próprios, faixas de investimento abertas, oferta de loja automatizada e formulário de contato.
 - [Engenharia de Software](https://conectweb.online/desenvolvimento-de-sistemas/): Sistemas web, plataformas internas, produtos SaaS e aplicações mobile sob medida.
 - [Integrações & Automação](https://conectweb.online/automacoes-e-integracoes/): Integração via API e webhooks entre ERP, CRM, e-commerce e sistemas proprietários; automação de processos e IA aplicada.
-- [Sites e Landing Pages](https://conectweb.online/sites-e-landing-pages/): Sites e páginas de alta performance, oferecidos como capacidade complementar às soluções de sistema.
 - [Projetos](https://conectweb.online/projetos/): Produtos próprios e projetos entregues, com arquitetura, tecnologias e situação atual.
 
 ## Serviços

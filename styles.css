@@ -1146,3 +1146,82 @@ body.capability-open .capabilities-grid{
   overflow-y:auto!important;
   overflow-x:hidden!important;
 }
+
+/* =====================================================================
+   REPOSICIONAMENTO — componentes novos
+   oplog (hero) · cap-card--tier (investimento) · door/kit (loja) · whobox
+   Reaproveita o componente cap-card existente. Nada acima foi alterado.
+   ===================================================================== */
+
+/* ---------- log da operação (hero escuro) ---------- */
+.oplog{background:rgba(255,255,255,.04);border:1px solid var(--dark-line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg)}
+.oplog__head{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--dark-line);background:rgba(255,255,255,.03)}
+.oplog__dot{width:8px;height:8px;border-radius:50%;background:#22C55E;flex:none}
+.oplog__file{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--dark-muted)}
+.oplog__tag{margin-left:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dark-muted);border:1px solid var(--dark-line);padding:3px 8px;border-radius:6px}
+.oplog__body{padding:12px 4px;overflow-x:auto}
+.oplog__body table{border-collapse:collapse;width:100%;min-width:360px}
+.oplog__body td{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:2;padding:0 12px;white-space:nowrap;vertical-align:baseline}
+.oplog__body .t{color:rgba(226,232,240,.45);font-variant-numeric:tabular-nums}
+.oplog__body .e{color:var(--dark-text)}
+.oplog__body .s{color:rgba(226,232,240,.45);text-align:right;width:1%}
+.oplog__body tr.hi .e{color:#93B8FF}
+.oplog__foot{border-top:1px solid var(--dark-line);padding:11px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--dark-muted);display:flex;gap:18px;flex-wrap:wrap}
+.oplog__foot b{color:var(--dark-text);font-weight:600}
+.oplog .btn--block{margin:0 16px 16px}
+@media (max-width:720px){.oplog__body td{font-size:11px;padding:0 9px}}
+
+/* ---------- capacidades em duas colunas ---------- */
+.capabilities-grid--duo{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:720px){.capabilities-grid--duo{grid-template-columns:1fr}}
+.notdo{max-width:70ch;margin:26px auto 0;border-left:3px solid var(--line2);padding-left:16px;color:var(--muted);font-size:15px;line-height:1.65;text-align:left}
+.notdo b{color:var(--text)}
+
+/* ---------- pacotes de investimento (usam o cap-card) ---------- */
+.capabilities-grid--tiers{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:1000px){.capabilities-grid--tiers{grid-template-columns:1fr}}
+.cap-price{position:relative;z-index:1;margin:0 0 6px;font-size:clamp(28px,3vw,34px);font-weight:800;letter-spacing:-.035em;line-height:1.05;color:var(--text);font-variant-numeric:tabular-nums}
+.cap-price small{display:block;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
+.cap-card--tier h3{font-size:clamp(18px,1.6vw,21px);margin:0 0 10px}
+.cap-card--tier .cap-card__type{color:var(--muted2);font-weight:700}
+.cap-card--mid .cap-card__front{border-color:var(--brand);box-shadow:var(--shadow)}
+.cap-card--mid .cap-card__number{background:var(--brand)}
+.cap-card__ribbon{position:absolute;z-index:3;top:0;right:28px;transform:translateY(-50%);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--brand);color:#fff;padding:5px 11px;border-radius:999px;white-space:nowrap}
+.cap-card.is-open .cap-card__ribbon{display:none}
+.fine--center{text-align:center;margin-top:20px}
+
+/* ---------- porta de entrada: loja nova ---------- */
+.doorgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:44px;align-items:start}
+@media (max-width:940px){.doorgrid{grid-template-columns:1fr;gap:28px}}
+.door__copy{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.door__copy h2{margin:0;font-size:clamp(26px,3.4vw,40px);line-height:1.1;letter-spacing:-.03em}
+.door__lead{margin:0;color:var(--muted);font-size:17px;line-height:1.7;max-width:58ch}
+.door__pitch{margin:0;max-width:56ch;border-left:3px solid var(--brand);padding-left:16px;color:var(--muted);font-size:15px;line-height:1.65}
+.door__pitch b{color:var(--text)}
+.door__seal{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--brand-ink);background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.35);padding:7px 14px;border-radius:999px}
+.kit{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.kit__head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:17px 22px;border-bottom:1px solid var(--line);background:var(--bg-muted)}
+.kit__name{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.01em}
+.kit__price{margin-left:auto;font-size:12px;color:var(--muted2);white-space:nowrap}
+.kit__price b{color:var(--text);font-size:18px;font-weight:800;letter-spacing:-.02em}
+.kit__list{list-style:none;margin:0;padding:8px 22px 16px}
+.kit__list li{font-size:14.5px;color:var(--muted);line-height:1.55;padding:11px 0 11px 26px;border-bottom:1px solid var(--line);position:relative}
+.kit__list li:last-child{border-bottom:0}
+.kit__list li::before{content:"✓";position:absolute;left:2px;top:11px;color:var(--ok);font-weight:800;font-size:13px}
+.kit__list li b{color:var(--text);font-weight:700}
+.kit__foot{border-top:1px solid var(--line);background:var(--bg-muted);padding:13px 22px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--muted2)}
+
+/* ---------- quem faz ---------- */
+.whobox{margin-top:30px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px;display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start;box-shadow:var(--shadow-sm)}
+@media (max-width:640px){.whobox{grid-template-columns:1fr;padding:24px;gap:18px}}
+.whobox__av{width:96px;height:96px;border-radius:18px;background:var(--bg-muted);border:1px solid var(--line2);display:grid;place-items:center;font-size:30px;font-weight:800;color:var(--muted2)}
+.whobox__body{display:flex;flex-direction:column;gap:14px}
+.whobox__body p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.7;max-width:62ch}
+.whobox__body strong{color:var(--text);font-weight:800}
+.whobox__creds{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.whobox__chip{font-size:12.5px;font-weight:700;color:var(--text);background:var(--bg-muted);border:1px solid var(--line2);padding:7px 13px;border-radius:999px}
+.whobox__chip:first-child{color:var(--brand-ink);background:rgba(37,99,235,.07);border-color:rgba(37,99,235,.35)}
+/* ajustes finais */
+.cap-card--mid{position:relative}
+.cap-card__ribbon{top:-11px;right:22px;transform:none}
+.fine--center{color:var(--muted)}
