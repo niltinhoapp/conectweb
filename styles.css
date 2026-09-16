@@ -1225,3 +1225,309 @@ body.capability-open .capabilities-grid{
 .cap-card--mid{position:relative}
 .cap-card__ribbon{top:-11px;right:22px;transform:none}
 .fine--center{color:var(--muted)}
+
+/* =====================================================================
+   REFINO RESPONSIVO MOBILE
+   Contem os componentes no proprio layout e trata o log do hero sem
+   depender do overflow-x global para esconder conteudo.
+   ===================================================================== */
+
+/* Itens de grid/flex precisam poder encolher abaixo da largura minima
+   inferida pelo seu conteudo. Isso e especialmente importante no hero,
+   nos mockups e nos cards com textos longos. */
+.hero__grid,
+.sys,
+.integ,
+.nuvem,
+.product,
+.prodhub__grid,
+.capabilities-grid,
+.cap-detail__grid,
+.partners,
+.workgrid,
+.timeline,
+.cta,
+.doorgrid,
+.whobox{
+  min-width:0;
+}
+
+.hero__grid > *,
+.sys > *,
+.integ > *,
+.nuvem > *,
+.product > *,
+.prodhub__grid > *,
+.capabilities-grid > *,
+.cap-detail__grid > *,
+.partners > *,
+.workgrid > *,
+.timeline > *,
+.cta > *,
+.doorgrid > *,
+.whobox > *,
+.hero__right,
+.oplog,
+.oplog__body,
+.prodcard,
+.cap-card,
+.cap-card__inner,
+.cap-card__face,
+.cap-detail,
+.form,
+.form label,
+.footer__inner > *{
+  min-width:0;
+  max-width:100%;
+}
+
+.hero__grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
+.prodhub__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.partners{grid-template-columns:repeat(2,minmax(0,1fr))}
+.workgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.timeline{grid-template-columns:repeat(4,minmax(0,1fr))}
+.cta{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+/* O botao ja ocupa a largura util do card; as margens nao podem ser
+   somadas a width:100%, pois isso cria overflow dentro do painel. */
+.oplog .btn--block{
+  width:calc(100% - 32px);
+  max-width:calc(100% - 32px);
+}
+
+.prodcard,
+.cap-card,
+.cap-detail,
+.partner,
+.work,
+.tl,
+.cta,
+.kit,
+.whobox,
+.legal__body,
+.footer{
+  overflow-wrap:anywhere;
+}
+
+.form input[type="text"],
+.form select{
+  min-width:0;
+  max-width:100%;
+}
+
+/* O estado aberto e a unica area que recebe gesto vertical; o documento
+   atras permanece travado, inclusive em navegadores moveis. */
+html:has(body.capability-open),
+body.capability-open{
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+.cap-card.is-open .cap-card__back{
+  width:100%;
+  min-width:0;
+}
+
+@media (max-width:1000px){
+  .workgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .timeline{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:900px){
+  .hero__grid,
+  .sys,
+  .integ,
+  .nuvem,
+  .cta,
+  .product{
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  /* No mobile, o texto apresenta a proposta antes do log operacional. */
+  .hero__right{order:0}
+}
+
+@media (max-width:720px){
+  .container{width:calc(100% - 32px)}
+
+  .topbar__inner{gap:10px;padding:10px 0}
+  .brand{min-width:0;max-width:calc(100% - 54px)}
+  .brand__logo{flex:0 0 36px}
+  .brand__text{min-width:0}
+  .menu{width:44px;height:44px;flex:0 0 44px}
+  .mobile{
+    max-height:calc(100dvh - 65px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  .mobile__inner{padding:10px 0 calc(16px + env(safe-area-inset-bottom))}
+  .mobile a:not(.btn),
+  .mobile .btn{min-height:44px;display:flex;align-items:center}
+
+  .section{padding:56px 0}
+  .hero{padding:48px 0 58px}
+  .hero__grid{gap:32px}
+  .hero h1{font-size:clamp(33px,10vw,43px);line-height:1.07}
+  .hero .lead{margin-bottom:24px}
+  .badge-row,.chips{align-items:flex-start}
+  .live-badge,.partner-badge,.livia-badge,.chip{
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .hero__cta{margin-bottom:24px}
+  .trustline span{min-width:0;overflow-wrap:anywhere}
+
+  .btn{
+    min-width:0;
+    max-width:100%;
+    min-height:44px;
+    height:auto;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    text-align:center;
+  }
+  .btn--sm{min-height:44px}
+  .btn--lg{padding:14px 18px}
+
+  .oplog__head{padding:11px 13px}
+  .oplog__body{padding:4px 0;overflow:visible}
+  .oplog__body table,
+  .oplog__body tbody{
+    display:block;
+    width:100%;
+    min-width:0;
+  }
+  .oplog__body tr{
+    display:grid;
+    grid-template-columns:62px minmax(0,1fr);
+    column-gap:8px;
+    padding:8px 12px;
+    border-bottom:1px solid rgba(255,255,255,.055);
+  }
+  .oplog__body tr:last-child{border-bottom:0}
+  .oplog__body td{
+    display:block;
+    min-width:0;
+    width:auto;
+    padding:0;
+    font-size:11px;
+    line-height:1.45;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .oplog__body .t{grid-column:1;grid-row:1 / span 2}
+  .oplog__body .e{grid-column:2}
+  .oplog__body .s{
+    grid-column:2;
+    margin-top:3px;
+    width:auto;
+    text-align:left;
+    font-size:10px;
+    line-height:1.35;
+  }
+  .oplog__foot{gap:7px 14px;padding:11px 13px}
+  .oplog .btn--block{
+    width:calc(100% - 24px);
+    max-width:calc(100% - 24px);
+    margin:0 12px 12px;
+  }
+
+  .prodhub__grid,
+  .capabilities-grid,
+  .cap-detail__grid,
+  .partners,
+  .workgrid,
+  .timeline{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .prodcard,.sol,.work,.tl{padding:20px}
+  .prodcard .link{
+    display:inline-flex;
+    align-items:center;
+    min-height:44px;
+    max-width:100%;
+    overflow-wrap:anywhere;
+  }
+  .work__top,.work__actions{min-width:0}
+  .work__actions > *{min-width:0}
+  .pill,.tag,.tchip,.whobox__chip{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+
+  .cap-card__meta{align-items:flex-start;flex-wrap:wrap}
+  .cap-card__type{max-width:calc(100% - 54px);overflow-wrap:anywhere;text-align:right}
+  .cap-card__action{max-width:100%;width:auto;overflow-wrap:anywhere}
+  .cap-card.is-open{
+    top:max(6px,env(safe-area-inset-top));
+    right:max(6px,env(safe-area-inset-right));
+    bottom:max(6px,env(safe-area-inset-bottom));
+    left:max(6px,env(safe-area-inset-left));
+  }
+  .cap-card.is-open .cap-card__back{
+    padding:14px;
+    scrollbar-gutter:auto;
+  }
+  .cap-card__close{min-width:84px;min-height:44px;height:44px;top:0}
+  .cap-detail{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+  .cap-detail h3{font-size:clamp(25px,8.4vw,36px);overflow-wrap:anywhere}
+  .cap-detail__eyebrow,.cap-detail__lead,.cap-detail__grid p{overflow-wrap:anywhere}
+  .cap-detail > .btn{width:100%}
+  .cap-price{max-width:100%;overflow-wrap:anywhere}
+  .cap-card__ribbon{max-width:calc(100% - 44px);white-space:normal;text-align:center}
+
+  .cta{padding:22px;border-radius:22px}
+  .cta__bullets{padding-left:20px}
+  .form{width:100%}
+  .form input[type="text"],
+  .form select{
+    width:100%;
+    font-size:16px;
+  }
+  .form .check{
+    grid-auto-flow:initial;
+    grid-template-columns:17px minmax(0,1fr);
+    width:100%;
+  }
+  .form .check span{min-width:0;overflow-wrap:anywhere}
+
+  .door__seal{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+  .kit__head{padding:16px 18px}
+  .kit__price{max-width:100%;white-space:normal}
+  .kit__list{padding-inline:18px}
+  .whobox{padding:20px}
+
+  .legal__body{padding:22px 18px}
+  .legal__table{max-width:100%}
+  .legal__body .btn{width:100%}
+
+  .footer{padding:46px 0 calc(92px + env(safe-area-inset-bottom))}
+  .footer__inner{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+  .footer__links{gap:2px 14px}
+  .footer__links a{display:flex;align-items:center;min-height:44px;overflow-wrap:anywhere}
+  .footer p,.footer small{overflow-wrap:anywhere}
+
+  .cookiebar{
+    left:max(12px,env(safe-area-inset-left));
+    right:max(12px,env(safe-area-inset-right));
+    bottom:calc(78px + env(safe-area-inset-bottom));
+    max-height:calc(100dvh - 96px - env(safe-area-inset-bottom));
+    overflow-y:auto;
+  }
+  .cookiebar__inner{padding:15px}
+  .cookiebar__btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .cookiebar__btns .btn{width:100%}
+
+  .wa-float{
+    right:max(16px,env(safe-area-inset-right));
+    bottom:calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width:360px){
+  .brand{gap:9px}
+  .brand__text strong{font-size:15px}
+  .brand__text small{font-size:10.5px}
+  .hero h1{font-size:32px}
+  .cap-card__front{padding:20px}
+  .cap-card__front::after{left:20px;right:20px}
+  .partner{padding:20px}
+  .cookiebar__txt{font-size:13.5px}
+}
