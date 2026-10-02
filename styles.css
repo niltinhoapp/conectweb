@@ -138,7 +138,23 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 .btn--primary:hover{ --btn-bg:var(--brand-ink); }
 .btn--ghost{ --btn-bg:#fff; --btn-fg:var(--text); --btn-bd:var(--line2); box-shadow:var(--shadow-xs); }
 .btn--ghost:hover{ --btn-bd:#C9CDD4; }
-.btn--wa{ --btn-bg:#25D366; --btn-fg:#04140A; box-shadow:0 12px 26px -14px rgba(37,211,102,.9); }
+.btn--wa{
+  --btn-bg:#25D366;
+  --btn-fg:#031409;
+  font-weight:700;
+  box-shadow:0 12px 26px -12px rgba(37,211,102,.85), 0 2px 6px rgba(37,211,102,.3);
+}
+.btn--wa:hover{
+  --btn-bg:#22bf5b;
+  transform:translateY(-2px);
+  box-shadow:0 16px 32px -10px rgba(37,211,102,.95), 0 4px 10px rgba(37,211,102,.4);
+}
+.btn--wa svg{
+  flex-shrink:0;
+  width:20px;
+  height:20px;
+  fill:currentColor;
+}
 
 /* Botoes sobre fundo escuro (hero e CTA) */
 .hero .btn--ghost, .cta .btn--ghost{
@@ -834,9 +850,27 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
   position:fixed; right:20px; bottom:20px; z-index:70;
   width:54px; height:54px; border-radius:50%; display:grid; place-items:center;
   background:#25D366; box-shadow:0 14px 32px -10px rgba(37,211,102,.8);
-  transition:transform .18s ease;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease, background .2s ease;
+  animation:waPulse 3.2s infinite ease-out;
 }
-.wa-float:hover{ transform:scale(1.06); }
+.wa-float:hover{
+  transform:scale(1.08) translateY(-2px);
+  background:#20ba5a;
+  box-shadow:0 18px 36px -8px rgba(37,211,102,.9), 0 0 0 8px rgba(37,211,102,.15);
+  animation:none;
+}
+.wa-float:active{ transform:scale(0.96); }
+.wa-float svg{
+  width:28px; height:28px; fill:#fff;
+  transition:transform .2s ease;
+}
+.wa-float:hover svg{ transform:scale(1.05); }
+
+@keyframes waPulse{
+  0%{ box-shadow:0 12px 28px -8px rgba(37,211,102,.75), 0 0 0 0 rgba(37,211,102,.55); }
+  60%{ box-shadow:0 12px 28px -8px rgba(37,211,102,.75), 0 0 0 14px rgba(37,211,102,0); }
+  100%{ box-shadow:0 12px 28px -8px rgba(37,211,102,.75), 0 0 0 0 rgba(37,211,102,0); }
+}
 
 /* =============================================================
    Responsivo

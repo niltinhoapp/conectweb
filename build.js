@@ -16,8 +16,7 @@ const path = require("path");
 const ROOT = __dirname;
 const CSS_FILE = path.join(ROOT, "styles.css");
 const PAGES = [
-  { file: path.join(ROOT, "index.html"), href: "./styles.css" },
-  { file: path.join(ROOT, "integracao-de-sistemas", "index.html"), href: "/styles.css" },
+  { file: path.join(ROOT, "index.html"), href: "/styles.css" },
 ];
 
 const DEV = process.argv.includes("--dev");

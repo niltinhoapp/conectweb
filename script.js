@@ -19,15 +19,20 @@ function baseMessage() {
 }
 
 function filledMessage({ tipo, estagio, descricao, prazo }, utmText) {
-  return (
-    "Olá! Quero falar sobre um projeto de sistema/desenvolvimento.\n\n" +
-    "Tipo de projeto: " + tipo + "\n" +
-    "Estágio do projeto: " + estagio + "\n" +
-    "Necessidade: " + descricao + "\n" +
-    "Prazo/orçamento: " + (prazo || "a combinar") + "\n\n" +
-    "Site: " + DOMAIN +
-    (utmText ? "\n\n" + utmText : "")
-  );
+  const lines = [
+    "Olá! Quero falar sobre um projeto de sistema/desenvolvimento.\n",
+    "Tipo de projeto: " + tipo
+  ];
+  if (estagio) {
+    lines.push("Estágio do projeto: " + estagio);
+  }
+  lines.push("Necessidade: " + descricao);
+  lines.push("Prazo/orçamento: " + (prazo || "a combinar") + "\n");
+  lines.push("Site: " + DOMAIN);
+  if (utmText) {
+    lines.push("\n" + utmText);
+  }
+  return lines.join("\n");
 }
 
 function waLink(message) {
@@ -264,14 +269,14 @@ if (form) {
     e.preventDefault();
 
     const fd = new FormData(form);
-    const tipo = String(fd.get("tipo") || "").trim();
+    const tipo = String(fd.get("tipo") || "Projeto / Desenvolvimento").trim();
     const estagio = String(fd.get("estagio") || "").trim();
     const descricao = String(fd.get("descricao") || "").trim();
     const prazo = String(fd.get("prazo") || "").trim();
     const aceite = fd.get("aceite");
 
-    if (!tipo || !estagio || !descricao || !aceite) {
-      alert("Preencha o tipo, o estágio, a descrição e marque o aceite para enviar no WhatsApp.");
+    if (!tipo || !descricao || !aceite) {
+      alert("Por favor, descreva a necessidade do projeto e marque a autorização de contato para enviar no WhatsApp.");
       return;
     }
 
