@@ -770,7 +770,8 @@ h3{ font-size:clamp(18px,1.6vw,21px); letter-spacing:-.02em; }
 /* =============================================================
    Footer
    ============================================================= */
-.footer{ background:var(--dark); color:var(--dark-text); padding:52px 0 40px; }
+.footer{ background:#06080E; color:var(--dark-text); padding:52px 0 40px; position:relative; border-top:1px solid rgba(255,255,255,.08); }
+.footer::before{ content:""; position:absolute; top:0; left:15%; right:15%; height:1px; background:linear-gradient(90deg, transparent, rgba(59,130,246,.5), rgba(124,58,237,.5), transparent); pointer-events:none; }
 .footer__inner{ display:flex; align-items:flex-start; justify-content:space-between; gap:26px; flex-wrap:wrap; }
 .footer strong{ font-size:15.5px; font-weight:700; letter-spacing:-.02em; color:#fff; }
 .footer p{ margin:6px 0; font-size:14px; color:var(--dark-muted); }
@@ -2111,6 +2112,494 @@ body.capability-open{
 }
 
 
+
+/* =============================================================
+   ELEVATION: Premium Form Card & Engineering Footer (Sexta Dimensão)
+   ============================================================= */
+
+/* ---------- Container da Seção de Contato ---------- */
+.section--cta{
+  background:linear-gradient(180deg, var(--bg) 0%, #07090E 100%);
+  padding:clamp(68px, 8vw, 110px) 0;
+  position:relative;
+}
+
+/* ---------- Card do Formulário (Sexta Dimensão) ---------- */
+.cta--premium{
+  position:relative;
+  overflow:hidden;
+  border-radius:32px;
+  background:
+    radial-gradient(ellipse 600px 380px at 15% 20%, rgba(37,99,235,.22) 0%, transparent 60%),
+    radial-gradient(ellipse 550px 340px at 85% 80%, rgba(124,58,237,.18) 0%, transparent 60%),
+    linear-gradient(180deg, #0D111C 0%, #080A12 100%);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.5),
+    0 35px 100px -25px rgba(0,0,0,.95),
+    0 0 80px -20px rgba(37,99,235,.25),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:clamp(32px, 4.5vw, 60px);
+  padding:clamp(34px, 4.5vw, 56px);
+  backdrop-filter:blur(20px);
+  align-items:start;
+}
+.cta--premium::before{
+  content:"";
+  position:absolute;
+  top:0;left:10%;right:10%;
+  height:2px;
+  background:linear-gradient(90deg, transparent, #3B82F6 25%, #8B5CF6 50%, #10B981 75%, transparent);
+  box-shadow:0 0 18px rgba(59,130,246,.7);
+  pointer-events:none;
+}
+.cta--premium::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at 50% 50%, #000 35%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 50%, #000 35%, transparent 80%);
+  pointer-events:none;
+}
+.cta--premium > *{ position:relative; z-index:2; }
+
+/* Coluna Esquerda do Card */
+.cta__left h2{
+  color:#fff;
+  font-size:clamp(27px, 3.2vw, 40px);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  margin:12px 0 16px;
+}
+.cta__lead{
+  color:rgba(226,232,240,.75);
+  font-size:15.5px;
+  line-height:1.68;
+  margin:0 0 24px;
+}
+.cta-status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11.5px;
+  font-weight:700;
+  color:#93C5FD;
+  background:rgba(59,130,246,.12);
+  border:1px solid rgba(59,130,246,.32);
+  padding:5px 14px;
+  border-radius:999px;
+  box-shadow:0 0 14px -2px rgba(59,130,246,.3);
+}
+
+.cta__benefits{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  margin:24px 0 28px;
+}
+.cta__benefit-item{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+}
+.cta__benefit-icon{
+  width:28px;
+  height:28px;
+  border-radius:9px;
+  background:rgba(59,130,246,.15);
+  border:1px solid rgba(59,130,246,.32);
+  color:#60A5FA;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  margin-top:2px;
+  box-shadow:0 0 10px -2px rgba(59,130,246,.4);
+}
+.cta__benefit-item strong{
+  display:block;
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:2px;
+}
+.cta__benefit-item span{
+  display:block;
+  font-size:13px;
+  color:rgba(226,232,240,.65);
+  line-height:1.5;
+}
+
+.cta-dev-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);
+  backdrop-filter:blur(10px);
+  margin-top:8px;
+}
+.cta-dev-avatar{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:var(--grad);
+  color:#fff;
+  font-weight:800;
+  font-size:15px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  box-shadow:0 0 16px rgba(37,99,235,.45);
+}
+.cta-dev-info strong{
+  display:block;
+  font-size:13.5px;
+  font-weight:700;
+  color:#fff;
+}
+.cta-dev-info span{
+  display:block;
+  font-size:11.5px;
+  color:rgba(226,232,240,.6);
+  margin-top:2px;
+}
+
+/* Coluna Direita: Caixa Console do Formulário */
+.cta__form-box{
+  background:rgba(11, 15, 24, 0.82);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:24px;
+  padding:28px;
+  backdrop-filter:blur(20px);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.4),
+    0 24px 60px -15px rgba(0,0,0,.7),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+.cta__form-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:16px;
+  margin-bottom:18px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.cta__form-title{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px;
+  color:#93C5FD;
+  font-weight:600;
+}
+.cta__form-secure{
+  font-size:11px;
+  font-weight:700;
+  color:#34D399;
+  background:rgba(52,211,153,.10);
+  border:1px solid rgba(52,211,153,.25);
+  padding:3px 10px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+
+.form--tech{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.form-label-text{
+  display:block;
+  font-size:11.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:rgba(226,232,240,.8);
+  margin-bottom:6px;
+}
+.form--tech input[type="text"],
+.form--tech select{
+  width:100%;
+  padding:13px 16px;
+  border-radius:12px;
+  background:rgba(7, 10, 18, 0.92);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;
+  font-size:14.5px;
+  font-family:inherit;
+  transition:all .22s ease;
+  outline:none;
+}
+.form--tech input[type="text"]::placeholder{
+  color:rgba(226,232,240,.42);
+}
+.form--tech input[type="text"]:hover,
+.form--tech select:hover{
+  border-color:rgba(255,255,255,.25);
+}
+.form--tech input[type="text"]:focus,
+.form--tech select:focus{
+  border-color:#3B82F6;
+  background:rgba(12, 16, 28, 0.98);
+  box-shadow:
+    0 0 0 3px rgba(59,130,246,.25),
+    0 0 20px -3px rgba(59,130,246,.35);
+}
+.form--tech select option{
+  background:#0E1320;
+  color:#fff;
+}
+.select-wrapper{
+  position:relative;
+  width:100%;
+}
+.select-wrapper::after{
+  content:"";
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:0;
+  height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:6px solid rgba(255,255,255,.5);
+  pointer-events:none;
+}
+
+.check--tech{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  font-size:12.5px;
+  color:rgba(226,232,240,.72);
+  font-weight:500;
+  line-height:1.5;
+  cursor:pointer;
+  padding:2px 0;
+}
+.check--tech input{
+  width:18px;
+  height:18px;
+  margin-top:2px;
+  accent-color:#2563EB;
+  flex-shrink:0;
+  cursor:pointer;
+}
+
+.btn--glow{
+  background:linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  color:#fff;
+  font-weight:800;
+  font-size:15.5px;
+  padding:16px 24px;
+  border-radius:14px;
+  box-shadow:
+    0 0 25px rgba(34,197,94,.40),
+    0 10px 25px -5px rgba(34,197,94,.60);
+  border:none;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.16,1,.3,1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.btn--glow:hover{
+  transform:translateY(-2px) scale(1.012);
+  box-shadow:
+    0 0 35px rgba(34,197,94,.65),
+    0 14px 30px -5px rgba(34,197,94,.75);
+  background:linear-gradient(135deg, #2ED369 0%, #15803D 100%);
+}
+.form__subtext{
+  text-align:center;
+  font-size:12px;
+  color:rgba(226,232,240,.48);
+  margin:4px 0 0;
+  font-family:ui-monospace, monospace;
+}
+
+/* ---------- Rodapé Técnico de Engenharia ---------- */
+.footer--tech{
+  background:#06080E;
+  color:rgba(226,232,240,.75);
+  padding:72px 0 34px;
+  position:relative;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.footer--tech::before{
+  content:"";
+  position:absolute;
+  top:0;left:15%;right:15%;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(59,130,246,.5), rgba(124,58,237,.5), transparent);
+  pointer-events:none;
+}
+.footer__grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1.1fr;
+  gap:44px;
+  align-items:start;
+}
+.footer__col--brand .brand{
+  margin-bottom:14px;
+}
+.footer__col--brand .brand__text strong{
+  color:#fff;
+}
+.footer__about{
+  font-size:13.5px;
+  color:rgba(226,232,240,.62);
+  line-height:1.68;
+  margin:0 0 20px;
+  max-width:38ch;
+}
+.footer__badges{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:flex-start;
+}
+.footer__badge-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:11.5px;
+  font-weight:700;
+  color:#93C5FD;
+  background:rgba(59,130,246,.12);
+  border:1px solid rgba(59,130,246,.30);
+  padding:6px 13px;
+  border-radius:999px;
+}
+.footer__badge-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#60A5FA;
+  box-shadow:0 0 8px #60A5FA;
+}
+.footer__hostinger{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;
+  padding:7px 12px;
+  display:inline-flex;
+  align-items:center;
+  transition:all .2s ease;
+}
+.footer__hostinger:hover{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.25);
+}
+.footer__col h4{
+  font-size:13px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#fff;
+  margin:0 0 18px;
+}
+.footer__nav-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+.footer__nav-list a{
+  font-size:13.5px;
+  color:rgba(226,232,240,.65);
+  transition:all .18s ease;
+  display:inline-flex;
+  align-items:center;
+}
+.footer__nav-list a:hover{
+  color:#fff;
+  transform:translateX(3px);
+}
+.footer__tag{
+  font-size:9.5px;
+  font-weight:700;
+  color:#93C5FD;
+  background:rgba(59,130,246,.15);
+  border:1px solid rgba(59,130,246,.30);
+  padding:2px 6px;
+  border-radius:4px;
+  margin-left:6px;
+  text-transform:uppercase;
+}
+.footer__cnpj{
+  font-family:ui-monospace,monospace;
+  font-size:12px;
+  color:rgba(226,232,240,.5);
+}
+
+.footer__bottom{
+  border-top:1px solid rgba(255,255,255,.07);
+  margin-top:52px;
+  padding-top:26px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:18px;
+}
+.footer__bottom-left p{
+  margin:0;
+  font-size:13px;
+  color:rgba(226,232,240,.6);
+}
+.footer__bottom-left small{
+  display:block;
+  font-size:12px;
+  color:rgba(226,232,240,.45);
+  margin-top:3px;
+}
+.footer__live-status{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:ui-monospace,monospace;
+  font-size:12px;
+  color:#34D399;
+  background:rgba(52,211,153,.08);
+  border:1px solid rgba(52,211,153,.25);
+  padding:6px 14px;
+  border-radius:999px;
+}
+.status-pulse-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#34D399;
+  box-shadow:0 0 0 3px rgba(52,211,153,.25), 0 0 8px #34D399;
+}
+
+/* Responsivo para o Formulário e Rodapé */
+@media (max-width:1000px){
+  .cta--premium{grid-template-columns:1fr;gap:36px;padding:32px 24px}
+  .footer__grid{grid-template-columns:repeat(2,1fr);gap:36px}
+}
+@media (max-width:600px){
+  .cta--premium{padding:24px 18px;border-radius:24px}
+  .cta__form-box{padding:20px 16px;border-radius:18px}
+  .footer__grid{grid-template-columns:1fr;gap:32px}
+  .footer__bottom{flex-direction:column;align-items:flex-start}
+}
+
   </style>
   <!-- CSS_INLINE_END --><script src="/consent.js?v=2" defer></script></head><body data-service="">
 
@@ -2280,9 +2769,215 @@ body.capability-open{
 
 <section class="section section--guarantee" id="garantias"><div class="container"><header class="section__head"><span class="eyebrow">Segurança &amp; Transparência</span><h2>Por que contratar a Conect Web é uma decisão de baixo risco</h2><p>Desenvolvimento sério é previsível, transparente e focado em manter o controle operacional nas suas mãos.</p></header><div class="guarantee-grid"><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></div><h3>Código 100% Seu (Zero Lock-in)</h3><p>Todo o repositório é criado no seu GitHub e serviços na sua nuvem. Você é proprietário da sua tecnologia.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3>Alta Resiliência &amp; Tolerância a Falhas</h3><p>Filas distribuídas com retentativas automáticas, logs de auditoria e monitoramento contínuo para sua operação nunca parar.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></div><h3>Previsibilidade &amp; Escopo Transparente</h3><p>Sem custos ocultos nem surpresas. Você acompanha e valida cada marco da solução diretamente em produção.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>Direto com o Desenvolvedor</h3><p>Sem gerentes de conta, intermediários ou repasses. Você fala diretamente com quem projeta o banco e programa as APIs.</p></div></div></div></section>
 
-<section id="contato" class="section section--cta"><div class="container cta"><div class="cta__left"><span class="eyebrow">Conversa técnica, sem compromisso</span><h2>Fale sobre sua operação</h2><p>Descreva o processo, sistema ou integração que você precisa resolver. A Conect Web retorna pelo WhatsApp com a viabilidade, os próximos passos e uma estimativa inicial.</p><ul class="cta__bullets"><li>Diagnóstico técnico antes de qualquer orçamento</li><li>Contato direto com quem desenvolve</li><li>Faixa de investimento na primeira resposta</li><li>Projeto tratado com sigilo</li></ul></div><form class="form" data-lead-form><label>Tipo de necessidade<select name="tipo" required><option value="">Escolha...</option><option>Integrar sistemas que não se falam</option><option>Automatizar uma tarefa manual repetitiva</option><option>Automatizar atendimento ou pós-venda no WhatsApp</option><option>Sistema sob medida (login, regras próprias, painel)</option><option>Abrir minha primeira loja, já automatizada</option><option>Outro / ainda não sei</option></select></label><label>Estágio do projeto<select name="estagio" required><option value="">Escolha...</option><option>Só avaliando possibilidades</option><option>Ainda não vendo — quero abrir</option><option>Já tenho o problema mapeado</option><option>Já tenho um sistema e preciso integrar/evoluir</option><option>Já tenho escopo e quero orçamento</option></select></label><label>Descreva rapidamente a necessidade<input type="text" name="descricao" placeholder="Ex.: preciso conectar meu sistema ao CRM..." required></label><label>Prazo ou orçamento, se tiver<input type="text" name="prazo" placeholder="Ex.: até 60 dias / a combinar"></label><label class="check"><input type="checkbox" name="aceite" required><span>Concordo em ser contatado(a) via WhatsApp sobre o projeto.</span></label><button class="btn btn--wa btn--lg btn--block" type="submit"><svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.652 4.469 1.781 6.305L3 29l7.879-2.734A12.94 12.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3Zm0 22.1a10.06 10.06 0 0 1-5.13-1.404l-.368-.219-4.678 1.624 1.548-4.554-.24-.375A10.07 10.07 0 0 1 5.9 15c0-5.577 4.532-10.1 10.104-10.1S26.1 9.423 26.1 15 21.576 25.1 16.004 25.1Zm5.542-7.564c-.303-.152-1.792-.884-2.07-.985-.278-.101-.48-.152-.682.152-.202.303-.783.985-.96 1.187-.177.202-.354.227-.657.076-.303-.152-1.278-.471-2.434-1.503-.9-.803-1.508-1.796-1.685-2.099-.177-.303-.019-.467.133-.618.137-.136.303-.354.454-.531.152-.177.202-.303.303-.505.101-.202.05-.379-.025-.531-.076-.152-.682-1.646-.935-2.253-.246-.591-.497-.511-.682-.52l-.581-.01c-.202 0-.531.076-.809.379-.278.303-1.06 1.036-1.06 2.529s1.085 2.935 1.236 3.138c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.199 1.909.121.582-.087 1.792-.733 2.045-1.441.253-.708.253-1.315.177-1.441-.076-.126-.278-.202-.581-.354Z"/></svg><span>Enviar no WhatsApp</span></button></form></div></section>
+<section id="contato" class="section section--cta reveal">
+  <div class="container cta cta--premium">
+    <div class="cta__left">
+      <div class="cta__badge-row">
+        <span class="cta-status-pill"><span class="pulse-ring"></span> Direto com Desenvolvedor Sênior</span>
+      </div>
+      <h2>Vamos analisar sua operação e desenhar a arquitetura ideal</h2>
+      <p class="cta__lead">Sem intermediários, sem reuniões vazias com gerentes de conta. Descreva o processo, sistema ou integração que você quer resolver e receba um diagnóstico técnico com escopo e estimativa transparente.</p>
 
-<footer class="footer"><div class="container footer__inner"><div><strong>Conect Web</strong><p>Engenharia de Software • Integrações &amp; Automação • Produtos Digitais</p><small>conectweb.online • CNPJ 63.039.583/0001-84 • Parceiro Certificado Nuvemshop</small><a href="https://www.hostinger.com/" target="_blank" rel="noopener" style="display:block;margin-top:14px;width:80px" aria-label="Hostinger Partner"><img src="/imagem/hostinger-partner-badge.svg" alt="Hostinger Partner" width="80" height="30" loading="lazy" style="display:block"></a></div><div class="footer__links"><a href="/">Início</a><a href="/desenvolvimento-de-sistemas/">Engenharia de Software</a><a href="/automacoes-e-integracoes/">Integrações e Automação</a><a href="/projetos/">Projetos</a><a href="/privacidade/">Privacidade</a><a href="/termos/">Termos</a><a href="/cookies/">Cookies</a></div></div></footer>
+      <div class="cta__benefits">
+        <div class="cta__benefit-item">
+          <div class="cta__benefit-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <strong>Diagnóstico arquitetural prévio</strong>
+            <span>Avaliamos suas APIs e fluxo de dados antes de qualquer proposta comercial.</span>
+          </div>
+        </div>
+
+        <div class="cta__benefit-item">
+          <div class="cta__benefit-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <strong>Resposta ágil no WhatsApp</strong>
+            <span>Retorno rápido, objetivo e direto no mesmo dia útil.</span>
+          </div>
+        </div>
+
+        <div class="cta__benefit-item">
+          <div class="cta__benefit-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <strong>Zero Lock-in &amp; Código 100% Seu</strong>
+            <span>Repositório no seu GitHub e infraestrutura na sua conta em nuvem.</span>
+          </div>
+        </div>
+
+        <div class="cta__benefit-item">
+          <div class="cta__benefit-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <strong>Sigilo &amp; Proteção de Dados (LGPD)</strong>
+            <span>Seu modelo de negócio, credenciais e integrações tratados com total confidencialidade.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-dev-card">
+        <div class="cta-dev-avatar" aria-hidden="true">NV</div>
+        <div class="cta-dev-info">
+          <strong>Nilton Vicente</strong>
+          <span>Fundador &amp; Desenvolvedor Principal • Especialista Nuvemshop</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container do Formulário Console -->
+    <div class="cta__form-box">
+      <div class="cta__form-header">
+        <div class="term-dots">
+          <span class="term-dot term-dot--close"></span>
+          <span class="term-dot term-dot--min"></span>
+          <span class="term-dot term-dot--max"></span>
+        </div>
+        <span class="cta__form-title">diagnostico_projeto.ts</span>
+        <span class="cta__form-secure">🔒 Conexão Segura</span>
+      </div>
+
+      <form class="form form--tech" data-lead-form>
+        <label>
+          <span class="form-label-text">Tipo de necessidade</span>
+          <div class="select-wrapper">
+            <select name="tipo" required>
+              <option value="">Selecione o objetivo principal...</option>
+              <option>Integrar sistemas que não se falam (APIs / Webhooks)</option>
+              <option>Automatizar tarefas manuais e planilhas repetitivas</option>
+              <option>Automatizar atendimento ou pós-venda no WhatsApp</option>
+              <option>Sistema web sob medida (login, banco, regras próprias)</option>
+              <option>Abrir minha primeira loja virtual, já automatizada</option>
+              <option>Outro / ainda estou mapeando</option>
+            </select>
+          </div>
+        </label>
+
+        <label>
+          <span class="form-label-text">Estágio atual do projeto</span>
+          <div class="select-wrapper">
+            <select name="estagio" required>
+              <option value="">Em qual estágio está sua operação?...</option>
+              <option>Já tenho um problema claro e quero resolver rápido</option>
+              <option>Já tenho sistemas rodando e preciso integrar/evoluir</option>
+              <option>Já tenho escopo técnico e procuro desenvolvedor</option>
+              <option>Ainda não vendo online — quero abrir já estruturado</option>
+              <option>Apenas avaliando viabilidade técnica e orçamento</option>
+            </select>
+          </div>
+        </label>
+
+        <label>
+          <span class="form-label-text">Descreva rapidamente a dor ou processo</span>
+          <input type="text" name="descricao" placeholder="Ex.: Preciso enviar mensagens no WhatsApp quando o pedido é despachado..." required>
+        </label>
+
+        <label>
+          <span class="form-label-text">Previsão de prazo ou orçamento (opcional)</span>
+          <input type="text" name="prazo" placeholder="Ex.: até 30 dias / a combinar">
+        </label>
+
+        <label class="check check--tech">
+          <input type="checkbox" name="aceite" required>
+          <span>Concordo em receber o contato técnico via WhatsApp para detalhar o projeto.</span>
+        </label>
+
+        <button class="btn btn--wa btn--lg btn--block btn--glow" type="submit">
+          <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.652 4.469 1.781 6.305L3 29l7.879-2.734A12.94 12.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3Zm0 22.1a10.06 10.06 0 0 1-5.13-1.404l-.368-.219-4.678 1.624 1.548-4.554-.24-.375A10.07 10.07 0 0 1 5.9 15c0-5.577 4.532-10.1 10.104-10.1S26.1 9.423 26.1 15 21.576 25.1 16.004 25.1Zm5.542-7.564c-.303-.152-1.792-.884-2.07-.985-.278-.101-.48-.152-.682.152-.202.303-.783.985-.96 1.187-.177.202-.354.227-.657.076-.303-.152-1.278-.471-2.434-1.503-.9-.803-1.508-1.796-1.685-2.099-.177-.303-.019-.467.133-.618.137-.136.303-.354.454-.531.152-.177.202-.303.303-.505.101-.202.05-.379-.025-.531-.076-.152-.682-1.646-.935-2.253-.246-.591-.497-.511-.682-.52l-.581-.01c-.202 0-.531.076-.809.379-.278.303-1.06 1.036-1.06 2.529s1.085 2.935 1.236 3.138c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.199 1.909.121.582-.087 1.792-.733 2.045-1.441.253-.708.253-1.315.177-1.441-.076-.126-.278-.202-.581-.354Z"/></svg>
+          <span>Enviar Diagnóstico no WhatsApp</span>
+        </button>
+
+        <p class="form__subtext">
+          <span>Sem compromisso comercial</span> • <span>Resposta no mesmo dia útil</span>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer footer--tech">
+  <div class="container footer__container">
+    <div class="footer__grid">
+      <!-- Coluna 1: Marca & Autoridade -->
+      <div class="footer__col footer__col--brand">
+        <a class="brand" href="/" aria-label="Conect Web — início">
+          <span class="brand__logo">CW</span>
+          <span class="brand__text">
+            <strong>Conect Web</strong>
+            <small>Engenharia de Software &amp; Automação</small>
+          </span>
+        </a>
+        <p class="footer__about">
+          Engenharia de software focada em substituir processos manuais por código robusto. Sistemas sob medida, integrações de APIs e pipelines de automação para operações digitais escalarem.
+        </p>
+        <div class="footer__badges">
+          <span class="footer__badge-pill">
+            <span class="footer__badge-dot"></span> Parceiro Certificado Nuvemshop
+          </span>
+          <a href="https://www.hostinger.com/" target="_blank" rel="noopener" class="footer__hostinger" aria-label="Hostinger Partner">
+            <img src="/imagem/hostinger-partner-badge.svg" alt="Hostinger Partner" width="90" height="34" loading="lazy">
+          </a>
+        </div>
+      </div>
+
+      <!-- Coluna 2: Soluções -->
+      <div class="footer__col">
+        <h4>Soluções Técnicas</h4>
+        <ul class="footer__nav-list">
+          <li><a href="/desenvolvimento-de-sistemas/">Software Web Sob Medida</a></li>
+          <li><a href="/automacoes-e-integracoes/">Integrações de APIs &amp; Webhooks</a></li>
+          <li><a href="/automacoes-e-integracoes/">Automação WhatsApp Cloud API</a></li>
+          <li><a href="/desenvolvimento-de-sistemas/">Arquitetura em Nuvem &amp; Banco</a></li>
+          <li><a href="#loja">Loja Virtual Automatizada</a></li>
+          <li><a href="#calculadora-roi">Calculadora de Desperdício (ROI)</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 3: Produtos Próprios -->
+      <div class="footer__col">
+        <h4>Produtos Próprios</h4>
+        <ul class="footer__nav-list">
+          <li><a href="https://livia.conectweb.online/" target="_blank" rel="noopener">Lívia IA <small class="footer__tag">WhatsApp</small></a></li>
+          <li><a href="https://nuvemrush.com.br" target="_blank" rel="noopener">Nuvem Rush <small class="footer__tag">Carrinho</small></a></li>
+          <li><a href="https://financer-auto.conectweb.online" target="_blank" rel="noopener">Financer Auto <small class="footer__tag">FinTech</small></a></li>
+          <li><a href="https://lucro.conectweb.online" target="_blank" rel="noopener">Lucro ML <small class="footer__tag">Analytics</small></a></li>
+          <li><a href="/projetos/">Ver Todos os Projetos →</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 4: Contato & Transparência -->
+      <div class="footer__col">
+        <h4>Contato &amp; Jurídico</h4>
+        <ul class="footer__nav-list">
+          <li><a href="https://wa.me/5514996807881?text=Olá+Nilton!+Gostaria+de+conversar+sobre+um+projeto" target="_blank" rel="noopener">Conversar no WhatsApp</a></li>
+          <li><a href="/certificado-nuvemshop.pdf" target="_blank" rel="noopener">Certificado Nuvemshop (PDF)</a></li>
+          <li><a href="/privacidade/">Política de Privacidade</a></li>
+          <li><a href="/termos/">Termos de Uso</a></li>
+          <li><a href="/cookies/">Política de Cookies</a></li>
+          <li><span class="footer__cnpj">CNPJ: 63.039.583/0001-84</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Barra Inferior do Rodapé -->
+    <div class="footer__bottom">
+      <div class="footer__bottom-left">
+        <p>© 2026 Conect Web • Todos os direitos reservados • CNPJ 63.039.583/0001-84</p>
+        <small>Projetado e desenvolvido por Nilton Vicente • Engenharia de Software sem intermediários.</small>
+      </div>
+      <div class="footer__bottom-right">
+        <div class="footer__live-status">
+          <span class="status-pulse-dot"></span>
+          <span>Sistemas e pipelines operacionais</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
 <a class="wa-float" href="#" data-wa-btn data-event="whatsapp_click" aria-label="Falar no WhatsApp"><svg viewBox="0 0 32 32" width="28" height="28" fill="#fff" aria-hidden="true" focusable="false"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.652 4.469 1.781 6.305L3 29l7.879-2.734A12.94 12.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3Zm0 22.1a10.06 10.06 0 0 1-5.13-1.404l-.368-.219-4.678 1.624 1.548-4.554-.24-.375A10.07 10.07 0 0 1 5.9 15c0-5.577 4.532-10.1 10.104-10.1S26.1 9.423 26.1 15 21.576 25.1 16.004 25.1Zm5.542-7.564c-.303-.152-1.792-.884-2.07-.985-.278-.101-.48-.152-.682.152-.202.303-.783.985-.96 1.187-.177.202-.354.227-.657.076-.303-.152-1.278-.471-2.434-1.503-.9-.803-1.508-1.796-1.685-2.099-.177-.303-.019-.467.133-.618.137-.136.303-.354.454-.531.152-.177.202-.303.303-.505.101-.202.05-.379-.025-.531-.076-.152-.682-1.646-.935-2.253-.246-.591-.497-.511-.682-.52l-.581-.01c-.202 0-.531.076-.809.379-.278.303-1.06 1.036-1.06 2.529s1.085 2.935 1.236 3.138c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.199 1.909.121.582-.087 1.792-.733 2.045-1.441.253-.708.253-1.315.177-1.441-.076-.126-.278-.202-.581-.354Z"/></svg></a><script src="/script.js?v=3" defer></script><script>
 /* CAPABILITIES_INTERACTION */
 (() => {
