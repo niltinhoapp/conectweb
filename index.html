@@ -1574,18 +1574,38 @@ body.capability-open{
    ============================================================= */
 
 /* ---------- Terminal Interativo de Engenharia (Hero) ---------- */
+/* ---------- Terminal Interativo de Engenharia (Hero) — Sexta Dimensão ---------- */
 .tech-terminal{
-  background:rgba(11,15,25,.88);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:20px;
+  position:relative;
+  background:linear-gradient(180deg, rgba(14,18,30,.94) 0%, rgba(9,12,20,.98) 100%);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
   overflow:hidden;
-  box-shadow:0 30px 80px -30px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.05);
-  backdrop-filter:blur(14px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.05),
+    0 30px 90px -20px rgba(0,0,0,.95),
+    0 0 80px -20px rgba(37,99,235,.30),
+    inset 0 1px 0 rgba(255,255,255,.20);
+  backdrop-filter:blur(20px);
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+.tech-terminal::before{
+  content:"";position:absolute;top:0;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(96,165,250,.6), rgba(192,132,252,.6), transparent);
+  pointer-events:none;
+}
+.tech-terminal:hover{
+  border-color:rgba(96,165,250,.4);
+  box-shadow:
+    0 0 0 1px rgba(96,165,250,.3),
+    0 35px 100px -20px rgba(0,0,0,.95),
+    0 0 100px -15px rgba(37,99,235,.45),
+    inset 0 1px 0 rgba(255,255,255,.30);
 }
 .tech-terminal__top{
   display:flex; align-items:center; gap:12px;
-  padding:12px 16px;
-  background:rgba(255,255,255,.04);
+  padding:14px 18px;
+  background:rgba(255,255,255,.03);
   border-bottom:1px solid var(--dark-line);
 }
 .tech-terminal__controls{display:flex;gap:6px}
@@ -1594,53 +1614,65 @@ body.capability-open{
 .ctrl--yellow{background:#F59E0B}
 .ctrl--green{background:#10B981}
 
-.tech-terminal__tabs{display:flex;gap:4px;margin-left:4px}
+.tech-terminal__tabs{display:flex;gap:6px;margin-left:4px}
 .tech-terminal__tab{
-  background:transparent;border:none;color:var(--dark-muted);
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);color:var(--dark-muted);
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:12px;padding:6px 12px;border-radius:8px;
+  font-size:12px;padding:6px 14px;border-radius:10px;
   cursor:pointer;display:inline-flex;align-items:center;gap:7px;
-  transition:all .18s ease;
+  transition:all .2s ease;
 }
-.tech-terminal__tab:hover{color:#fff;background:rgba(255,255,255,.05)}
-.tech-terminal__tab.is-active{background:rgba(255,255,255,.09);color:#fff;font-weight:600}
-.term-status-dot{width:6px;height:6px;border-radius:50%;background:#34D399;box-shadow:0 0 0 3px rgba(52,211,153,.25)}
+.tech-terminal__tab:hover{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
+.tech-terminal__tab.is-active{
+  background:linear-gradient(135deg, rgba(37,99,235,.25), rgba(124,58,237,.25));
+  border-color:rgba(96,165,250,.5);
+  color:#fff;font-weight:600;
+  box-shadow:0 0 16px -2px rgba(37,99,235,.4);
+}
+.term-status-dot{width:7px;height:7px;border-radius:50%;background:#34D399;box-shadow:0 0 0 3px rgba(52,211,153,.3), 0 0 8px #34D399}
 
 .tech-terminal__pill{
   margin-left:auto;font-family:ui-monospace,monospace;font-size:11px;
-  color:#34D399;background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.25);
-  padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;
+  color:#34D399;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);
+  padding:4px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;
+  box-shadow:0 0 16px -2px rgba(52,211,153,.3);
 }
-.pulse-ring{width:6px;height:6px;border-radius:50%;background:#34D399}
+.pulse-ring{width:7px;height:7px;border-radius:50%;background:#34D399;box-shadow:0 0 8px #34D399}
 
-.tech-terminal__panel{padding:10px 14px}
-.tech-terminal__body{display:flex;flex-direction:column;gap:4px}
+.tech-terminal__panel{padding:12px 16px}
+.tech-terminal__body{display:flex;flex-direction:column;gap:5px}
 
 .log-row{
   display:flex;align-items:center;gap:10px;
   font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:12px;padding:7px 10px;border-radius:6px;
-  transition:background .15s ease;
+  font-size:12px;padding:7px 12px;border-radius:8px;
+  border:1px solid transparent;
+  transition:all .18s ease;
 }
-.log-row:hover{background:rgba(255,255,255,.03)}
-.log-row--hi{background:rgba(37,99,235,.10);border:1px solid rgba(37,99,235,.20)}
+.log-row:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08)}
+.log-row--hi{
+  background:linear-gradient(90deg, rgba(37,99,235,.15), rgba(124,58,237,.10));
+  border:1px solid rgba(59,130,246,.30);
+  box-shadow:0 0 18px -4px rgba(37,99,235,.25);
+}
 .log-t{color:rgba(226,232,240,.45);font-variant-numeric:tabular-nums;flex-shrink:0}
-.log-tag{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.03em;text-transform:uppercase;flex-shrink:0}
-.log-tag--hook{background:rgba(59,130,246,.2);color:#93C5FD}
-.log-tag--crm{background:rgba(168,85,247,.2);color:#D8B4FE}
-.log-tag--wa{background:rgba(34,197,94,.2);color:#86EFAC}
-.log-tag--erp{background:rgba(234,179,8,.2);color:#FDE047}
-.log-tag--fin{background:rgba(20,184,166,.2);color:#5EEAD4}
-.log-tag--post{background:rgba(99,102,241,.2);color:#A5B4FC}
-.log-tag--nps{background:rgba(236,72,153,.2);color:#F472B6}
+.log-tag{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.03em;text-transform:uppercase;flex-shrink:0}
+.log-tag--hook{background:rgba(59,130,246,.25);color:#93C5FD;border:1px solid rgba(59,130,246,.3)}
+.log-tag--crm{background:rgba(168,85,247,.25);color:#D8B4FE;border:1px solid rgba(168,85,247,.3)}
+.log-tag--wa{background:rgba(34,197,94,.25);color:#86EFAC;border:1px solid rgba(34,197,94,.3)}
+.log-tag--erp{background:rgba(234,179,8,.25);color:#FDE047;border:1px solid rgba(234,179,8,.3)}
+.log-tag--fin{background:rgba(20,184,166,.25);color:#5EEAD4;border:1px solid rgba(20,184,166,.3)}
+.log-tag--post{background:rgba(99,102,241,.25);color:#A5B4FC;border:1px solid rgba(99,102,241,.3)}
+.log-tag--nps{background:rgba(236,72,153,.25);color:#F472B6;border:1px solid rgba(236,72,153,.3)}
 .log-msg{color:var(--dark-text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.log-msg strong{color:#fff}
-.log-svc{color:rgba(226,232,240,.45);font-size:11px;flex-shrink:0}
+.log-msg strong{color:#fff;text-shadow:0 0 10px rgba(255,255,255,.2)}
+.log-svc{color:rgba(226,232,240,.5);font-size:11px;flex-shrink:0}
 
 .tech-terminal__code{
-  margin:0;padding:16px;background:rgba(0,0,0,.45);border-radius:12px;
-  border:1px solid rgba(255,255,255,.06);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  margin:0;padding:18px;background:rgba(0,0,0,.55);border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size:12px;line-height:1.65;overflow-x:auto;color:#E2E8F0;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.6);
 }
 .c-cmt{color:#6B7280;font-style:italic}
 .c-kwd{color:#C084FC;font-weight:600}
@@ -1650,12 +1682,12 @@ body.capability-open{
 .c-num{color:#FBBF24}
 
 .tech-terminal__foot{
-  display:flex;gap:18px;flex-wrap:wrap;
-  padding:12px 18px;border-top:1px solid var(--dark-line);
-  font-family:ui-monospace,monospace;font-size:11px;color:var(--dark-muted);
+  display:flex;gap:20px;flex-wrap:wrap;
+  padding:14px 20px;border-top:1px solid var(--dark-line);
+  font-family:ui-monospace,monospace;font-size:11.5px;color:var(--dark-muted);
 }
 .tech-terminal__foot b{color:#fff}
-.tech-terminal__action{padding:0 16px 16px}
+.tech-terminal__action{padding:0 18px 18px}
 .tech-terminal__action .btn{width:100%}
 
 @media (max-width:640px){
@@ -1670,108 +1702,216 @@ body.capability-open{
 /* ---------- Faixa de Métricas de Engenharia ---------- */
 .eng-metrics{
   background:#07090E;
-  border-top:1px solid rgba(255,255,255,.07);
-  border-bottom:1px solid rgba(255,255,255,.07);
-  padding:32px 0;position:relative;z-index:2;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  padding:36px 0;position:relative;z-index:2;
 }
 .eng-metrics__grid{
   display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
 }
 .eng-metric{
-  border-left:2px solid var(--brand);padding-left:16px;
+  position:relative;
+  border-left:2px solid transparent;
+  border-image:linear-gradient(180deg, var(--brand), var(--brand2)) 1;
+  padding-left:18px;
 }
 .eng-metric__num{
-  display:block;font-size:23px;font-weight:800;color:#fff;
+  display:block;font-size:25px;font-weight:800;color:#fff;
   letter-spacing:-.025em;font-family:ui-monospace,Inter,sans-serif;
+  text-shadow:0 0 16px rgba(37,99,235,.35);
 }
 .eng-metric__lbl{
   display:block;font-size:13px;color:var(--dark-muted);line-height:1.55;margin-top:5px;
 }
-@media (max-width:880px){.eng-metrics__grid{grid-template-columns:repeat(2,1fr);gap:20px}}
+@media (max-width:880px){.eng-metrics__grid{grid-template-columns:repeat(2,1fr);gap:24px}}
 @media (max-width:480px){.eng-metrics__grid{grid-template-columns:1fr}}
 
-/* ---------- Mini-Mockups de Produtos (UI de Alta Fidelidade) ---------- */
+/* ---------- Cards Sexta Dimensão (Produtos Vivos) ---------- */
 .prodcard--tech{
-  display:flex;flex-direction:column;justify-content:space-between;gap:18px;
-  border:1px solid var(--line);border-radius:24px;background:#fff;
-  padding:26px;box-shadow:var(--shadow-sm);transition:all .25s ease;
+  position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;gap:20px;
+  border:1px solid rgba(226,232,240,.9);
+  border-radius:26px;
+  background:linear-gradient(180deg, #FFFFFF 0%, #F9FBFE 60%, #F1F5F9 100%);
+  padding:28px;
+  overflow:hidden;
+  box-shadow:
+    0 1px 2px rgba(15,23,42,.03),
+    0 10px 30px -10px rgba(15,23,42,.06),
+    0 24px 50px -20px rgba(37,99,235,.06),
+    inset 0 1px 0 #fff;
+  transition:all .32s cubic-bezier(.16,1,.3,1);
+}
+.prodcard--tech::before{
+  content:"";position:absolute;top:0;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(37,99,235,.5), rgba(124,58,237,.5), transparent);
+  transition:all .35s ease;
+  pointer-events:none;
 }
 .prodcard--tech:hover{
-  transform:translateY(-3px);border-color:#CBD5E1;box-shadow:var(--shadow-lg);
+  transform:translateY(-6px) scale(1.012);
+  border-color:rgba(37,99,235,.35);
+  box-shadow:
+    0 0 0 1px rgba(37,99,235,.2),
+    0 24px 60px -15px rgba(37,99,235,.22),
+    0 10px 24px -8px rgba(124,58,237,.14),
+    inset 0 1px 0 #fff;
+}
+.prodcard--tech:hover::before{
+  left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, #2563EB, #7C3AED, transparent);
+  box-shadow:0 0 12px rgba(37,99,235,.6);
 }
 .prodcard__badge-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.prodcard__status{font-size:11px;font-weight:700;color:#10B981;font-family:ui-monospace,monospace}
+.prodcard__status{
+  font-size:11px;font-weight:700;color:#10B981;font-family:ui-monospace,monospace;
+  background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);
+  padding:2px 8px;border-radius:999px;
+  display:inline-flex;align-items:center;gap:4px;
+}
 
 .ui-mockup{
-  background:#F8FAFC;border:1px solid var(--line);border-radius:16px;
-  padding:15px;margin:2px 0 6px;
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(226,232,240,.95);
+  border-radius:18px;
+  padding:16px;margin:4px 0 8px;
+  box-shadow:0 4px 14px -4px rgba(15,23,42,.05), inset 0 1px 0 #fff;
+  position:relative;
 }
 .ui-chat__header{
-  display:flex;align-items:center;gap:9px;padding-bottom:10px;
+  display:flex;align-items:center;gap:10px;padding-bottom:11px;
   border-bottom:1px solid var(--line);
 }
 .ui-chat__avatar{
-  width:28px;height:28px;border-radius:50%;background:var(--grad);
+  width:30px;height:30px;border-radius:50%;background:var(--grad);
   color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px;
+  box-shadow:0 0 0 3px rgba(37,99,235,.15), 0 0 12px rgba(124,58,237,.3);
 }
 .ui-chat__header strong{display:block;font-size:12px;color:var(--text)}
-.ui-chat__header small{display:block;font-size:10px;color:#10B981;font-weight:600}
+.ui-chat__header small{display:block;font-size:10.5px;color:#10B981;font-weight:700}
 .ui-chat__body{display:flex;flex-direction:column;gap:8px;padding-top:10px}
-.ui-bubble{font-size:11.5px;line-height:1.45;padding:8px 12px;border-radius:12px;max-width:88%}
-.ui-bubble--user{align-self:flex-end;background:#E0E7FF;color:#1E1B4B;border-bottom-right-radius:3px}
-.ui-bubble--bot{align-self:flex-start;background:#fff;color:var(--text);border:1px solid var(--line);border-bottom-left-radius:3px}
+.ui-bubble{font-size:11.5px;line-height:1.45;padding:9px 13px;border-radius:14px;max-width:88%}
+.ui-bubble--user{
+  align-self:flex-end;
+  background:linear-gradient(135deg, #EEF2FF, #E0E7FF);
+  color:#1E1B4B;border-bottom-right-radius:4px;
+  box-shadow:0 2px 6px rgba(37,99,235,.08);
+}
+.ui-bubble--bot{
+  align-self:flex-start;background:#fff;color:var(--text);
+  border:1px solid var(--line);border-bottom-left-radius:4px;
+  box-shadow:0 2px 6px rgba(15,23,42,.04);
+}
 .ui-bubble--bot p{margin:0}
 .ui-bubble__badge{
   display:inline-block;margin-top:6px;font-size:10px;font-weight:700;
-  color:#059669;background:rgba(5,150,105,.08);padding:3px 8px;border-radius:4px;
+  color:#059669;background:rgba(5,150,105,.10);border:1px solid rgba(5,150,105,.2);
+  padding:3px 8px;border-radius:6px;
 }
 
-.ui-pipe-step{display:flex;align-items:center;gap:10px}
-.ui-pipe-dot{width:9px;height:9px;border-radius:50%;background:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,.2);flex-shrink:0}
+.ui-pipe-step{display:flex;align-items:center;gap:11px}
+.ui-pipe-dot{
+  width:10px;height:10px;border-radius:50%;background:#10B981;
+  box-shadow:0 0 0 4px rgba(16,185,129,.25), 0 0 10px rgba(16,185,129,.6);
+  flex-shrink:0;
+}
 .ui-pipe-info strong{display:block;font-size:12px;color:var(--text)}
 .ui-pipe-info span{display:block;font-size:11px;color:var(--muted)}
-.ui-pipe-line{width:2px;height:14px;background:var(--line2);margin-left:3.5px}
+.ui-pipe-line{
+  width:2px;height:16px;margin-left:4px;
+  background:linear-gradient(180deg, #10B981, rgba(37,99,235,.6));
+}
 .ui-pipe-badge{
   margin-top:12px;font-size:11px;font-weight:700;color:var(--brand-ink);
-  background:var(--grad-soft);padding:5px 9px;border-radius:6px;border:1px solid rgba(37,99,235,.15);
+  background:var(--grad-soft);padding:6px 11px;border-radius:8px;
+  border:1px solid rgba(37,99,235,.2);
+  box-shadow:0 0 14px -3px rgba(37,99,235,.2);
 }
 
 .ui-dash__stat{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .ui-dash__lbl{font-size:11.5px;color:var(--muted);font-weight:600}
-.ui-dash__val{font-size:17px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
-.ui-dash__bars{display:flex;height:8px;border-radius:999px;overflow:hidden;gap:2px;margin-bottom:8px;background:#E2E8F0}
-.ui-bar{height:100%;border-radius:2px}
+.ui-dash__val{
+  font-size:18px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg, #111827 40%, var(--brand) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.ui-dash__bars{display:flex;height:9px;border-radius:999px;overflow:hidden;gap:3px;margin-bottom:8px;background:#E2E8F0}
+.ui-bar{height:100%;border-radius:3px}
+.ui-bar--green{background:#10B981;box-shadow:0 0 10px rgba(16,185,129,.4)}
+.ui-bar--amber{background:#F59E0B}
+.ui-bar--red{background:#EF4444}
 .ui-dash__tags{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--muted2)}
 
-.ui-dre__row{display:flex;justify-content:space-between;font-size:11.5px;padding:3.5px 0;border-bottom:1px dashed var(--line)}
+.ui-dre__row{display:flex;justify-content:space-between;font-size:11.5px;padding:4px 0;border-bottom:1px dashed var(--line)}
 .ui-dre__row:last-child{border-bottom:none}
 .ui-dre__row.is-deduct{color:#EF4444}
-.ui-dre__row.is-profit{color:#059669;font-weight:800;padding-top:7px;border-top:1px solid var(--line2);border-bottom:none}
+.ui-dre__row.is-profit{
+  color:#059669;font-weight:800;padding-top:8px;border-top:1px solid var(--line2);border-bottom:none;
+  text-shadow:0 0 12px rgba(5,150,105,.2);
+}
 
-/* ---------- Seção de Garantias & Desrisco ---------- */
+/* ---------- Seção de Garantias & Desrisco (Cards 6D) ---------- */
 .section--guarantee{
   background:linear-gradient(180deg, var(--bg-subtle), var(--bg));
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  position:relative;
 }
 .guarantee-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:10px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:12px;
 }
 .gcard{
-  background:#fff;border:1px solid var(--line);border-radius:20px;
-  padding:26px 22px;box-shadow:var(--shadow-xs);transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  position:relative;
+  background:linear-gradient(180deg, #FFFFFF 0%, #FAFCFF 60%, #F3F6FA 100%);
+  border:1px solid rgba(226,232,240,.95);
+  border-radius:24px;
+  padding:28px 24px;
+  overflow:hidden;
+  box-shadow:
+    0 1px 2px rgba(15,23,42,.03),
+    0 10px 28px -10px rgba(15,23,42,.06),
+    0 20px 45px -15px rgba(37,99,235,.05),
+    inset 0 1px 0 #fff;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
 }
-.gcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:#CBD5E1}
+.gcard::before{
+  content:"";position:absolute;top:0;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(37,99,235,.45), rgba(124,58,237,.45), transparent);
+  transition:all .35s ease;
+  pointer-events:none;
+}
+.gcard:hover{
+  transform:translateY(-6px) scale(1.012);
+  border-color:rgba(37,99,235,.35);
+  box-shadow:
+    0 0 0 1px rgba(37,99,235,.2),
+    0 24px 55px -12px rgba(37,99,235,.20),
+    0 10px 25px -8px rgba(124,58,237,.12),
+    inset 0 1px 0 #fff;
+}
+.gcard:hover::before{
+  left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, #2563EB, #7C3AED, transparent);
+  box-shadow:0 0 10px rgba(37,99,235,.5);
+}
 .gcard__icon{
-  width:46px;height:46px;border-radius:14px;
+  width:48px;height:48px;border-radius:15px;
   background:var(--grad-soft);color:var(--brand);
-  display:grid;place-items:center;margin-bottom:16px;
-  border:1px solid rgba(37,99,235,.18);
+  display:grid;place-items:center;margin-bottom:18px;
+  border:1px solid rgba(37,99,235,.20);
+  box-shadow:0 8px 20px -4px rgba(37,99,235,.15);
+  transition:all .25s ease;
+}
+.gcard:hover .gcard__icon{
+  transform:scale(1.1) rotate(2deg);
+  box-shadow:0 12px 24px -4px rgba(37,99,235,.30);
+  color:var(--brand-ink);
 }
 .gcard h3{font-size:16.5px;margin:0 0 8px;font-weight:700;color:var(--text)}
 .gcard p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0}
 
 @media (max-width:960px){.guarantee-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:540px){.guarantee-grid{grid-template-columns:1fr}}
+
 
   </style>
   <!-- CSS_INLINE_END --><script src="/consent.js?v=2" defer></script></head><body data-service="">
@@ -1798,7 +1938,7 @@ body.capability-open{
   <span class="c-kwd">return</span> { status: <span class="c-num">200</span>, idempotencyKey: req.id };
 }</code></pre></div><div class="tech-terminal__foot"><span><b>0</b> toques manuais</span><span><b>fila</b> com retry</span><span><b>100%</b> rastreabilidade</span></div><div class="tech-terminal__action"><a class="btn btn--primary btn--block" href="#contato" data-event="cta_click" data-cta="painel_iniciar_projeto">Quero isso na minha operação</a></div></div></aside></div></main>
 
-<section class="eng-metrics" aria-label="Métricas de engenharia e impacto"><div class="container eng-metrics__grid"><div class="eng-metric"><span class="eng-metric__num">&lt; 1.2s</span><span class="eng-metric__lbl">Tempo médio de sincronização entre checkout e ERP</span></div><div class="eng-metric"><span class="eng-metric__num">99.9%</span><span class="eng-metric__lbl">Disponibilidade com fila assíncrona e tolerância a falhas</span></div><div class="eng-metric"><span class="eng-metric__num">100%</span><span class="eng-metric__lbl">Propriedade do código no seu GitHub sem lock-in</span></div><div class="eng-metric"><span class="eng-metric__num">30 dias</span><span class="eng-metric__lbl">Garantia total de acompanhamento e ajustes pós-entrega</span></div></div></section>
+<section class="eng-metrics" aria-label="Métricas de engenharia e impacto"><div class="container eng-metrics__grid"><div class="eng-metric"><span class="eng-metric__num">&lt; 1.2s</span><span class="eng-metric__lbl">Tempo médio de sincronização entre checkout e ERP</span></div><div class="eng-metric"><span class="eng-metric__num">99.9%</span><span class="eng-metric__lbl">Disponibilidade com fila assíncrona e tolerância a falhas</span></div><div class="eng-metric"><span class="eng-metric__num">100%</span><span class="eng-metric__lbl">Propriedade do código no seu GitHub sem lock-in</span></div><div class="eng-metric"><span class="eng-metric__num">Zero Débito</span><span class="eng-metric__lbl">Arquitetura modular, documentada e pronta para escalar</span></div></div></section>
 
 <section id="produtos-conectweb" class="section reveal"><div class="container"><header class="section__head"><span class="eyebrow">Produtos ConectWeb</span><h2>Produtos desenvolvidos pela Conect Web</h2><p>Soluções próprias que aplicam nossa experiência em software, automação, IA e gestão a operações reais.</p></header>
 
@@ -1808,7 +1948,7 @@ body.capability-open{
 
 <article class="prodcard prodcard--tech"><div class="prodcard__top"><div class="prodcard__badge-row"><span class="prodcard__tag">Automação · Nuvemshop</span><span class="prodcard__status">● Certificado</span></div><h3>Nuvem Rush</h3><p class="prodcard__tagline">Pipeline assíncrono para recuperação de carrinhos, status de frete e recompra via WhatsApp.</p><div class="ui-mockup ui-pipe"><div class="ui-pipe-step"><span class="ui-pipe-dot"></span><div class="ui-pipe-info"><strong>Checkout Abandonado</strong><span>Webhook capturado em 380ms</span></div></div><div class="ui-pipe-line"></div><div class="ui-pipe-step"><span class="ui-pipe-dot"></span><div class="ui-pipe-info"><strong>Régua Inteligente WhatsApp</strong><span>Link direto com carrinho preservado</span></div></div><div class="ui-pipe-badge">+34% recuperação média de vendas</div></div></div><a class="link" href="https://nuvemrush.com.br" target="_blank" rel="noopener" data-event="cta_click" data-cta="produtos_nuvemrush">Ver o Nuvem Rush →</a></article>
 
-<article class="prodcard prodcard--tech"><div class="prodcard__top"><div class="prodcard__badge-row"><span class="prodcard__tag">SaaS Sob Medida</span><span class="prodcard__status">● Produção</span></div><h3>Financer Auto</h3><p class="prodcard__tagline">Gestão de contratos, parcelas, cobrança automática e portal do cliente para revendas de veículos.</p><div class="ui-mockup ui-dash"><div class="ui-dash__stat"><span class="ui-dash__lbl">Volume em Contratos</span><span class="ui-dash__val">R$ 482.000</span></div><div class="ui-dash__bars"><span class="ui-bar" style="width:72%;background:#10B981"></span><span class="ui-bar" style="width:18%;background:#F59E0B"></span><span class="ui-bar" style="width:10%;background:#EF4444"></span></div><div class="ui-dash__tags"><span>72% Pagos em Dia</span><span>Split PIX Automático</span></div></div></div><a class="link" href="https://financer-auto.conectweb.online" target="_blank" rel="noopener" data-event="cta_click" data-cta="produtos_financerauto">Ver o Financer Auto →</a></article>
+<article class="prodcard prodcard--tech"><div class="prodcard__top"><div class="prodcard__badge-row"><span class="prodcard__tag">SaaS Sob Medida</span><span class="prodcard__status">● Produção</span></div><h3>Financer Auto</h3><p class="prodcard__tagline">Gestão de contratos, parcelas, cobrança automática e portal do cliente para revendas de veículos.</p><div class="ui-mockup ui-dash"><div class="ui-dash__stat"><span class="ui-dash__lbl">Volume em Contratos</span><span class="ui-dash__val">R$ 482.000</span></div><div class="ui-dash__bars"><span class="ui-bar ui-bar--green" style="width:72%"></span><span class="ui-bar ui-bar--amber" style="width:18%"></span><span class="ui-bar ui-bar--red" style="width:10%"></span></div><div class="ui-dash__tags"><span>72% Pagos em Dia</span><span>Split PIX Automático</span></div></div></div><a class="link" href="https://financer-auto.conectweb.online" target="_blank" rel="noopener" data-event="cta_click" data-cta="produtos_financerauto">Ver o Financer Auto →</a></article>
 
 <article class="prodcard prodcard--tech"><div class="prodcard__top"><div class="prodcard__badge-row"><span class="prodcard__tag">Analytics · Mercado Livre</span><span class="prodcard__status">● Produção</span></div><h3>Lucro ML</h3><p class="prodcard__tagline">DRE em tempo real, auditoria de comissões, frete e diagnóstico da margem líquida real por anúncio.</p><div class="ui-mockup ui-dre"><div class="ui-dre__row"><span>Faturamento Bruto</span><span>R$ 38.450,00</span></div><div class="ui-dre__row is-deduct"><span>Comissões ML (16.5%)</span><span>- R$ 6.344,25</span></div><div class="ui-dre__row is-deduct"><span>Fretes &amp; Taxas Extras</span><span>- R$ 3.820,00</span></div><div class="ui-dre__row is-profit"><span>Margem Líquida Real</span><span>R$ 12.185,75 (31.7%)</span></div></div></div><a class="link" href="https://lucro.conectweb.online" target="_blank" rel="noopener" data-event="cta_click" data-cta="produtos_lucroml">Ver o Lucro ML →</a></article>
 
@@ -1816,15 +1956,15 @@ body.capability-open{
 
 <section class="section capabilities-section" id="capacidades"><div class="container"><header class="section__head capabilities-head"><span class="eyebrow">O que fazemos</span><h2>Fazemos duas coisas, e fazemos as duas bem</h2><p>Não somos agência de tudo. Duas frentes, feitas por quem escreve o código — e uma lista honesta do que fica de fora.</p><span class="capabilities-hint">Toque em uma frente para ver o que entra, como fazemos e quando faz sentido.</span></header>
 
-<div class="capabilities-grid capabilities-grid--duo" data-capabilities-grid><article class="cap-card" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Integração &amp; automação"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">01</span><span class="cap-card__type">Porta de entrada</span></div><div><h3>Integração &amp; automação</h3><p>Seus sistemas passam a conversar e o trabalho repetitivo sai da mão de alguém. É a frente de resultado mais rápido.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Integração &amp; automação</span><h3>A maior parte do trabalho manual de uma operação é informação andando de um sistema para outro.</h3><p class="cap-detail__lead">Pedido que vira cadastro, cadastro que vira mensagem, mensagem que vira registro. Cada uma dessas pontes é código simples — o que custa caro é não ter nenhuma delas e pagar alguém para ser a ponte todo dia.</p><div class="cap-detail__grid"><div><strong>O que conectamos</strong><p>Nuvemshop, Mercado Livre, ERPs, gateways de pagamento, transportadoras, planilhas e sistemas próprios, por API ou webhook.</p></div><div><strong>Como entregamos</strong><p>Fila com retry, log de cada entrega, alerta quando falha e painel para reprocessar sem depender de nós.</p></div><div><strong>Quando faz sentido</strong><p>Quando alguém redigita pedido, responde sempre a mesma pergunta no WhatsApp ou fecha o dia conferindo planilha na mão.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="cap_integracao">Conversar sobre este tipo de projeto</a></div></div></div></article><article class="cap-card" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Software sob medida"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">02</span><span class="cap-card__type">Quando nada pronto serve</span></div><div><h3>Software sob medida</h3><p>Plataforma própria, com login, as suas regras de negócio e os seus dados no seu domínio. Código entregue a você.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Software sob medida</span><h3>Sistema de prateleira impõe o processo dele. O seu negócio já tem um, e ele funciona.</h3><p class="cap-detail__lead">Construímos em cima de como a operação realmente acontece: quem aprova o quê, o que não pode acontecer, qual número importa. Entregamos por etapas, cada uma em produção.</p><div class="cap-detail__grid"><div><strong>O que construímos</strong><p>Sistemas internos, painéis operacionais, áreas de cliente, portais de acompanhamento e produtos SaaS.</p></div><div><strong>Como construímos</strong><p>Next.js, TypeScript, banco gerenciado, autenticação, perfis de acesso, trilha de auditoria e publicação automatizada.</p></div><div><strong>O que fica com você</strong><p>Código no seu GitHub, banco na sua conta e 30 dias de ajuste depois do go-live. Se um dia sair de nós, sai inteiro.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="cap_sobmedida">Conversar sobre este tipo de projeto</a></div></div></div></article></div><p class="notdo"><b>O que não fazemos:</b> logo, social media, gestão de tráfego e site institucional de vitrine. Se é isso que você precisa, indicamos alguém bom e seguimos amigos.</p><div class="capabilities-backdrop" data-cap-backdrop hidden></div></div></section>
+<div class="capabilities-grid capabilities-grid--duo" data-capabilities-grid><article class="cap-card" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Integração &amp; automação"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">01</span><span class="cap-card__type">Porta de entrada</span></div><div><h3>Integração &amp; automação</h3><p>Seus sistemas passam a conversar e o trabalho repetitivo sai da mão de alguém. É a frente de resultado mais rápido.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Integração &amp; automação</span><h3>A maior parte do trabalho manual de uma operação é informação andando de um sistema para outro.</h3><p class="cap-detail__lead">Pedido que vira cadastro, cadastro que vira mensagem, mensagem que vira registro. Cada uma dessas pontes é código simples — o que custa caro é não ter nenhuma delas e pagar alguém para ser a ponte todo dia.</p><div class="cap-detail__grid"><div><strong>O que conectamos</strong><p>Nuvemshop, Mercado Livre, ERPs, gateways de pagamento, transportadoras, planilhas e sistemas próprios, por API ou webhook.</p></div><div><strong>Como entregamos</strong><p>Fila com retry, log de cada entrega, alerta quando falha e painel para reprocessar sem depender de nós.</p></div><div><strong>Quando faz sentido</strong><p>Quando alguém redigita pedido, responde sempre a mesma pergunta no WhatsApp ou fecha o dia conferindo planilha na mão.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="cap_integracao">Conversar sobre este tipo de projeto</a></div></div></div></article><article class="cap-card" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Software sob medida"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">02</span><span class="cap-card__type">Quando nada pronto serve</span></div><div><h3>Software sob medida</h3><p>Plataforma própria, com login, as suas regras de negócio e os seus dados no seu domínio. Código entregue a você.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Software sob medida</span><h3>Sistema de prateleira impõe o processo dele. O seu negócio já tem um, e ele funciona.</h3><p class="cap-detail__lead">Construímos em cima de como a operação realmente acontece: quem aprova o quê, o que não pode acontecer, qual número importa. Entregamos por etapas, cada uma em produção.</p><div class="cap-detail__grid"><div><strong>O que construímos</strong><p>Sistemas internos, painéis operacionais, áreas de cliente, portais de acompanhamento e produtos SaaS.</p></div><div><strong>Como construímos</strong><p>Next.js, TypeScript, banco gerenciado, autenticação, perfis de acesso, trilha de auditoria e publicação automatizada.</p></div><div><strong>O que fica com você</strong><p>Código no seu GitHub, banco na sua conta e documentação completa da arquitetura. Se um dia sair de nós, sai inteiro.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="cap_sobmedida">Conversar sobre este tipo de projeto</a></div></div></div></article></div><p class="notdo"><b>O que não fazemos:</b> logo, social media, gestão de tráfego e site institucional de vitrine. Se é isso que você precisa, indicamos alguém bom e seguimos amigos.</p><div class="capabilities-backdrop" data-cap-backdrop hidden></div></div></section>
 
-<section class="section capabilities-section" id="investimento"><div class="container"><header class="section__head capabilities-head"><span class="eyebrow">Investimento</span><h2>O preço está aqui porque o seu tempo vale alguma coisa</h2><p>Escopo fechado antes de começar. Pagamento em duas parcelas: metade na aprovação, metade na entrega em produção.</p><span class="capabilities-hint">Toque em um pacote para ver exatamente o que entra.</span></header><div class="capabilities-grid capabilities-grid--tiers"><article class="cap-card cap-card--tier" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Automação pontual"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">01</span><span class="cap-card__type">Ponto de partida</span></div><div><p class="cap-price"><small>a partir de</small>R$ 1.000</p><h3>Automação pontual</h3><p>Uma integração, um fluxo ou um relatório automático. Resolve a dor mais óbvia primeiro.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Automação pontual</span><h3>Um problema, resolvido inteiro, rodando em produção.</h3><p class="cap-detail__lead">É o pacote de quem quer testar como trabalhamos antes de contratar algo maior — e o que mais vira projeto grande depois.</p><div class="cap-detail__grid"><div><strong>Exemplos reais</strong><p>Pedido caindo sozinho no ERP. Confirmação no WhatsApp quando a venda entra. Aviso de rastreio. Relatório de vendas às 8h no seu celular. Lead do anúncio indo direto pro CRM.</p></div><div><strong>O que você recebe</strong><p>Um fluxo definido junto com você, em produção, com log de execução e alerta se der erro.</p></div><div><strong>Condições</strong><p>Escopo fechado antes de começar. Metade na aprovação, metade na entrega.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_pontual">Quero uma automação assim</a></div></div></div></article><article class="cap-card cap-card--tier cap-card--mid" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Operação conectada"><span class="cap-card__ribbon">Mais contratado</span><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">02</span><span class="cap-card__type">Múltiplos sistemas</span></div><div><p class="cap-price"><small>a partir de</small>R$ 3.000</p><h3>Operação conectada</h3><p>Vários sistemas conversando, com painel de acompanhamento, alerta de falha e reprocessamento.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Operação conectada</span><h3>Quando o problema não é uma tarefa manual — são cinco, e elas dependem umas das outras.</h3><p class="cap-detail__lead">Aqui a operação inteira passa a funcionar como um ciclo só: loja, ERP, financeiro e WhatsApp no mesmo fluxo, com você enxergando o que rodou e o que falhou.</p><div class="cap-detail__grid"><div><strong>Tudo do pacote anterior, mais</strong><p>Painel web mostrando o que rodou, o que falhou e um botão para reprocessar. Fila com retry: se a API do parceiro cai, o pedido espera e entra depois.</p></div><div><strong>Operação sob controle</strong><p>Alerta no seu WhatsApp quando algo falha duas vezes. Log de cada envio com data, destinatário e conteúdo — o que a LGPD pede.</p></div><div><strong>Pós-venda completo</strong><p>Régua de confirmação, rastreio, entrega, avaliação e recompra, mais relatórios agendados e ambiente de teste.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_conectada">Quero conectar minha operação</a></div></div></div></article><article class="cap-card cap-card--tier" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Sistema sob medida"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">03</span><span class="cap-card__type">Sob medida</span></div><div><p class="cap-price"><small>a partir de</small>R$ 5.000</p><h3>Sistema sob medida</h3><p>Plataforma própria, com login, suas regras de negócio e seus dados. Código entregue a você.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Sistema sob medida</span><h3>Quando nenhum sistema de prateleira serve e adaptar o negócio à ferramenta sai mais caro que construir.</h3><p class="cap-detail__lead">Uma aplicação web no seu domínio, feita em cima de como a sua operação realmente funciona, entregue por etapas e sempre em produção.</p><div class="cap-detail__grid"><div><strong>O que inclui</strong><p>Login por usuário, perfis e permissões, cadastros, kanban, aprovações, geração de contrato ou proposta em PDF e painéis com os seus números.</p></div><div><strong>Sem ficar refém</strong><p>Código no seu GitHub, banco na sua conta, integração com o que você já usa e trilha de auditoria de quem mudou o quê.</p></div><div><strong>Garantia</strong><p>30 dias de ajuste depois do go-live, sem custo. Correção de erro nosso não tem prazo.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_sobmedida">Quero avaliar um sistema próprio</a></div></div></div></article></div><p class="fine fine--center">Manutenção e evolução mensal são opcionais, contratadas só depois da entrega.</p></div></section><section class="section section--alt reveal" id="loja"><div class="container"><div class="doorgrid"><div class="door__copy"><span class="eyebrow">Ainda não vende</span><h2>Sua primeira loja não precisa nascer manual</h2><p class="door__lead">Quem monta loja entrega uma loja. Nós entregamos a operação funcionando desde o primeiro pedido — o mesmo trabalho da página inteira, só que aplicado antes de você ter o problema.</p><p class="door__pitch"><b>Por que isso importa:</b> a loja que abre sem automação passa os primeiros seis meses acumulando trabalho manual, e depois paga de novo pra desmontar isso. Nascer certo é mais barato que arrumar depois.</p><span class="door__seal">Especialista certificado Nuvemshop</span><a class="btn btn--primary btn--lg" href="#contato" data-event="cta_click" data-cta="loja_abrir">Quero abrir minha loja</a></div><div class="kit"><div class="kit__head"><span class="kit__name">Loja completa, já automatizada</span><span class="kit__price">a partir de <b>R$ 2.500</b></span></div><ul class="kit__list"><li><b>Loja Nuvemshop configurada</b> — tema, catálogo, categorias e políticas</li><li><b>Meios de pagamento e frete</b> ligados e testados com pedido real</li><li><b>Domínio próprio e e-mail profissional</b> no ar</li><li><b>WhatsApp ligado ao pedido</b> — confirmação e rastreio automáticos</li><li><b>Pós-venda rodando</b> desde a primeira venda, não daqui a um ano</li><li><b>Treinamento de 1h</b> com você, gravado, pra consultar depois</li></ul><div class="kit__foot">30 dias de ajuste incluídos</div></div></div></div></section><section id="parceiros" class="section section--dark"><div class="container"><header class="section__head"><span class="eyebrow">Autoridade</span><h2>Parcerias que fortalecem nossas soluções</h2><p>Relações oficiais reconhecidas diretamente pelas plataformas — não apenas tecnologias que utilizamos.</p></header><div class="partners"><article class="partner"><span class="partner__eyebrow">Nuvemshop Partners Core</span><h3>Parceiro Certificado Nuvemshop</h3><p>Desenvolvimento de aplicações, integrações e automações para o ecossistema Nuvemshop.</p><a class="link" href="/certificado-nuvemshop.pdf" target="_blank" rel="noopener">Ver certificado</a></article><article class="partner"><span class="partner__badgewrap"><img class="partner__img" src="/imagem/hostinger-partner-badge.svg" alt="Hostinger Partner" width="150" height="56" loading="lazy"></span><h3>Parceiro Hostinger</h3><p>Infraestrutura e hospedagem reconhecidas oficialmente pela Hostinger.</p></article></div></div></section>
+<section class="section capabilities-section" id="investimento"><div class="container"><header class="section__head capabilities-head"><span class="eyebrow">Investimento</span><h2>O tempo é o ativo mais valioso da sua operação</h2><p>Transparência técnica e previsibilidade total. Escopo bem definido e entregas por etapas para sua empresa não perder um único dia de vendas.</p><span class="capabilities-hint">Toque em um pacote para ver exatamente o que entra.</span></header><div class="capabilities-grid capabilities-grid--tiers"><article class="cap-card cap-card--tier" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Automação pontual"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">01</span><span class="cap-card__type">Ponto de partida</span></div><div><p class="cap-price"><small>a partir de</small>R$ 1.000</p><h3>Automação pontual</h3><p>Uma integração, um fluxo ou um relatório automático. Resolve a dor mais óbvia primeiro.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Automação pontual</span><h3>Um problema, resolvido inteiro, rodando em produção.</h3><p class="cap-detail__lead">É o pacote de quem quer testar como trabalhamos antes de contratar algo maior — e o que mais vira projeto grande depois.</p><div class="cap-detail__grid"><div><strong>Exemplos reais</strong><p>Pedido caindo sozinho no ERP. Confirmação no WhatsApp quando a venda entra. Aviso de rastreio. Relatório de vendas às 8h no seu celular. Lead do anúncio indo direto pro CRM.</p></div><div><strong>O que você recebe</strong><p>Um fluxo definido junto com você, em produção, com log de execução e alerta se der erro.</p></div><div><strong>Condições</strong><p>Escopo claro e fechado antes de começar. Faturamento facilitado e alinhado aos marcos da entrega.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_pontual">Quero uma automação assim</a></div></div></div></article><article class="cap-card cap-card--tier cap-card--mid" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Operação conectada"><span class="cap-card__ribbon">Mais contratado</span><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">02</span><span class="cap-card__type">Múltiplos sistemas</span></div><div><p class="cap-price"><small>a partir de</small>R$ 3.000</p><h3>Operação conectada</h3><p>Vários sistemas conversando, com painel de acompanhamento, alerta de falha e reprocessamento.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Operação conectada</span><h3>Quando o problema não é uma tarefa manual — são cinco, e elas dependem umas das outras.</h3><p class="cap-detail__lead">Aqui a operação inteira passa a funcionar como um ciclo só: loja, ERP, financeiro e WhatsApp no mesmo fluxo, com você enxergando o que rodou e o que falhou.</p><div class="cap-detail__grid"><div><strong>Tudo do pacote anterior, mais</strong><p>Painel web mostrando o que rodou, o que falhou e um botão para reprocessar. Fila com retry: se a API do parceiro cai, o pedido espera e entra depois.</p></div><div><strong>Operação sob controle</strong><p>Alerta no seu WhatsApp quando algo falha duas vezes. Log de cada envio com data, destinatário e conteúdo — o que a LGPD pede.</p></div><div><strong>Pós-venda completo</strong><p>Régua de confirmação, rastreio, entrega, avaliação e recompra, mais relatórios agendados e ambiente de teste.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_conectada">Quero conectar minha operação</a></div></div></div></article><article class="cap-card cap-card--tier" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Sistema sob medida"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">03</span><span class="cap-card__type">Sob medida</span></div><div><p class="cap-price"><small>a partir de</small>R$ 5.000</p><h3>Sistema sob medida</h3><p>Plataforma própria, com login, suas regras de negócio e seus dados. Código entregue a você.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Sistema sob medida</span><h3>Quando nenhum sistema de prateleira serve e adaptar o negócio à ferramenta sai mais caro que construir.</h3><p class="cap-detail__lead">Uma aplicação web no seu domínio, feita em cima de como a sua operação realmente funciona, entregue por etapas e sempre em produção.</p><div class="cap-detail__grid"><div><strong>O que inclui</strong><p>Login por usuário, perfis e permissões, cadastros, kanban, aprovações, geração de contrato ou proposta em PDF e painéis com os seus números.</p></div><div><strong>Sem ficar refém</strong><p>Código no seu GitHub, banco na sua conta, integração com o que você já usa e trilha de auditoria de quem mudou o quê.</p></div><div><strong>Compromisso</strong><p>Homologação assistida e acompanhamento na entrada em produção. Correção de qualquer inconsistência com prioridade máxima e sem prazo limite.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_sobmedida">Quero avaliar um sistema próprio</a></div></div></div></article></div><p class="fine fine--center">Manutenção e evolução mensal são opcionais, contratadas só depois da entrega.</p></div></section><section class="section section--alt reveal" id="loja"><div class="container"><div class="doorgrid"><div class="door__copy"><span class="eyebrow">Ainda não vende</span><h2>Sua primeira loja não precisa nascer manual</h2><p class="door__lead">Quem monta loja entrega uma loja. Nós entregamos a operação funcionando desde o primeiro pedido — o mesmo trabalho da página inteira, só que aplicado antes de você ter o problema.</p><p class="door__pitch"><b>Por que isso importa:</b> a loja que abre sem automação passa os primeiros seis meses acumulando trabalho manual, e depois paga de novo pra desmontar isso. Nascer certo é mais barato que arrumar depois.</p><span class="door__seal">Especialista certificado Nuvemshop</span><a class="btn btn--primary btn--lg" href="#contato" data-event="cta_click" data-cta="loja_abrir">Quero abrir minha loja</a></div><div class="kit"><div class="kit__head"><span class="kit__name">Loja completa, já automatizada</span><span class="kit__price">a partir de <b>R$ 2.500</b></span></div><ul class="kit__list"><li><b>Loja Nuvemshop configurada</b> — tema, catálogo, categorias e políticas</li><li><b>Meios de pagamento e frete</b> ligados e testados com pedido real</li><li><b>Domínio próprio e e-mail profissional</b> no ar</li><li><b>WhatsApp ligado ao pedido</b> — confirmação e rastreio automáticos</li><li><b>Pós-venda rodando</b> desde a primeira venda, não daqui a um ano</li><li><b>Treinamento de 1h</b> com você, gravado, pra consultar depois</li></ul><div class="kit__foot">Homologação completa e treinamento assistido incluídos</div></div></div></div></section><section id="parceiros" class="section section--dark"><div class="container"><header class="section__head"><span class="eyebrow">Autoridade</span><h2>Parcerias que fortalecem nossas soluções</h2><p>Relações oficiais reconhecidas diretamente pelas plataformas — não apenas tecnologias que utilizamos.</p></header><div class="partners"><article class="partner"><span class="partner__eyebrow">Nuvemshop Partners Core</span><h3>Parceiro Certificado Nuvemshop</h3><p>Desenvolvimento de aplicações, integrações e automações para o ecossistema Nuvemshop.</p><a class="link" href="/certificado-nuvemshop.pdf" target="_blank" rel="noopener">Ver certificado</a></article><article class="partner"><span class="partner__badgewrap"><img class="partner__img" src="/imagem/hostinger-partner-badge.svg" alt="Hostinger Partner" width="150" height="56" loading="lazy"></span><h3>Parceiro Hostinger</h3><p>Infraestrutura e hospedagem reconhecidas oficialmente pela Hostinger.</p></article></div></div></section>
 
 <section class="section"><div class="container stack"><h2 class="stack__label">Stack utilizada nos projetos</h2><div class="stack__chips"><span class="tchip">Next.js</span><span class="tchip">React</span><span class="tchip">React Native</span><span class="tchip">Node.js</span><span class="tchip">Firebase / Firestore</span><span class="tchip">Vercel</span><span class="tchip">WhatsApp Cloud API</span><span class="tchip">OpenAI API</span><span class="tchip">Resend</span></div></div></section>
 
 <section class="section section--alt"><div class="container"><header class="section__head"><span class="eyebrow">Quem faz</span><h2>Você fala com quem escreve o código</h2><p>A Conect Web é uma operação pequena e técnica de propósito.</p></header><div class="whobox"><div class="whobox__av" aria-hidden="true">NV</div><div class="whobox__body"><p><strong>Nilton Vicente</strong> — desenvolvedor. Quem responde a primeira mensagem é quem levanta o requisito, escreve o código e sobe em produção. Não existe camada de atendimento repassando recado, e não existe estagiário herdando o seu projeto no meio do caminho.</p><p>Projeto pequeno tem uma vantagem que projeto grande não tem: dá pra falar com o dono no sábado à noite quando a integração cai.</p><div class="whobox__creds"><span class="whobox__chip">Especialista certificado Nuvemshop</span><span class="whobox__chip">Parceiro Hostinger</span><span class="whobox__chip">CNPJ 63.039.583/0001-84</span></div></div></div></div></section>
 
-<section class="section section--guarantee" id="garantias"><div class="container"><header class="section__head"><span class="eyebrow">Segurança &amp; Transparência</span><h2>Por que contratar a Conect Web é uma decisão de baixo risco</h2><p>Desenvolvimento sério é previsível, transparente e focado em manter o controle operacional nas suas mãos.</p></header><div class="guarantee-grid"><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></div><h3>Código 100% Seu</h3><p>Todo o repositório é criado no seu GitHub e serviços na sua conta de nuvem. Sem dependência nem aprisionamento.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3>Garantia de 30 Dias</h3><p>Após a publicação em produção, você tem 30 dias de acompanhamento e ajustes sem custo extra. Erro nosso não tem prazo.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div><h3>Pagamento 50 / 50</h3><p>Metade na aprovação do escopo e a metade final somente quando a solução estiver validada e em produção.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>Direto com o Desenvolvedor</h3><p>Sem gerentes de conta, intermediários ou repasses. Você fala diretamente com quem projeta o banco e programa as APIs.</p></div></div></div></section>
+<section class="section section--guarantee" id="garantias"><div class="container"><header class="section__head"><span class="eyebrow">Segurança &amp; Transparência</span><h2>Por que contratar a Conect Web é uma decisão de baixo risco</h2><p>Desenvolvimento sério é previsível, transparente e focado em manter o controle operacional nas suas mãos.</p></header><div class="guarantee-grid"><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></div><h3>Código 100% Seu (Zero Lock-in)</h3><p>Todo o repositório é criado no seu GitHub e serviços na sua nuvem. Você é proprietário da sua tecnologia.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3>Alta Resiliência &amp; Tolerância a Falhas</h3><p>Filas distribuídas com retentativas automáticas, logs de auditoria e monitoramento contínuo para sua operação nunca parar.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></div><h3>Previsibilidade &amp; Escopo Transparente</h3><p>Sem custos ocultos nem surpresas. Você acompanha e valida cada marco da solução diretamente em produção.</p></div><div class="gcard"><div class="gcard__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>Direto com o Desenvolvedor</h3><p>Sem gerentes de conta, intermediários ou repasses. Você fala diretamente com quem projeta o banco e programa as APIs.</p></div></div></div></section>
 
 <section id="contato" class="section section--cta"><div class="container cta"><div class="cta__left"><span class="eyebrow">Conversa técnica, sem compromisso</span><h2>Fale sobre sua operação</h2><p>Descreva o processo, sistema ou integração que você precisa resolver. A Conect Web retorna pelo WhatsApp com a viabilidade, os próximos passos e uma estimativa inicial.</p><ul class="cta__bullets"><li>Diagnóstico técnico antes de qualquer orçamento</li><li>Contato direto com quem desenvolve</li><li>Faixa de investimento na primeira resposta</li><li>Projeto tratado com sigilo</li></ul></div><form class="form" data-lead-form><label>Tipo de necessidade<select name="tipo" required><option value="">Escolha...</option><option>Integrar sistemas que não se falam</option><option>Automatizar uma tarefa manual repetitiva</option><option>Automatizar atendimento ou pós-venda no WhatsApp</option><option>Sistema sob medida (login, regras próprias, painel)</option><option>Abrir minha primeira loja, já automatizada</option><option>Outro / ainda não sei</option></select></label><label>Estágio do projeto<select name="estagio" required><option value="">Escolha...</option><option>Só avaliando possibilidades</option><option>Ainda não vendo — quero abrir</option><option>Já tenho o problema mapeado</option><option>Já tenho um sistema e preciso integrar/evoluir</option><option>Já tenho escopo e quero orçamento</option></select></label><label>Descreva rapidamente a necessidade<input type="text" name="descricao" placeholder="Ex.: preciso conectar meu sistema ao CRM..." required></label><label>Prazo ou orçamento, se tiver<input type="text" name="prazo" placeholder="Ex.: até 60 dias / a combinar"></label><label class="check"><input type="checkbox" name="aceite" required><span>Concordo em ser contatado(a) via WhatsApp sobre o projeto.</span></label><button class="btn btn--wa btn--lg btn--block" type="submit"><svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.652 4.469 1.781 6.305L3 29l7.879-2.734A12.94 12.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3Zm0 22.1a10.06 10.06 0 0 1-5.13-1.404l-.368-.219-4.678 1.624 1.548-4.554-.24-.375A10.07 10.07 0 0 1 5.9 15c0-5.577 4.532-10.1 10.104-10.1S26.1 9.423 26.1 15 21.576 25.1 16.004 25.1Zm5.542-7.564c-.303-.152-1.792-.884-2.07-.985-.278-.101-.48-.152-.682.152-.202.303-.783.985-.96 1.187-.177.202-.354.227-.657.076-.303-.152-1.278-.471-2.434-1.503-.9-.803-1.508-1.796-1.685-2.099-.177-.303-.019-.467.133-.618.137-.136.303-.354.454-.531.152-.177.202-.303.303-.505.101-.202.05-.379-.025-.531-.076-.152-.682-1.646-.935-2.253-.246-.591-.497-.511-.682-.52l-.581-.01c-.202 0-.531.076-.809.379-.278.303-1.06 1.036-1.06 2.529s1.085 2.935 1.236 3.138c.152.202 2.135 3.26 5.174 4.572.723.312 1.287.499 1.727.638.726.231 1.386.199 1.909.121.582-.087 1.792-.733 2.045-1.441.253-.708.253-1.315.177-1.441-.076-.126-.278-.202-.581-.354Z"/></svg><span>Enviar no WhatsApp</span></button></form></div></section>
 
