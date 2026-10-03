@@ -313,3 +313,32 @@ if (form) {
 
   els.forEach((el) => io.observe(el));
 })();
+
+/* =============================
+   Terminal tab switching
+   ============================= */
+(function initTechTerminal() {
+  const tabs = document.querySelectorAll("[data-term-tab]");
+  if (!tabs.length) return;
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.getAttribute("data-term-tab");
+      tabs.forEach((t) => t.classList.remove("is-active"));
+      tab.classList.add("is-active");
+
+      const panelLogs = document.getElementById("term-panel-logs");
+      const panelCode = document.getElementById("term-panel-code");
+
+      if (panelLogs && panelCode) {
+        if (target === "code") {
+          panelLogs.hidden = true;
+          panelCode.hidden = false;
+        } else {
+          panelLogs.hidden = false;
+          panelCode.hidden = true;
+        }
+      }
+    });
+  });
+})();
