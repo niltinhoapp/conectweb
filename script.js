@@ -342,3 +342,44 @@ if (form) {
     });
   });
 })();
+
+/* =============================
+   ROI Calculator Interaction
+   ============================= */
+(function initRoiCalculator() {
+  const peopleSlider = document.getElementById("roi-people");
+  const hoursSlider = document.getElementById("roi-hours");
+  const peoplePill = document.getElementById("roi-val-people");
+  const hoursPill = document.getElementById("roi-val-hours");
+  const costEl = document.getElementById("roi-cost");
+  const hoursTotalEl = document.getElementById("roi-total-hours");
+  const ctaBtn = document.getElementById("roi-cta");
+
+  if (!peopleSlider || !hoursSlider || !costEl || !hoursTotalEl) return;
+
+  const HOURLY_RATE = 20; // R$ 20/h (custo médio padrão de operador operacional)
+  const DAYS_PER_MONTH = 22; // Dias úteis médios
+
+  function update() {
+    const people = parseInt(peopleSlider.value, 10) || 1;
+    const hours = parseInt(hoursSlider.value, 10) || 1;
+
+    if (peoplePill) peoplePill.textContent = people === 1 ? "1 pessoa" : `${people} pessoas`;
+    if (hoursPill) hoursPill.textContent = hours === 1 ? "1h / dia" : `${hours}h / dia`;
+
+    const totalHours = people * hours * DAYS_PER_MONTH;
+    const monthlyCost = totalHours * HOURLY_RATE;
+
+    hoursTotalEl.textContent = `${totalHours} horas / mês`;
+    costEl.textContent = `R$ ${monthlyCost.toLocaleString("pt-BR")}`;
+
+    if (ctaBtn) {
+      const msg = `Olá Nilton! Calculei no site da Conect Web: minha operação perde cerca de ${totalHours}h e R$ ${monthlyCost.toLocaleString("pt-BR")}/mês em rotinas manuais. Gostaria de entender como automatizar isso.`;
+      ctaBtn.href = waLink(msg);
+    }
+  }
+
+  peopleSlider.addEventListener("input", update);
+  hoursSlider.addEventListener("input", update);
+  update();
+})();

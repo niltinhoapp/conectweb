@@ -1912,6 +1912,204 @@ body.capability-open{
 @media (max-width:960px){.guarantee-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:540px){.guarantee-grid{grid-template-columns:1fr}}
 
+/* ---------- Cyber Grid Background (Hero) ---------- */
+.hero{
+  position:relative;
+  background:radial-gradient(circle at 50% 10%, rgba(37,99,235,.15) 0%, transparent 65%), #0B0D14;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse at 50% 25%, #000 40%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 25%, #000 40%, transparent 80%);
+  pointer-events:none;
+}
+
+/* ---------- Comparativo Operação Manual vs Conect Web ---------- */
+.section--compare{
+  background:var(--bg);
+  position:relative;
+}
+.compare-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:26px;
+  margin-top:16px;
+}
+.compare-card{
+  border-radius:26px;
+  padding:34px 30px;
+  position:relative;
+  overflow:hidden;
+  transition:all .3s ease;
+}
+.compare-card--manual{
+  background:#FFFFFF;
+  border:1px solid rgba(239,68,68,.25);
+  box-shadow:0 1px 3px rgba(15,23,42,.04), 0 10px 25px -5px rgba(239,68,68,.05);
+}
+.compare-card--manual:hover{
+  transform:translateY(-4px);
+  border-color:rgba(239,68,68,.4);
+  box-shadow:0 20px 40px -10px rgba(239,68,68,.12);
+}
+.compare-card--auto{
+  background:linear-gradient(180deg, #FFFFFF 0%, #F8FAFE 100%);
+  border:1px solid rgba(37,99,235,.35);
+  box-shadow:
+    0 1px 3px rgba(15,23,42,.04),
+    0 16px 36px -10px rgba(37,99,235,.14),
+    inset 0 1px 0 #fff;
+}
+.compare-card--auto::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, #2563EB, #10B981, transparent);
+  box-shadow:0 0 12px rgba(37,99,235,.5);
+}
+.compare-card--auto:hover{
+  transform:translateY(-6px) scale(1.01);
+  border-color:rgba(37,99,235,.5);
+  box-shadow:
+    0 24px 60px -15px rgba(37,99,235,.24),
+    0 0 0 1px rgba(37,99,235,.25),
+    inset 0 1px 0 #fff;
+}
+.compare-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 12px;border-radius:999px;margin-bottom:14px;
+}
+.compare-badge--manual{
+  background:rgba(239,68,68,.10);color:#DC2626;border:1px solid rgba(239,68,68,.25);
+}
+.compare-badge--auto{
+  background:rgba(16,185,129,.12);color:#059669;border:1px solid rgba(16,185,129,.3);
+  box-shadow:0 0 12px -2px rgba(16,185,129,.3);
+}
+.compare-card h3{
+  font-size:21px;font-weight:800;margin:0 0 10px;color:var(--text);letter-spacing:-.02em;
+}
+.compare-card p.compare-lead{
+  font-size:14px;color:var(--muted);line-height:1.55;margin:0 0 20px;
+}
+.compare-list{
+  list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:13px;
+}
+.compare-list li{
+  display:flex;align-items:flex-start;gap:12px;font-size:13.5px;line-height:1.5;color:var(--text);
+}
+.compare-icon{
+  width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:2px;font-size:11px;font-weight:800;
+}
+.compare-icon--neg{background:rgba(239,68,68,.15);color:#EF4444}
+.compare-icon--pos{background:rgba(16,185,129,.18);color:#059669}
+
+@media (max-width:820px){
+  .compare-grid{grid-template-columns:1fr;gap:20px}
+}
+
+/* ---------- Calculadora de ROI / Desperdício Operacional ---------- */
+.section--roi{
+  background:linear-gradient(180deg, var(--bg-subtle), var(--bg));
+  border-top:1px solid var(--line);
+  position:relative;
+}
+.roi-card{
+  background:linear-gradient(180deg, #FFFFFF 0%, #F9FBFE 60%, #F2F6FA 100%);
+  border:1px solid rgba(226,232,240,.95);
+  border-radius:28px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:
+    0 1px 3px rgba(15,23,42,.03),
+    0 16px 40px -12px rgba(15,23,42,.07),
+    0 30px 70px -20px rgba(37,99,235,.08),
+    inset 0 1px 0 #fff;
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  margin-top:24px;
+}
+.roi-card::before{
+  content:"";position:absolute;top:0;left:10%;right:10%;height:2px;
+  background:linear-gradient(90deg, transparent, #2563EB, #7C3AED, transparent);
+  box-shadow:0 0 14px rgba(37,99,235,.5);
+}
+.roi-left{
+  padding:40px 36px;
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:28px;
+}
+.roi-control{display:flex;flex-direction:column;gap:10px}
+.roi-control__head{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.roi-control__label{
+  font-size:14.5px;font-weight:700;color:var(--text);
+}
+.roi-control__pill{
+  font-family:ui-monospace,monospace;font-size:13px;font-weight:800;
+  color:var(--brand-ink);background:var(--grad-soft);
+  border:1px solid rgba(37,99,235,.2);padding:3px 10px;border-radius:999px;
+}
+.roi-slider{
+  -webkit-appearance:none;appearance:none;width:100%;height:8px;
+  border-radius:999px;background:#E2E8F0;outline:none;cursor:pointer;
+  transition:background .2s;
+}
+.roi-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:22px;height:22px;
+  border-radius:50%;background:var(--brand);
+  box-shadow:0 0 0 4px rgba(37,99,235,.2), 0 2px 6px rgba(0,0,0,.2);
+  cursor:pointer;transition:transform .15s ease;
+}
+.roi-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.roi-slider::-moz-range-thumb{
+  width:22px;height:22px;border:none;border-radius:50%;background:var(--brand);
+  box-shadow:0 0 0 4px rgba(37,99,235,.2), 0 2px 6px rgba(0,0,0,.2);
+  cursor:pointer;
+}
+
+.roi-right{
+  padding:40px 36px;
+  background:linear-gradient(145deg, rgba(37,99,235,.03), rgba(124,58,237,.03));
+  display:flex;flex-direction:column;justify-content:space-between;gap:24px;
+}
+.roi-metric{display:flex;flex-direction:column;gap:4px}
+.roi-metric__sub{
+  font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
+}
+.roi-metric__val{
+  font-size:38px;font-weight:900;letter-spacing:-.03em;
+  background:linear-gradient(135deg, #DC2626 30%, #EF4444 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-family:ui-monospace,Inter,sans-serif;line-height:1.1;
+}
+.roi-metric__subval{
+  font-size:13.5px;color:var(--muted);margin-top:2px;
+}
+.roi-metric__subval strong{color:var(--text)}
+.roi-insight{
+  background:#FFFFFF;border:1px solid var(--line);border-radius:14px;
+  padding:14px 18px;font-size:13px;line-height:1.55;color:var(--text);
+  box-shadow:var(--shadow-xs);
+}
+.roi-insight strong{color:var(--brand-ink)}
+.roi-btn{
+  width:100%;text-align:center;
+}
+
+@media (max-width:920px){
+  .roi-card{grid-template-columns:1fr}
+  .roi-left{border-right:none;border-bottom:1px solid var(--line);padding:28px 22px}
+  .roi-right{padding:28px 22px}
+  .roi-metric__val{font-size:32px}
+}
+
 
   </style>
   <!-- CSS_INLINE_END --><script src="/consent.js?v=2" defer></script></head><body data-service="">
@@ -1954,9 +2152,125 @@ body.capability-open{
 
 </div></div><div class="sys__cta" style="justify-content:center"><a class="btn btn--ghost btn--lg" href="/projetos/">Ver todos os produtos e projetos</a></div></div></section>
 
+<section class="section section--compare reveal" id="comparativo">
+  <div class="container">
+    <header class="section__head">
+      <span class="eyebrow">Diagnóstico Operacional</span>
+      <h2>O custo invisível de rodar no improviso manual</h2>
+      <p>A diferença prática entre depender de pessoas copiando e colando dados e uma arquitetura que roda sozinha 24 horas por dia.</p>
+    </header>
+
+    <div class="compare-grid">
+      <!-- Card Manual -->
+      <div class="compare-card compare-card--manual">
+        <span class="compare-badge compare-badge--manual">✕ Sem Engenharia Conect Web</span>
+        <h3>Operação Manual &amp; Fragmentada</h3>
+        <p class="compare-lead">A equipe vira "ponte humana" entre planilhas, sistemas e atendimento, gerando lentidão e retrabalho diário.</p>
+        <ul class="compare-list">
+          <li>
+            <span class="compare-icon compare-icon--neg">✕</span>
+            <span><strong>Digitação repetitiva:</strong> Pedidos digitados manualmente no ERP e em planilhas sujeitas a erros de estoque.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--neg">✕</span>
+            <span><strong>Falta de rastreabilidade:</strong> Ninguém sabe por que um webhook falhou ou qual cliente ficou sem resposta.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--neg">✕</span>
+            <span><strong>Pós-venda reativo:</strong> O cliente precisa cobrar o código de rastreio ou o boleto no WhatsApp.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--neg">✕</span>
+            <span><strong>Gargalo de escala:</strong> Se o volume de vendas dobrar amanhã, você precisa dobrar a equipe de apoio operacional.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--neg">✕</span>
+            <span><strong>Refém de ferramentas:</strong> Planilhas que travam, sistemas legados e dados dispersos sem backup unificado.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Card Conect Web -->
+      <div class="compare-card compare-card--auto">
+        <span class="compare-badge compare-badge--auto">✓ Com Engenharia Conect Web</span>
+        <h3>Operação Automatizada &amp; Escalável</h3>
+        <p class="compare-lead">Pipelines em nuvem, webhooks com tolerância a falhas e interfaces sob medida para seu negócio acelerar.</p>
+        <ul class="compare-list">
+          <li>
+            <span class="compare-icon compare-icon--pos">✓</span>
+            <span><strong>Sincronização em tempo real:</strong> Venda confirmada gera baixa de estoque, nota fiscal e lançamento contábil em segundos.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--pos">✓</span>
+            <span><strong>Filas resilientes &amp; retries:</strong> Se a API parceira cair, o evento é enfileirado e processado automaticamente na volta.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--pos">✓</span>
+            <span><strong>WhatsApp transacional ativo:</strong> Mensagens instantâneas de status, rastreio, confirmação PIX e pesquisa NPS.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--pos">✓</span>
+            <span><strong>Escalabilidade com custo fixo:</strong> Processe 10 ou 10.000 pedidos por dia sem inchar o quadro de funcionários.</span>
+          </li>
+          <li>
+            <span class="compare-icon compare-icon--pos">✓</span>
+            <span><strong>Propriedade total do ativo:</strong> Código-fonte no seu GitHub, sem mensalidades abusivas e sem lock-in.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="section capabilities-section" id="capacidades"><div class="container"><header class="section__head capabilities-head"><span class="eyebrow">O que fazemos</span><h2>Fazemos duas coisas, e fazemos as duas bem</h2><p>Não somos agência de tudo. Duas frentes, feitas por quem escreve o código — e uma lista honesta do que fica de fora.</p><span class="capabilities-hint">Toque em uma frente para ver o que entra, como fazemos e quando faz sentido.</span></header>
 
 <div class="capabilities-grid capabilities-grid--duo" data-capabilities-grid><article class="cap-card" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Integração &amp; automação"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">01</span><span class="cap-card__type">Porta de entrada</span></div><div><h3>Integração &amp; automação</h3><p>Seus sistemas passam a conversar e o trabalho repetitivo sai da mão de alguém. É a frente de resultado mais rápido.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Integração &amp; automação</span><h3>A maior parte do trabalho manual de uma operação é informação andando de um sistema para outro.</h3><p class="cap-detail__lead">Pedido que vira cadastro, cadastro que vira mensagem, mensagem que vira registro. Cada uma dessas pontes é código simples — o que custa caro é não ter nenhuma delas e pagar alguém para ser a ponte todo dia.</p><div class="cap-detail__grid"><div><strong>O que conectamos</strong><p>Nuvemshop, Mercado Livre, ERPs, gateways de pagamento, transportadoras, planilhas e sistemas próprios, por API ou webhook.</p></div><div><strong>Como entregamos</strong><p>Fila com retry, log de cada entrega, alerta quando falha e painel para reprocessar sem depender de nós.</p></div><div><strong>Quando faz sentido</strong><p>Quando alguém redigita pedido, responde sempre a mesma pergunta no WhatsApp ou fecha o dia conferindo planilha na mão.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="cap_integracao">Conversar sobre este tipo de projeto</a></div></div></div></article><article class="cap-card" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Software sob medida"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">02</span><span class="cap-card__type">Quando nada pronto serve</span></div><div><h3>Software sob medida</h3><p>Plataforma própria, com login, as suas regras de negócio e os seus dados no seu domínio. Código entregue a você.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Software sob medida</span><h3>Sistema de prateleira impõe o processo dele. O seu negócio já tem um, e ele funciona.</h3><p class="cap-detail__lead">Construímos em cima de como a operação realmente acontece: quem aprova o quê, o que não pode acontecer, qual número importa. Entregamos por etapas, cada uma em produção.</p><div class="cap-detail__grid"><div><strong>O que construímos</strong><p>Sistemas internos, painéis operacionais, áreas de cliente, portais de acompanhamento e produtos SaaS.</p></div><div><strong>Como construímos</strong><p>Next.js, TypeScript, banco gerenciado, autenticação, perfis de acesso, trilha de auditoria e publicação automatizada.</p></div><div><strong>O que fica com você</strong><p>Código no seu GitHub, banco na sua conta e documentação completa da arquitetura. Se um dia sair de nós, sai inteiro.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="cap_sobmedida">Conversar sobre este tipo de projeto</a></div></div></div></article></div><p class="notdo"><b>O que não fazemos:</b> logo, social media, gestão de tráfego e site institucional de vitrine. Se é isso que você precisa, indicamos alguém bom e seguimos amigos.</p><div class="capabilities-backdrop" data-cap-backdrop hidden></div></div></section>
+
+
+<section class="section section--roi reveal" id="calculadora-roi">
+  <div class="container">
+    <header class="section__head">
+      <span class="eyebrow">Calculadora Interativa</span>
+      <h2>Quanto sua operação perde em rotinas manuais?</h2>
+      <p>Selecione o tamanho da sua equipe e as horas gastas diariamente com planilhas, cadastros e mensagens repetitivas.</p>
+    </header>
+
+    <div class="roi-card">
+      <div class="roi-left">
+        <div class="roi-control">
+          <div class="roi-control__head">
+            <span class="roi-control__label">Pessoas envolvidas em tarefas repetitivas</span>
+            <span class="roi-control__pill" id="roi-val-people">2 pessoas</span>
+          </div>
+          <input type="range" class="roi-slider" id="roi-people" min="1" max="15" value="2" step="1" aria-label="Número de pessoas">
+        </div>
+
+        <div class="roi-control">
+          <div class="roi-control__head">
+            <span class="roi-control__label">Horas diárias perdidas por pessoa</span>
+            <span class="roi-control__pill" id="roi-val-hours">2h / dia</span>
+          </div>
+          <input type="range" class="roi-slider" id="roi-hours" min="1" max="8" value="2" step="1" aria-label="Horas por dia">
+        </div>
+
+        <div class="roi-insight">
+          💡 <strong>O dado real:</strong> Uma tarefa de 15 minutos repetida 8 vezes ao dia consome 44 horas no mês de um colaborador — tempo que deveria estar focado em vendas e atendimento estratégico.
+        </div>
+      </div>
+
+      <div class="roi-right">
+        <div class="roi-metric">
+          <span class="roi-metric__sub">Custo Operacional Desperdiçado Estimado</span>
+          <span class="roi-metric__val" id="roi-cost">R$ 1.760</span>
+          <span class="roi-metric__subval">Equivalente a <strong id="roi-total-hours">88 horas / mês</strong> de trabalho puramente braçal.</span>
+        </div>
+
+        <a class="btn btn--primary btn--lg roi-btn" id="roi-cta" href="#contato" data-event="cta_click" data-cta="roi_eliminar_desperdicio">Eliminar esse desperdício</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section capabilities-section" id="investimento"><div class="container"><header class="section__head capabilities-head"><span class="eyebrow">Investimento</span><h2>O tempo é o ativo mais valioso da sua operação</h2><p>Transparência técnica e previsibilidade total. Escopo bem definido e entregas por etapas para sua empresa não perder um único dia de vendas.</p><span class="capabilities-hint">Toque em um pacote para ver exatamente o que entra.</span></header><div class="capabilities-grid capabilities-grid--tiers"><article class="cap-card cap-card--tier" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Automação pontual"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">01</span><span class="cap-card__type">Ponto de partida</span></div><div><p class="cap-price"><small>a partir de</small>R$ 1.000</p><h3>Automação pontual</h3><p>Uma integração, um fluxo ou um relatório automático. Resolve a dor mais óbvia primeiro.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Automação pontual</span><h3>Um problema, resolvido inteiro, rodando em produção.</h3><p class="cap-detail__lead">É o pacote de quem quer testar como trabalhamos antes de contratar algo maior — e o que mais vira projeto grande depois.</p><div class="cap-detail__grid"><div><strong>Exemplos reais</strong><p>Pedido caindo sozinho no ERP. Confirmação no WhatsApp quando a venda entra. Aviso de rastreio. Relatório de vendas às 8h no seu celular. Lead do anúncio indo direto pro CRM.</p></div><div><strong>O que você recebe</strong><p>Um fluxo definido junto com você, em produção, com log de execução e alerta se der erro.</p></div><div><strong>Condições</strong><p>Escopo claro e fechado antes de começar. Faturamento facilitado e alinhado aos marcos da entrega.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_pontual">Quero uma automação assim</a></div></div></div></article><article class="cap-card cap-card--tier cap-card--mid" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Operação conectada"><span class="cap-card__ribbon">Mais contratado</span><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">02</span><span class="cap-card__type">Múltiplos sistemas</span></div><div><p class="cap-price"><small>a partir de</small>R$ 3.000</p><h3>Operação conectada</h3><p>Vários sistemas conversando, com painel de acompanhamento, alerta de falha e reprocessamento.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Operação conectada</span><h3>Quando o problema não é uma tarefa manual — são cinco, e elas dependem umas das outras.</h3><p class="cap-detail__lead">Aqui a operação inteira passa a funcionar como um ciclo só: loja, ERP, financeiro e WhatsApp no mesmo fluxo, com você enxergando o que rodou e o que falhou.</p><div class="cap-detail__grid"><div><strong>Tudo do pacote anterior, mais</strong><p>Painel web mostrando o que rodou, o que falhou e um botão para reprocessar. Fila com retry: se a API do parceiro cai, o pedido espera e entra depois.</p></div><div><strong>Operação sob controle</strong><p>Alerta no seu WhatsApp quando algo falha duas vezes. Log de cada envio com data, destinatário e conteúdo — o que a LGPD pede.</p></div><div><strong>Pós-venda completo</strong><p>Régua de confirmação, rastreio, entrega, avaliação e recompra, mais relatórios agendados e ambiente de teste.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_conectada">Quero conectar minha operação</a></div></div></div></article><article class="cap-card cap-card--tier" data-cap-card tabindex="0" role="button" aria-expanded="false" aria-label="Abrir detalhes de Sistema sob medida"><div class="cap-card__inner"><div class="cap-card__face cap-card__front"><div class="cap-card__meta"><span class="cap-card__number">03</span><span class="cap-card__type">Sob medida</span></div><div><p class="cap-price"><small>a partir de</small>R$ 5.000</p><h3>Sistema sob medida</h3><p>Plataforma própria, com login, suas regras de negócio e seus dados. Código entregue a você.</p></div><span class="cap-card__action">Ver o que entra</span></div><div class="cap-card__face cap-card__back"><button class="cap-card__close" type="button" data-cap-close aria-label="Voltar">Voltar</button><div class="cap-detail"><span class="cap-detail__eyebrow">Sistema sob medida</span><h3>Quando nenhum sistema de prateleira serve e adaptar o negócio à ferramenta sai mais caro que construir.</h3><p class="cap-detail__lead">Uma aplicação web no seu domínio, feita em cima de como a sua operação realmente funciona, entregue por etapas e sempre em produção.</p><div class="cap-detail__grid"><div><strong>O que inclui</strong><p>Login por usuário, perfis e permissões, cadastros, kanban, aprovações, geração de contrato ou proposta em PDF e painéis com os seus números.</p></div><div><strong>Sem ficar refém</strong><p>Código no seu GitHub, banco na sua conta, integração com o que você já usa e trilha de auditoria de quem mudou o quê.</p></div><div><strong>Compromisso</strong><p>Homologação assistida e acompanhamento na entrada em produção. Correção de qualquer inconsistência com prioridade máxima e sem prazo limite.</p></div></div><a class="btn btn--primary" href="#contato" data-event="cta_click" data-cta="pacote_sobmedida">Quero avaliar um sistema próprio</a></div></div></div></article></div><p class="fine fine--center">Manutenção e evolução mensal são opcionais, contratadas só depois da entrega.</p></div></section><section class="section section--alt reveal" id="loja"><div class="container"><div class="doorgrid"><div class="door__copy"><span class="eyebrow">Ainda não vende</span><h2>Sua primeira loja não precisa nascer manual</h2><p class="door__lead">Quem monta loja entrega uma loja. Nós entregamos a operação funcionando desde o primeiro pedido — o mesmo trabalho da página inteira, só que aplicado antes de você ter o problema.</p><p class="door__pitch"><b>Por que isso importa:</b> a loja que abre sem automação passa os primeiros seis meses acumulando trabalho manual, e depois paga de novo pra desmontar isso. Nascer certo é mais barato que arrumar depois.</p><span class="door__seal">Especialista certificado Nuvemshop</span><a class="btn btn--primary btn--lg" href="#contato" data-event="cta_click" data-cta="loja_abrir">Quero abrir minha loja</a></div><div class="kit"><div class="kit__head"><span class="kit__name">Loja completa, já automatizada</span><span class="kit__price">a partir de <b>R$ 2.500</b></span></div><ul class="kit__list"><li><b>Loja Nuvemshop configurada</b> — tema, catálogo, categorias e políticas</li><li><b>Meios de pagamento e frete</b> ligados e testados com pedido real</li><li><b>Domínio próprio e e-mail profissional</b> no ar</li><li><b>WhatsApp ligado ao pedido</b> — confirmação e rastreio automáticos</li><li><b>Pós-venda rodando</b> desde a primeira venda, não daqui a um ano</li><li><b>Treinamento de 1h</b> com você, gravado, pra consultar depois</li></ul><div class="kit__foot">Homologação completa e treinamento assistido incluídos</div></div></div></div></section><section id="parceiros" class="section section--dark"><div class="container"><header class="section__head"><span class="eyebrow">Autoridade</span><h2>Parcerias que fortalecem nossas soluções</h2><p>Relações oficiais reconhecidas diretamente pelas plataformas — não apenas tecnologias que utilizamos.</p></header><div class="partners"><article class="partner"><span class="partner__eyebrow">Nuvemshop Partners Core</span><h3>Parceiro Certificado Nuvemshop</h3><p>Desenvolvimento de aplicações, integrações e automações para o ecossistema Nuvemshop.</p><a class="link" href="/certificado-nuvemshop.pdf" target="_blank" rel="noopener">Ver certificado</a></article><article class="partner"><span class="partner__badgewrap"><img class="partner__img" src="/imagem/hostinger-partner-badge.svg" alt="Hostinger Partner" width="150" height="56" loading="lazy"></span><h3>Parceiro Hostinger</h3><p>Infraestrutura e hospedagem reconhecidas oficialmente pela Hostinger.</p></article></div></div></section>
 
